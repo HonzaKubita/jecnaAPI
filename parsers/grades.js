@@ -67,7 +67,6 @@ module.exports = (htmlBody) => {
           let data = dataEl.title;
 
           // Parse data from <a> title property
-          // TODO make this actually work
 
           const bracket = data.lastIndexOf("("); // The opening bracket before date (always there after it always same format)
 
