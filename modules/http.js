@@ -6,7 +6,7 @@ const axiosInstance = axios.create({
   baseURL: BASE_URL
 });
 
-module.exports.request = async (options) => {
+async function request(options) {
   let result;
   try {
     result = await axiosInstance(options);
@@ -15,4 +15,29 @@ module.exports.request = async (options) => {
     console.log(e);
   }
   return result;
+}
+
+async function authRequest(path, token, options={}) {
+  let result;
+
+  try {
+    result = await axiosInstance({
+      method: 'GET',
+      url: path,
+      headers: {
+        "Cookie": `JSESSIONID=${token}`
+      },
+      ...options
+    });
+  }
+  catch (e) {
+    console.log(e);
+  }
+  return result;
+}
+
+module.exports = {
+  request,
+  authRequest,
+  BASE_URL
 }
