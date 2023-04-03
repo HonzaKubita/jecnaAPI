@@ -25,21 +25,15 @@ module.exports = (htmlBody) => {
 
   // parse scheduleTable
 
-  console.log("Parsing: schedule");
-
   const days = scheduleTBody.children;
   for (const day of days) {
     if (day === scheduleTBody.children[0]) continue; // Skip the first element as it is a row with times
-
-    console.log("Parsing: day");
       
     let dayLessons = [];
 
     const lessons = day.children;
     for (const lesson of lessons) {
       if (lesson.classList.contains("day")) continue; // Skip first element as it is a block with day label not a lesson
-
-      console.log("Parsing: lesson");
 
       let lessonGroupLessons = [];
 
@@ -53,8 +47,6 @@ module.exports = (htmlBody) => {
 
       const groupLessons = lesson.children;
       for (const groupLesson of groupLessons) {
-
-        console.log("Parsing: group lesson");
 
         let groupLessonJSON = {
           type: "",
@@ -107,8 +99,6 @@ module.exports = (htmlBody) => {
     scheduleJSON.days.push(dayLessons);
 
   }
-
-  console.log(scheduleJSON);
   
   return scheduleJSON;
 }
