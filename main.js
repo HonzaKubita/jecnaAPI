@@ -3,7 +3,7 @@ const autoRestAPI = require('autorestapi');
 
 const app = express();
 
-app.use(express.json({extended: true, limit: '1mb'}));
+app.use(express.json());
 
 autoRestAPI(app);
 
