@@ -1,20 +1,18 @@
 const axios = require('axios');
 
-const BASE_URL = 'https://spsejecna.cz';
+const BASE_URL = 'https://www.spsejecna.cz/';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL
 });
 
 module.exports.request = async (options) => {
-  let res;
+  let result;
   try {
-    res = await axiosInstance(options);
+    result = await axiosInstance(options);
   }
   catch (e) {
     console.log(e);
   }
-  finally {
-    return res;
-  }
+  return result;
 }

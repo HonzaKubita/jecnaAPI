@@ -1,12 +1,13 @@
 const express = require('express');
 const autoRestAPI = require('autorestapi');
 
-const app = express();
+const PORT = 3000;
 
+const app = express();
 app.use(express.json());
 
 autoRestAPI(app);
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000!');
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}!`);
 });
