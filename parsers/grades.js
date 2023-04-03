@@ -69,8 +69,6 @@ module.exports = (htmlBody) => {
           // Parse data from <a> title property
           // TODO make this actually work
 
-          let example = "Hřídel (7.2.+13.2.2023) a Šroub a matice (20.2+27.2+28.2.2021) (06.03.2023, Skalická Libuše, Ing.)"
-
           const bracket = data.lastIndexOf("("); // The opening bracket before date (always there after it always same format)
 
           gradeObject.description = data.substring(0, bracket - 1);
