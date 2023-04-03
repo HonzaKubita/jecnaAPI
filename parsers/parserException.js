@@ -19,7 +19,11 @@ catch (e) {
   if (e.isParserException) {
     res.status(400).send(e.message);
   } else {
-    res.status(500).send("Internal Server Error. Please report this at https://github.com/HonzaKubita/jecnaAPI/issues");
+    res.status(500).send(`
+      <b>Internal Server Error. Please report this at <a href="https://github.com/HonzaKubita/jecnaAPI/issues">Github Issues</a></b>
+      <p>Error:</p>
+      <p>${e}</p>
+    `);
   }
 }
 */
