@@ -9,8 +9,8 @@ module.exports = {
         {
             "token" : "token",
             "archive" : true/false // default = false,
-            "max": maximum-number-of-events,
-            "index": index-to-start-from
+            "max": maximum-number-of-events, // only for archive
+            "index": index-to-start-from // only for archive
         }
         Request will return json containing the list of all news in this format:
         {
