@@ -28,7 +28,7 @@ module.exports = (htmlBody) => {
     // parse the profile image:
     const profileImageDivChild = teacherDOM.getElementsByClassName("profilephoto")[0].children[0].children[0]; // get profile photo div
     if (profileImageDivChild.tagName !== "IMG") teacherJSON.image = ""; // if it's not image set image to none
-    else teacherJSON.image = `${BASE_URL}${profileImageDivChild.getAttribute("src")}`; // set image
+    else teacherJSON.image = `${BASE_URL}${profileImageDivChild.src}`; // set image
 
     // parse profile
     const userProfileTbody = teacherDOM.getElementsByClassName("userprofile")[0].children[0]; // get <tbody> element with user profile
