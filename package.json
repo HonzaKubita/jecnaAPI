@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/HonzaKubita/jecnaAPI#readme",
   "dependencies": {
-    "autorestapi": "^1.0.1",
+    "autorestapi": "^1.0.2",
     "axios": "^1.3.4",
     "crypto-js": "^4.1.1",
     "express": "^4.18.2",
