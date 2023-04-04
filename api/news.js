@@ -30,6 +30,9 @@ module.exports = {
         }
          */
 
+        // sets token
+        const token = req.body.token === undefined ? "sus" : req.body.token;
+
         // sets archive
         const archive = req.body.archive === undefined ? false : req.body.archive;
 
@@ -46,10 +49,10 @@ module.exports = {
         }
 
         // contains archive or the main news
-        const resNews = archive ? await authRequest("/akce/archiv", req.body.token) : await authRequest("/akce", req.body.token);
+        const resNews = archive ? await authRequest("/akce/archiv", token) : await authRequest("/akce", token);
 
         try {
-            const newsJSON = archive ? await newsParser.archive(resNews.data, req.body.token, max, index) : newsParser.normal(resNews.data);
+            const newsJSON = archive ? await newsParser.archive(resNews.data, token, max, index) : newsParser.normal(resNews.data);
             res.status(200).send(JSON.stringify(newsJSON));
         }
         catch (ex) {
