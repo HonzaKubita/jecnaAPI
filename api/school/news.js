@@ -1,5 +1,5 @@
-const {authRequest} = require("../modules/http");
-const newsParser = require("../parsers/newsParser");
+const {authRequest} = require("../../modules/http");
+const newsParser = require("../../parsers/newsParser");
 
 module.exports = {
     post: async (req, res) => {

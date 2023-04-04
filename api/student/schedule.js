@@ -1,5 +1,5 @@
-const { authRequest } = require('../modules/http');
-const scheduleParser = require("../parsers/schedule");
+const { authRequest } = require('../../modules/http');
+const scheduleParser = require("../../parsers/schedule");
 
 module.exports = {
   post: async (req, res) => {
