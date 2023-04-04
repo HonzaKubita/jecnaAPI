@@ -27,7 +27,7 @@ module.exports = (htmlBody) => {
 
     // parse the profile image:
     const profileImageDivChild = teacherDOM.getElementsByClassName("profilephoto")[0].children[0].children[0]; // get profile photo div
-    if (profileImageDivChild.tagName !== "img") teacherJSON.image = ""; // if it's not image set image to none
+    if (profileImageDivChild.tagName !== "IMG") teacherJSON.image = ""; // if it's not image set image to none
     else teacherJSON.image = `${BASE_URL}${profileImageDivChild.getAttribute("src")}`; // set image
 
     // parse profile
@@ -71,7 +71,6 @@ module.exports = (htmlBody) => {
           teacherJSON.consultations = statValue;
           break;
         default:
-          ;
       }
     }
     // parse schedule
