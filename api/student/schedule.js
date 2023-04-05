@@ -5,7 +5,7 @@ module.exports = {
   post: async (req, res) => {
     /*
       Endpoint for receiving schedule
-
+      TODO must contain period and year list
       Request must contain json body containing token you received from /login:
       {
         "token": "token_from_login"
