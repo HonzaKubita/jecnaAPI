@@ -55,7 +55,7 @@ module.exports = (htmlBody) => {
           teacherShort: "",
           subject: "",
           subjectShort: "",
-          groupName: "",
+          group: "",
           active: false
         };
 
@@ -79,7 +79,9 @@ module.exports = (htmlBody) => {
           groupLessonJSON.subject = subjectEl.title;  // Get full subject name
         }
 
-        groupLessonJSON.group = groupLesson.getElementsByClassName("group") ? "0" : groupLesson.getElementsByClassName("group")[0]; // Get the group name, 0 if the group is the whole class
+        const lessonGroupEl = groupLesson.getElementsByClassName("group")[0]; // Get the group name
+        if (lessonGroupEl)
+          groupLessonJSON.group = groupLesson.getElementsByClassName("group")[0].innerHTML;
 
         groupLessonJSON.active = lesson.classList.contains("actual"); // If the lesson happening now
         
