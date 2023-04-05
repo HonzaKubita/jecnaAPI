@@ -44,7 +44,7 @@ If some other error occurred, then make a github issue.
 
 ## Root
 ### Login
-> **Url:** `/login`
+> **Url:** `/login` <br>
 > **Description:** Logs in and returns a valid session token, that can be used to access the website
 > #### Request
 > ```json
@@ -64,7 +64,7 @@ If some other error occurred, then make a github issue.
 > 2. When you haven't provided one or both credentials
 
 ### Logout
-> **Url:** `/logout`
+> **Url:** `/logout` <br>
 > **Description:** Performs a logout
 > #### Request
 > ```json
@@ -83,7 +83,7 @@ If some other error occurred, then make a github issue.
 ## School
 
 ### News
-> **Url:** `/school/news`
+> **Url:** `/school/news` <br>
 > **Description:** Returns a list of all news on the main feed
 > #### Request
 > ```json5
@@ -112,7 +112,7 @@ If some other error occurred, then make a github issue.
 > 1. When your token is bad
 
 ### News archive
-> **Url:** `/school/news/archive`
+> **Url:** `/school/news/archive` <br>
 > **Description:** Returns a list of ALL news, including those in archive
 > #### Request
 > ```json5
@@ -163,7 +163,8 @@ If some other error occurred, then make a github issue.
 > 2. When you haven't provided one or both credentials
 
 ### Food
-> **Url:** `/school/food`
+> **Url:** `/school/food` <br>
+> **Description:** Returns lunches
 > #### Request
 > ```json5
 > {
@@ -352,7 +353,7 @@ If some other error occurred, then make a github issue.
 ## User
 
 ### Profile
-> **Url:** `/user/profile`
+> **Url:** `/user/profile` <br>
 > **Description:** Returns as much data about the current user as possible
 > #### Request
 > ```json5
@@ -395,7 +396,7 @@ If some other error occurred, then make a github issue.
 > 2. When you haven't provided the token
 
 ### Profile edit
-> **Url:** `/user/profile/edit`
+> **Url:** `/user/profile/edit` <br>
 > #### POST METHOD
 > > **Description:** Sends a list with all possible values to change and it's values.
 > > ##### Request
@@ -435,7 +436,7 @@ If some other error occurred, then make a github issue.
 > > ##### Throws
 > > 1. When the token is bad
 > > 2. When you haven't provided the token
-> 
+>
 > #### PUT METHOD
 > > **Description:** Edits values in the user profile
 > > ##### Request
@@ -476,7 +477,7 @@ If some other error occurred, then make a github issue.
 > > 9. When image is not JPEG format
 
 ### Grades
-> **Url:** `/user/grades`
+> **Url:** `/user/grades` <br>
 > **Description:** Returns all user grades and an array with possible years and half-terms
 > #### Request
 > ```json5
@@ -532,7 +533,7 @@ If some other error occurred, then make a github issue.
 > 3. When `year` or `half-term` is not a number
 > 4. When `year` or `half-term` don't exist
 
-### Record list
+### Record list <br>
 > **Url:** `/user/record-list`
 > **Description:** Returns a list of all the records (for parents)
 > #### Request
@@ -563,7 +564,7 @@ If some other error occurred, then make a github issue.
 > 1. When the token is bad
 > 2. When you haven't provided the token
 
-### Absence
+### Absence <br>
 > **Url:** `/user/absence`
 > **Description:** Returns users absence + list of available years
 > #### Request
@@ -597,7 +598,7 @@ If some other error occurred, then make a github issue.
 > 3. When `year` is not a number
 > 4. When `year` doesn't exist
 
-### Passings
+### Passings <br>
 > **Url:** `/user/passings`
 > **Description:** Returns a list of all users passings + a list of all availables years and months
 > #### Request
@@ -639,7 +640,7 @@ If some other error occurred, then make a github issue.
 > 3. When `year` or `month` is not a number
 > 4. When `year` or `month` don't exist
 
-### Schedule
+### Schedule <br>
 > **Url:** `/user/schedule`
 > **Description:** Returns a schedule for the user, including possible years and periods
 > #### Request
@@ -712,7 +713,7 @@ If some other error occurred, then make a github issue.
 > 4. When `year` or `period` don't exist
 
 ### Special schedule
-> **Url:** `/user/special-schedule`
+> **Url:** `/user/special-schedule` <br>
 > **Description:** provides an url to the special schedule
 > #### Request
 > ```json5
