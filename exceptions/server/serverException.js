@@ -1,11 +1,9 @@
-const Exception = require('../exception');
-
+const Exception = require("../exception");
 module.exports = class ServerException extends Exception {
+    type = "server";
 
-  statusCode = 500;
-
-  constructor(message) {
-    super(message);
-    this.type += "/serverException";
-  }
+    constructor(message, code = 500) {
+        super(message, code);
+        this.tree += `/${this.type}`;
+    }
 }

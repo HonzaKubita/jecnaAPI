@@ -1,8 +1,8 @@
 const PayloadException = require("./payloadException");
-module.exports = class TokenException extends PayloadException {
-    type = "token";
+module.exports = class LoginException extends PayloadException {
+    type = "login";
 
-    constructor(message, code) {
+    constructor(message) {
         super(message, 401);
         this.tree += `/${this.type}`;
     }

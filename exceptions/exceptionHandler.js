@@ -1,17 +1,20 @@
+const INTERNAL_EXCEPTION = "internalException";
+
 module.exports = (err, req, res, next) => {
-
-  console.log(err);
-
-  if (err.isCustomException) {
-    res.status(err.statusCode).json({
-      exceptionType: err.type,
-      message: err.message
-    });
-  } else {
+    console.log(err);
+    // check if the exception is custom
+    if (err.isCustom) {
+        res.status(err.status).json({
+            type: err.type,
+            tree: err.tree,
+            message: err.message
+        })
+        return;
+    }
+    // if it is not custom, throw an internal exception
     res.status(500).json({
-      exceptionType: "internalException",
-      message: `Please report this at https://github.com/HonzaKubita/jecnaAPI/issues Error: ${err.message}`
+        type: INTERNAL_EXCEPTION,
+        tree: INTERNAL_EXCEPTION,
+        message: `An undocumented exception happened, please report this on github issues. Error: ${err}`
     });
-  }
-
 }

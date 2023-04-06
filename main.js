@@ -1,16 +1,14 @@
 const express = require('express');
 const autoRestAPI = require('autorestapi');
-const exceptionHandler = require('./exceptions/exceptionHandler');
-
-const PORT = 3000;
+const {constants} = require("./modules/constants");
+const exceptionHandler = require("exceptions/exceptionHandler");
 
 const app = express();
 app.use(express.json()); // Parse json body
+app.use(exceptionHandler); // Exception handling
 
 autoRestAPI(app); // Register endpoints with autoRestAPI
 
-app.use(exceptionHandler); // Exception handling
-
-app.listen(PORT, () => { // Start the server
-  console.log(`Server running on port ${PORT}!`);
+app.listen(constants.server.port, () => { // Start the server
+  console.log(`Server running on port ${constants.server.port}!`);
 });

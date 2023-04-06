@@ -1,9 +1,11 @@
 module.exports = class Exception {
+    isCustom = true;
 
-  isCustomException = true;
-  type = 'exception';
+    type = "exception";
+    tree = this.type;
 
-  constructor(message) {
-    this.message = message;
-  }
+    constructor(message, code) {
+        this.message = message;
+        this.code = code;
+    }
 }

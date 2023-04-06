@@ -1,7 +1,9 @@
-module.exports = class ParserException {
+const ServerException = require("./serverException");
+module.exports = class ParserException extends ServerException {
+    type = "parser";
 
-  constructor(message) {
-    super(message);
-    this.type += "/parserException"
-  }
+    constructor(message) {
+        super(message);
+        this.tree += `/${this.type}`;
+    }
 }
