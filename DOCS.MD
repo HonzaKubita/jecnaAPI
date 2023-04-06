@@ -87,7 +87,7 @@ Internal exception also returns code `500`, and it means that something has gone
 > #### Request
 > ```json5
 > {
->   "token": "Your auth token" // Optional - if not provided show only public events
+>   "token": "Your auth token" // Optional; if not provided show only public events
 > }
 > ```
 > #### Response
