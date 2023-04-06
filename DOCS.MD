@@ -24,7 +24,7 @@
 > 21. [/user/special-schedule](#special-schedule)
 
 ## Server behaviour
-The server accepts everything in JSON data, if a payload doesn't have type `application/json` an <!-- TODO What exception? --> exception will be thrown;
+The server accepts everything in JSON data, if a payload doesn't have type `application/json` an `payloadException` exception will be thrown;
 The server always returns a http code and some JSON data.
 
 If everything is OK, the server returns code `200` and response data.
@@ -36,11 +36,10 @@ If an exception happens, the server returns an error http code and some JSON inf
   "message": "error message"
 }
 ```
-Here is the table of all possible errors:
-```js
-// TODO
-```
-If some other error occurred, then make a github issue.
+There are three types of exceptions: `clientException`, `serverException` and `internalException`.
+Client exception returns codes `400`, `401` or `404`. It means, that the client did something wrong.
+Server exception returns code `500`, and it means that something bad has happened to the server. Please report these errors to the issues page.
+Internal exception also returns code `500`, and it means that something has gone seriously wrong on the server. Please report these errors to the issues page too.
 
 ## Root
 ### Login
@@ -60,8 +59,8 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When credentials are wrong
-> 2. When you haven't provided one or both credentials
+> `loginException` When credentials are wrong <br>
+> `payloadException` When you haven't provided one or both credentials
 
 ### Logout
 > **Url:** `/logout` <br>
@@ -77,8 +76,8 @@ If some other error occurred, then make a github issue.
 > {}
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token
 
 ## School
 
@@ -109,7 +108,7 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When your token is bad
+> `tokenException` When your token is bad
 
 ### News archive
 > **Url:** `/school/news/archive` <br>
@@ -137,9 +136,9 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When your token is bad
-> 2. When `index` or `max` are not numbers
-> 3. When `expand` is not boolean
+> `tokenException` When your token is bad <br>
+> `payloadException` When `index` or `max` are not numbers <br>
+> `payloadException` When `expand` is not boolean
 
 ### Moodle
 > **Url:** `/school/moodle` <br>
@@ -159,8 +158,8 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When credentials are wrong
-> 2. When you haven't provided one or both credentials
+> `loginException` When credentials are wrong <br>
+> `payloadException` When you haven't provided one or both credentials
 
 ### Food
 > **Url:** `/school/food` <br>
@@ -185,7 +184,7 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When `list` is not a boolean
+> `payloadException` When `list` is not a boolean
 
 ### Food login
 > **Url:** `/school/food/login` <br>
@@ -204,8 +203,8 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When credentials are wrong
-> 2. When you haven't provided one or both credentials
+> `loginException` When credentials are wrong <br>
+> `payloadException` When you haven't provided one or both credentials
 
 ### Teachers
 > **Url:** `/school/teachers` <br>
@@ -250,8 +249,8 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token
 
 ### Teacher
 > **Url:** `/school/teacher` <br>
@@ -294,11 +293,11 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the teacher short
-> 3. When `teacherShort` doesn't exist
-> 4. When `year` or `timeTableId` is not a number
-> 5. When `year` or `timeTableId` don't exist
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the teacher short <br>
+> `dataException` When `teacherShort` doesn't exist <br>
+> `payloadException` When `year` or `timeTableId` is not a number <br>
+> `payloadException` When `year` or `timeTableId` don't exist
 
 ### Room
 > **Url:** `/school/room` <br>
@@ -328,10 +327,10 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
-> 3. When you haven't provided the room short
-> 4. When `roomShort` doesn't exist
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token <br>
+> `payloadException` When you haven't provided the room short <br>
+> `dataException` When `roomShort` doesn't exist
 
 ### Event
 > **Url:** `/school/event` <br>
@@ -346,9 +345,9 @@ If some other error occurred, then make a github issue.
 > #### Response
 > The classic event object as provided in [news](#news)
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the event code
-> 3. When `eventCode` doesn't exist
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the event code <br>
+> `dataException` When `eventCode` doesn't exist
 
 ## User
 
@@ -392,8 +391,8 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token
 
 ### Profile edit
 > **Url:** `/user/profile/edit` <br>
@@ -434,8 +433,8 @@ If some other error occurred, then make a github issue.
 > > }
 > > ```
 > > ##### Throws
-> > 1. When the token is bad
-> > 2. When you haven't provided the token
+> > `tokenException` When the token is bad <br>
+> > `payloadException` When you haven't provided the token
 >
 > #### PUT METHOD
 > > **Description:** Edits values in the user profile
@@ -466,15 +465,15 @@ If some other error occurred, then make a github issue.
 > > The data object (like [this](#response-12)) if successful
 > > If not successful -> error object ([reference](#server-behaviour))
 > > ##### Throws
-> > 1. When the token is bad
-> > 2. When you haven't provided the token
-> > 3. When you provided form and password field together
-> > 4. When `oldPassword` or `newPassword` or both in `password` field are missing
-> > 5. When `oldPassword` is wrong
-> > 6. When `newPassword` doesn't fulfill the password requirements
-> > 7. When `insurance` or `village` have wrong value
-> > 8. When image is too large
-> > 9. When image is not JPEG format
+> > `tokenException` When the token is bad <br>
+> > `payloadException` When you haven't provided the token <br>
+> > `payloadException` When you provided form and password field together <br>
+> > `payloadException` When `oldPassword` or `newPassword` or both in `password` field are missing <br>
+> > `dataException` When `oldPassword` is wrong <br>
+> > `dataException` When `newPassword` doesn't fulfill the password requirements <br>
+> > `payloadException` When `insurance` or `village` have wrong value <br>
+> > `payloadException` When image is too large <br>
+> > `payloadException` When image is not JPEG format
 
 ### Grades
 > **Url:** `/user/grades` <br>
@@ -528,12 +527,12 @@ If some other error occurred, then make a github issue.
 > }
 > > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
-> 3. When `year` or `half-term` is not a number
-> 4. When `year` or `half-term` don't exist
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token <br>
+> `payloadException` When `year` or `half-term` is not a number <br>
+> `payloadException` When `year` or `half-term` don't exist
 
-### Record list <br>
+### Record list
 > **Url:** `/user/record-list`
 > **Description:** Returns a list of all the records (for parents)
 > #### Request
@@ -561,10 +560,10 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token
 
-### Absence <br>
+### Absence
 > **Url:** `/user/absence`
 > **Description:** Returns users absence + list of available years
 > #### Request
@@ -593,12 +592,12 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
-> 3. When `year` is not a number
-> 4. When `year` doesn't exist
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token <br>
+> `payloadException` When `year` is not a number <br>
+> `payloadException` When `year` doesn't exist
 
-### Passings <br>
+### Passings
 > **Url:** `/user/passings`
 > **Description:** Returns a list of all users passings + a list of all availables years and months
 > #### Request
@@ -635,12 +634,12 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
-> 3. When `year` or `month` is not a number
-> 4. When `year` or `month` don't exist
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token <br>
+> `payloadException` When `year` or `month` is not a number <br>
+> `payloadException` When `year` or `month` don't exist
 
-### Schedule <br>
+### Schedule
 > **Url:** `/user/schedule`
 > **Description:** Returns a schedule for the user, including possible years and periods
 > #### Request
@@ -707,10 +706,10 @@ If some other error occurred, then make a github issue.
 > }
 > ```
 > #### Throws
-> 1. When the token is bad
-> 2. When you haven't provided the token
-> 3. When `year` or `period` is not a number
-> 4. When `year` or `period` don't exist
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token <br>
+> `payloadException` When `year` or `period` is not a number <br>
+> `payloadException` When `year` or `period` don't exist
 
 ### Special schedule
 > **Url:** `/user/special-schedule` <br>
