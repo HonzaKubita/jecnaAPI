@@ -1,7 +1,7 @@
 const express = require('express');
 const autoRestAPI = require('autorestapi');
 const {constants} = require("./modules/constants");
-const exceptionHandler = require("exceptions/exceptionHandler");
+const exceptionHandler = require("./exceptions/exceptionHandler");
 
 const app = express();
 app.use(express.json()); // Parse json body
