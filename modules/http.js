@@ -13,7 +13,7 @@ const foodAxios = axios.create({
  * @param options{AxiosRequestConfig} Axios options
  * @returns {Promise<axios.AxiosResponse<any>>} The server response
  */
-async function request(options) {
+async function jecnaRequest(options) {
     return jecnaAxios({
         validateStatus: () => true,
         ...options
@@ -29,8 +29,8 @@ async function request(options) {
  * @param method{Method} Optional: the http method to use (=GET)
  * @returns {Promise<AxiosResponse<*>>} The server response
  */
-async function authRequest(path, token, cookies = "", headers = {}, options = {}, method = "GET") {
-    return await request({
+async function jecnaAuthRequest(path, token, cookies = "", headers = {}, options = {}, method = "GET") {
+    return await jecnaRequest({
         method: method,
         url: path,
         headers: {
@@ -39,6 +39,26 @@ async function authRequest(path, token, cookies = "", headers = {}, options = {}
         },
         ...options
     });
+}
+
+/**
+ * This method sends POST request to the jecna server with path, token and data (url form encoded)
+ * @param path{string} The path where to send the request to
+ * @param token{string} The JSESSIONID token
+ * @param data The data to send
+ * @param cookies{string} Optional: more cookies to send
+ * @param headers{AxiosHeaders} Optional: more headers to send
+ * @param options{Method} Optional: the http method to use (=GET)
+ * @returns {Promise<AxiosResponse<*>>} The server response
+ */
+async function jecnaDataPost(path, token, data, cookies = "", headers = {}, options = {}) {
+    return await jecnaAuthRequest(path, token, cookies, {
+        "Content-Type": "application/x-www-form-urlencoded",
+        ... headers
+    }, {
+        data: data,
+        ...options
+    }, "POST");
 }
 
 /**
@@ -77,8 +97,9 @@ async function foodAuthRequest(path, session, token, cookies = "", headers = {},
 }
 
 module.exports = {
-    request,
-    authRequest,
+    jecnaRequest,
+    jecnaAuthRequest,
+    jecnaDataPost,
     foodRequest,
     foodAuthRequest
 }
