@@ -10,7 +10,7 @@ const foodAxios = axios.create({
 
 /**
  * This method sends reqest to the jecna server with options
- * @param options Axios options
+ * @param options{AxiosRequestConfig} Axios options
  * @returns {Promise<axios.AxiosResponse<any>>} The server response
  */
 async function request(options) {
@@ -21,13 +21,13 @@ async function request(options) {
 }
 /**
  * This method sends GET request to the jecna server with path and token
- * @param path The path where to send the request to
- * @param token The JSESSIONID token
- * @param cookies Optional: more cookies to send
- * @param headers Optional: more headers to send
- * @param options Optional: more axios options to send
- * @param method Optional: the http method to use (=GET)
- * @returns {Promise<axios.AxiosResponse<*>>} The server response
+ * @param path{string} The path where to send the request to
+ * @param token{string} The JSESSIONID token
+ * @param cookies{string} Optional: more cookies to send
+ * @param headers{AxiosHeaders} Optional: more headers to send
+ * @param options{AxiosRequestConfig} Optional: more axios options to send
+ * @param method{Method} Optional: the http method to use (=GET)
+ * @returns {Promise<AxiosResponse<*>>} The server response
  */
 async function authRequest(path, token, cookies = "", headers = {}, options = {}, method = "GET") {
     return await request({
@@ -43,8 +43,8 @@ async function authRequest(path, token, cookies = "", headers = {}, options = {}
 
 /**
  * This method sends request to the food server with options
- * @param options Axios options
- * @returns {Promise<axios.AxiosResponse<any>>} The server response
+ * @param options{AxiosRequestConfig} Axios options
+ * @returns {Promise<AxiosResponse<any>>} The server response
  */
 async function foodRequest(options) {
     return await foodAxios({
@@ -55,14 +55,14 @@ async function foodRequest(options) {
 
 /**
  * This method sends GET request to the food server with path, session and token
- * @param path The path where to send the request to
- * @param session The JSESSIONID token
- * @param token The XSRF-TOKEN token
- * @param cookies Optional: more cookies to send
- * @param headers Optional: more headers to send
- * @param options Optional: more axios options to send
- * @param method Optional: the http method to use (=GET)
- * @returns {Promise<axios.AxiosResponse<*>>}
+ * @param path{string} The path where to send the request to
+ * @param session{string} The JSESSIONID token
+ * @param token{string} The XSRF-TOKEN token
+ * @param cookies{string} Optional: more cookies to send
+ * @param headers{AxiosHeaders} Optional: more headers to send
+ * @param options{AxiosRequestConfig} Optional: more axios options to send
+ * @param method{Method} Optional: the http method to use (=GET)
+ * @returns {Promise<AxiosResponse<*>>}
  */
 async function foodAuthRequest(path, session, token, cookies = "", headers = {}, options = {}, method = "GET") {
     return foodRequest({
