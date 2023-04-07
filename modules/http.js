@@ -48,7 +48,7 @@ async function jecnaAuthRequest(path, token, cookies = "", headers = {}, options
  * @param data The data to send
  * @param cookies{string} Optional: more cookies to send
  * @param headers{AxiosHeaders} Optional: more headers to send
- * @param options{Method} Optional: the http method to use (=GET)
+ * @param options{AxiosRequestConfig} Optional: the http method to use (=GET)
  * @returns {Promise<AxiosResponse<*>>} The server response
  */
 async function jecnaDataPost(path, token, data, cookies = "", headers = {}, options = {}) {
