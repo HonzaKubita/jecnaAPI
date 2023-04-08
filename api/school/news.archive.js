@@ -1,7 +1,7 @@
-const {payloadIsType, getSafeField, getSafeBooleanField, getSafeNumberField, tokenValid} = require("../../../modules/checker");
-const {constants} = require("../../../modules/constants");
-const {jecnaAuthRequest} = require("../../../modules/http");
-const {archiveExpandParser, archiveParser} = require("../../../parsers/school/archiveParser");
+const {payloadIsType, getSafeField, getSafeBooleanField, getSafeNumberField, tokenValid} = require("../../modules/checker");
+const {constants} = require("../../modules/constants");
+const {jecnaAuthRequest} = require("../../modules/http");
+const {archiveExpandParser, archiveParser} = require("../../parsers/school/archiveParser");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);
