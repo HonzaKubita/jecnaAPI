@@ -11,7 +11,7 @@ function getCookie(name, resHeaders) {
     let header = resHeaders["set-cookie"];
     if (header === undefined) throw new ServerException("Response from jecna server doesn't contain the Set-Cookie header.");
 
-    const foundCookie = header.find(cookie => cookie.includes(name));
+    const foundCookie = header.find(cookie => cookie.includes(name) && !cookie.includes("deleted"));
     if (foundCookie === undefined) throw new ServerException(`The Set-Cookie header does not contain a cookie with name ${name}.`);
 
     return foundCookie?.match(new RegExp(`^${name}=(.+?);`))?.[1];
