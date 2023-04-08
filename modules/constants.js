@@ -7,7 +7,6 @@ const constants =
     jecna: {
         baseURL: "https://www.spsejecna.cz",
         sessionCookieName: "JSESSIONID",
-        tokenCheckerString: "Pro pokračování se přihlaste do systému",
         notFoundMessages: ["Pro pokračování se přihlaste do systému", "Neoprávněný přístup", "Stránka nebyla nalezena"]
     },
     food: {

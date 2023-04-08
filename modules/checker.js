@@ -3,13 +3,14 @@ const TokenException = require('../exceptions/client/tokenException');
 const PayloadException = require('../exceptions/client/payloadException');
 const ClientException = require('../exceptions/client/clientException');
 const DataException = require('../exceptions/client/dataException');
+const {userLoggedIn} = require("./utils");
 
 /**
  * Throws an exception if the token is not valid
  * @param htmlBody{string} The HTML body of the jecna server response
  */
 function tokenValid(htmlBody) {
-    if (htmlBody.includes(constants.jecna.tokenCheckerString))
+    if (!userLoggedIn(htmlBody))
         throw new TokenException("Invalid token!");
 }
 

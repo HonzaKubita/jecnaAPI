@@ -26,7 +26,17 @@ function documentOf(responseData) {
     return new JSDOM(responseData).window.document;
 }
 
+/**
+ * Returns if the user is logged in based on the jecna server response
+ * @param htmlBody{string} The response
+ * @returns {boolean} If the user is logged in
+ */
+function userLoggedIn(htmlBody) {
+    return documentOf(htmlBody).getElementsByClassName("user-menu").length !== 0;
+}
+
 module.exports = {
     getCookie,
-    documentOf
+    documentOf,
+    userLoggedIn
 }

@@ -1,7 +1,7 @@
 const {getSafeField} = require('../modules/checker');
 const {jecnaRequest, jecnaDataPost} = require('../modules/http');
 const {constants} = require('../modules/constants');
-const {getCookie, documentOf} = require('../modules/utils');
+const {getCookie, documentOf, userLoggedIn} = require('../modules/utils');
 const LoginException = require('../exceptions/client/loginException');
 module.exports = {
     post: async (req, res) => {
@@ -25,7 +25,7 @@ module.exports = {
             pass: password
         });
 
-        if (documentOf(loginRes.data).getElementsByClassName("user-menu").length === 0)
+        if (!userLoggedIn(loginRes.data))
             throw new LoginException("Wrong credentials!");
 
         res.status(200).json({
