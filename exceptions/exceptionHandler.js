@@ -1,7 +1,11 @@
+const PayloadException = require("./client/payloadException");
 const INTERNAL_EXCEPTION = "internalException";
 
 module.exports = (err, req, res, next) => {
     //console.log(err);
+    if (err instanceof SyntaxError) {
+        err = new PayloadException(`Wrong json format: ${err.message}`);
+    }
     // check if the exception is custom
     if (err.isCustom) {
         res.status(err.code).json({
