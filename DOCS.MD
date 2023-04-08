@@ -209,7 +209,7 @@ Internal exception also returns code `500`, and it means that something has gone
 
 ### Teachers
 > **Url:** `/school/teachers` <br>
-> **Description:** Returns a list of all teachers on the school. Teachers can then be fetched using `/teacher`
+> **Description:** Returns a list of all teachers on the school. Teachers can then be fetched using `/school/teacher`
 > #### Request
 > ```json5
 > {}
