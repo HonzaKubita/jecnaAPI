@@ -21,7 +21,7 @@ module.exports = {
             .children[0] // tokenInput
             .value;
 
-        const login1Res = await moodleDataPost("/login/index.php", session, {
+        const moodleLoginRes = await moodleDataPost("/login/index.php", session, {
             logintoken: loginToken,
             username: username,
             password: password
@@ -29,12 +29,12 @@ module.exports = {
             maxRedirects: 0
         });
 
-        if (login1Res.headers["location"]==="https://moodle.spsejecna.cz/login/index.php") {
+        if (moodleLoginRes.headers["location"]==="https://moodle.spsejecna.cz/login/index.php") {
             throw new LoginException("Wrong credentials!");
         }
 
-        session = getCookie(constants.moodle.sessionCookieName, login1Res.headers);
-        const id = getCookie(constants.moodle.idCookieName, login1Res.headers);
+        session = getCookie(constants.moodle.sessionCookieName, moodleLoginRes.headers);
+        const id = getCookie(constants.moodle.idCookieName, moodleLoginRes.headers);
 
         res.status(200).json({
             moodleSession: session,
