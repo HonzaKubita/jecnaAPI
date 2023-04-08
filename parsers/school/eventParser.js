@@ -1,5 +1,35 @@
 const {constants} = require("../../modules/constants");
+const {documentOf} = require("../../modules/utils");
 
+function eventParser(htmlBody) {
+    const eventDOM = documentOf(htmlBody);
+
+    const eventTitle = eventDOM
+        .getElementById("h1") // titleH1
+        .getElementsByClassName("label")[0] // titleSpan
+        .innerHTML;
+    const eventContent = eventDOM
+        .getElementsByClassName("text")[0] // textDiv
+        .innerHTML;
+    const eventMiscData = parseEventMiscData(eventDOM
+        .getElementsByClassName("info")[0] // infoP
+        .children[0] // infoEm
+        .innerHTML
+    );
+    const eventAttachments = parseEventAttachments(
+        eventDOM.getElementsByClassName("gallery"),
+        eventDOM.getElementsByClassName("files")
+    );
+
+    return {
+        title: eventTitle,
+        content: eventContent,
+        author: eventMiscData.author,
+        date: eventMiscData.date,
+        public: eventMiscData.public,
+        attachments: eventAttachments
+    };
+}
 /**
  * Parses misc data from event
  * @param miscText{string} The text
@@ -53,5 +83,6 @@ function parseEventAttachments(imageDivs, fileUls) {
 
 module.exports = {
     parseEventMiscData,
-    parseEventAttachments
+    parseEventAttachments,
+    eventParser
 }
