@@ -1,14 +1,14 @@
 const INTERNAL_EXCEPTION = "internalException";
 
 module.exports = (err, req, res, next) => {
-    console.log(err);
+    //console.log(err);
     // check if the exception is custom
     if (err.isCustom) {
-        res.status(err.status).json({
+        res.status(err.code).json({
             type: err.type,
             tree: err.tree,
             message: err.message
-        })
+        });
         return;
     }
     // if it is not custom, throw an internal exception
