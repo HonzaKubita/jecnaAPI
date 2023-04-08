@@ -4,24 +4,25 @@
 > 1. [Server behaviour](#server-behaviour)
 > 2. [/login](#login)
 > 3. [/logout](#logout)
-> 4. [/school/news](#news)
-> 5. [/school/news/archive](#news-archive)
-> 6. [/school/moodle](#moodle)
-> 7. [/school/food](#food)
-> 8. [/school/food/login](#food-login)
-> 9. [/school/teachers](#teachers)
-> 10. [/school/rooms](#rooms)
-> 11. [/school/teacher](#teacher)
-> 12. [/school/room](#room)
-> 13. [/school/event](#event)
-> 14. [/user/profile](#profile)
-> 15. [/user/profile/edit](#profile-edit)
-> 16. [/user/grades](#grades)
-> 17. [/user/record-list](#record-list)
-> 18. [/user/absence](#absence)
-> 19. [/user/passings](#passings)
-> 20. [/user/schedule](#schedule)
-> 21. [/user/special-schedule](#special-schedule)
+> 4. [/check-token](#check-token)
+> 5. [/school/news](#news)
+> 6. [/school/news/archive](#news-archive)
+> 7. [/school/moodle](#moodle)
+> 8. [/school/food](#food)
+> 9. [/school/food/login](#food-login)
+> 10. [/school/teachers](#teachers)
+> 11. [/school/rooms](#rooms)
+> 12. [/school/teacher](#teacher)
+> 13. [/school/room](#room)
+> 14. [/school/event](#event)
+> 15. [/user/profile](#profile)
+> 16. [/user/profile/edit](#profile-edit)
+> 17. [/user/grades](#grades)
+> 18. [/user/record-list](#record-list)
+> 19. [/user/absence](#absence)
+> 20. [/user/passings](#passings)
+> 21. [/user/schedule](#schedule)
+> 22. [/user/special-schedule](#special-schedule)
 
 ## Server behaviour
 The server accepts everything in JSON data, if a payload doesn't have type `application/json` an `payloadException` exception will be thrown;
@@ -77,6 +78,24 @@ Internal exception also returns code `500`, and it means that something has gone
 > ```
 > #### Throws
 > `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token
+
+### Check token
+> **Url:** `/check-token` <br>
+> **Description:** Checks if your token is valid
+> #### Request
+> ```json5
+> {
+>   "token": "Your auth token"
+> }
+> ```
+> #### Response
+> ```json5
+> {
+>   "valid": true // if your token is valid
+> }
+> ```
+> #### Throws
 > `payloadException` When you haven't provided the token
 
 ## School
@@ -463,7 +482,7 @@ Internal exception also returns code `500`, and it means that something has gone
 > > Content-Type: image/jpeg
 > > File: image
 > > ##### Response
-> > The data object (like [this](#response-12)) if successful
+> > The data object (like [this](#response-13)) if successful
 > > If not successful -> error object ([reference](#server-behaviour))
 > > ##### Throws
 > > `tokenException` When the token is bad <br>
