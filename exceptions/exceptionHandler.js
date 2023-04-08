@@ -12,6 +12,7 @@ module.exports = (err, req, res, next) => {
         return;
     }
     // if it is not custom, throw an internal exception
+    console.error(err);
     res.status(500).json({
         type: INTERNAL_EXCEPTION,
         tree: INTERNAL_EXCEPTION,
