@@ -1,4 +1,4 @@
-const ClientException = require("./clientException");
+const ClientException = require('./clientException');
 module.exports = class PayloadException extends ClientException {
     type = "payload";
 
