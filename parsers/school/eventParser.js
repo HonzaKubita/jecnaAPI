@@ -1,6 +1,11 @@
 const {constants} = require("../../modules/constants");
 const {documentOf} = require("../../modules/utils");
 
+/**
+ *
+ * @param htmlBody
+ * @return {{date: string, attachments: string[], public: boolean, author: string, title: string, content: string}}
+ */
 function eventParser(htmlBody) {
     const eventDOM = documentOf(htmlBody);
 
