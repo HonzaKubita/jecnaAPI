@@ -1,8 +1,8 @@
-const {getSafeField} = require('../modules/checker');
-const {jecnaRequest, jecnaDataPost} = require('../modules/http');
-const {constants} = require('../modules/constants');
-const {getCookie, documentOf, userLoggedIn} = require('../modules/utils');
-const LoginException = require('../exceptions/client/loginException');
+const {getSafeField} = require("../modules/checker");
+const {jecnaRequest, jecnaDataPost} = require("../modules/http");
+const {constants} = require("../modules/constants");
+const {getCookie, documentOf, userLoggedIn} = require("../modules/utils");
+const LoginException = require("../exceptions/client/loginException");
 module.exports = {
     post: async (req, res) => {
         const username = getSafeField(req.body.username, "username");

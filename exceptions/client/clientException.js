@@ -1,4 +1,4 @@
-const Exception = require('../exception');
+const Exception = require("../exception");
 module.exports = class ClientException extends Exception {
     type = "client";
 

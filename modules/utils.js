@@ -1,5 +1,5 @@
-const ServerException=  require('../exceptions/server/serverException');
-const {JSDOM} = require('jsdom');
+const ServerException=  require("../exceptions/server/serverException");
+const {JSDOM} = require("jsdom");
 
 /**
  * Returns a cookie value from set-cookie header

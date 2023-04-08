@@ -1,8 +1,8 @@
-const {constants} = require('./constants');
-const TokenException = require('../exceptions/client/tokenException');
-const PayloadException = require('../exceptions/client/payloadException');
-const ClientException = require('../exceptions/client/clientException');
-const DataException = require('../exceptions/client/dataException');
+const {constants} = require("./constants");
+const TokenException = require("../exceptions/client/tokenException");
+const PayloadException = require("../exceptions/client/payloadException");
+const ClientException = require("../exceptions/client/clientException");
+const DataException = require("../exceptions/client/dataException");
 const {userLoggedIn} = require("./utils");
 
 /**
@@ -30,7 +30,7 @@ function siteFound(htmlBody, what) {
  * @param type{string[]} An array of strings, represents all possible values for the header
  */
 function payloadIsType(headers, type = ["application/json"]) {
-    const contentTypeHeader = headers['content-type'];
+    const contentTypeHeader = headers["content-type"];
     if (contentTypeHeader === undefined) throw new ClientException("Request has no Content-Type header!");
     if (!type.includes(contentTypeHeader)) throw new PayloadException("The payload has wrong content type!");
 }

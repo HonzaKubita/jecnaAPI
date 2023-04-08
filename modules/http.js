@@ -1,5 +1,5 @@
-const axios = require('axios');
-const {constants} = require('./constants');
+const axios = require("axios");
+const {constants} = require("./constants");
 
 const jecnaAxios = axios.create({
     baseURL: constants.jecna.baseURL

@@ -1,9 +1,9 @@
-require('express-async-errors');
+require("express-async-errors");
 
-const express = require('express');
-const autoRestAPI = require('autorestapi');
-const {constants} = require('./modules/constants');
-const exceptionHandler = require('./exceptions/exceptionHandler');
+const express = require("express");
+const autoRestAPI = require("autorestapi");
+const {constants} = require("./modules/constants");
+const exceptionHandler = require("./exceptions/exceptionHandler");
 
 const server = express();
 server.use(express.json()); // Parse json body

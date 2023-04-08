@@ -1,4 +1,4 @@
-const PayloadException = require('./payloadException');
+const PayloadException = require("./payloadException");
 module.exports = class TokenException extends PayloadException {
     type = "token";
 
