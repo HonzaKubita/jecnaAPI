@@ -1,5 +1,5 @@
-const axios = require("axios");
-const {constants} = require("./constants");
+const axios = require('axios');
+const {constants} = require('./constants');
 
 const jecnaAxios = axios.create({
     baseURL: constants.jecna.baseURL
@@ -9,7 +9,7 @@ const foodAxios = axios.create({
 });
 
 /**
- * This method sends reqest to the jecna server with options
+ * This method sends request to the jecna server with options
  * @param options{AxiosRequestConfig} Axios options
  * @returns {Promise<axios.AxiosResponse<any>>} The server response
  */
@@ -48,7 +48,7 @@ async function jecnaAuthRequest(path, token, cookies = "", headers = {}, options
  * @param data The data to send
  * @param cookies{string} Optional: more cookies to send
  * @param headers{AxiosHeaders} Optional: more headers to send
- * @param options{AxiosRequestConfig} Optional: the http method to use (=GET)
+ * @param options{AxiosRequestConfig} Optional: more axios options to send
  * @returns {Promise<AxiosResponse<*>>} The server response
  */
 async function jecnaDataPost(path, token, data, cookies = "", headers = {}, options = {}) {
