@@ -1,8 +1,8 @@
-const {constants} = require("./constants");
-const TokenException = require("../exceptions/client/tokenException");
-const PayloadException = require("../exceptions/client/payloadException");
-const ClientException = require("../exceptions/client/clientException");
-const DataException = require("../exceptions/client/dataException");
+const {constants} = require('./constants');
+const TokenException = require('../exceptions/client/tokenException');
+const PayloadException = require('../exceptions/client/payloadException');
+const ClientException = require('../exceptions/client/clientException');
+const DataException = require('../exceptions/client/dataException');
 
 /**
  * Throws an exception if the token is not valid
@@ -42,7 +42,7 @@ function payloadIsType(headers, type = ["application/json"]) {
  * @returns {string} The final value of the field
  */
 function getSafeField(field, fieldName, defaultValue = null) {
-    if (defaultValue === null && field === undefined) throw new DataException(`Required field ${fieldName} is missing in the payload!`);
+    if (defaultValue === null && field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
     return (field === undefined ? defaultValue : field).toString();
 }
 
@@ -54,9 +54,9 @@ function getSafeField(field, fieldName, defaultValue = null) {
  * @returns {number} The final value for the field
  */
 function getSafeNumberField(field, fieldName, defaultValue = null) {
-    if (defaultValue === null && field === undefined) throw new DataException(`Required field ${fieldName} is missing in the payload!`);
+    if (defaultValue === null && field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
     const value = Number(field === undefined ? defaultValue : field);
-    if (isNaN(value)) throw new DataException(`Field ${fieldName} is not a number!`);
+    if (isNaN(value)) throw new DataException(`Field '${fieldName}' is not a number!`);
     return value;
 }
 
@@ -68,7 +68,7 @@ function getSafeNumberField(field, fieldName, defaultValue = null) {
  * @returns {boolean} The final value for the field
  */
 function getSafeBooleanField(field, fieldName, defaultValue = null) {
-    if (defaultValue === null && field === undefined) throw new DataException(`Required field ${fieldName} is missing in the payload!`);
+    if (defaultValue === null && field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
     return Boolean(field === undefined ? defaultValue : field);
 }
 
