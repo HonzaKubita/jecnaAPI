@@ -1,14 +1,17 @@
+require('express-async-errors');
+
 const express = require('express');
 const autoRestAPI = require('autorestapi');
-const {constants} = require("./modules/constants");
-const exceptionHandler = require("./exceptions/exceptionHandler");
+const {constants} = require('./modules/constants');
+const exceptionHandler = require('./exceptions/exceptionHandler');
 
-const app = express();
-app.use(express.json()); // Parse json body
-app.use(exceptionHandler); // Exception handling
+const server = express();
+server.use(express.json()); // Parse json body
 
-autoRestAPI(app); // Register endpoints with autoRestAPI
+autoRestAPI(server); // Register endpoints with autoRestAPI
 
-app.listen(constants.server.port, () => { // Start the server
+server.use(exceptionHandler); // Exception handling
+
+server.listen(constants.server.port, () => { // Start the server
     console.log(`Server running on port ${constants.server.port}!`);
 });
