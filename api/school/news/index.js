@@ -12,7 +12,6 @@ module.exports = {
         if (req.body.token !== undefined) tokenValid(newsRes.data);
 
         const newsJSON = newsParser(newsRes.data);
-
-        res.status(200).send(newsJSON);
+        res.status(200).json(newsJSON);
     }
 }
