@@ -14,6 +14,11 @@ const constants =
         baseURL: "https://objednavky.jidelnasokolska.cz",
         sessionCookieName: "JSESSIONID",
         tokenCookieName: "XSRF-TOKEN"
+    },
+    moodle: {
+        baseURL: "https://moodle.spsejecna.cz",
+        sessionCookieName: "MoodleSession",
+        idCookieName: "MOODLEID1_"
     }
 };
 

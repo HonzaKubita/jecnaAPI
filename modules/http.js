@@ -7,6 +7,9 @@ const jecnaAxios = axios.create({
 const foodAxios = axios.create({
     baseURL: constants.food.baseURL
 });
+const moodleAxios = axios.create({
+    baseURL: constants.moodle.baseURL
+});
 
 /**
  * This method sends request to the jecna server with options
@@ -96,10 +99,69 @@ async function foodAuthRequest(path, session, token, cookies = "", headers = {},
     });
 }
 
+/**
+ * This method sends request to the moodle server with options
+ * @param options{AxiosRequestConfig} Axios options
+ * @returns {Promise<axios.AxiosResponse<any>>} The server response
+ */
+async function moodleRequest(options) {
+    return moodleAxios({
+        validateStatus: () => true,
+        ...options
+    });
+}
+/**
+ * This method sends GET request to the moodle server with path and token
+ * @param path{string} The path where to send the request to
+ * @param token{string} The MoodleSession token
+ * @param id{string|undefined} Optional: MOODLEID1_ token, if not provided it's not sent
+ * @param cookies{string} Optional: more cookies to send
+ * @param headers{AxiosHeaders} Optional: more headers to send
+ * @param options{AxiosRequestConfig} Optional: more axios options to send
+ * @param method{Method} Optional: the http method to use (=GET)
+ * @returns {Promise<AxiosResponse<*>>} The server response
+ */
+async function moodleAuthRequest(path, token, id = undefined, cookies = "", headers = {}, options = {}, method = "GET") {
+    let moodleIdCookie = id === undefined ? "" : `${constants.moodle.idCookieName}=${id}`;
+    return await moodleRequest({
+        method: method,
+        url: path,
+        headers: {
+            "Cookie": `${constants.moodle.sessionCookieName}=${token}${moodleIdCookie}${cookies}`,
+            ...headers
+        },
+        ...options
+    });
+}
+
+/**
+ * This method sends POST request to the moodle server with path, token and data (url form encoded)
+ * @param path{string} The path where to send the request to
+ * @param token{string} The JSESSIONID token
+ * @param id{string|undefined} Optional: MOODLEID1_ token, if not provided it's not sent
+ * @param data The data to send
+ * @param cookies{string} Optional: more cookies to send
+ * @param headers{AxiosHeaders} Optional: more headers to send
+ * @param options{AxiosRequestConfig} Optional: more axios options to send
+ * @returns {Promise<AxiosResponse<*>>} The server response
+ */
+async function moodleDataPost(path, token, data, id = undefined, cookies = "", headers = {}, options = {}) {
+    return await moodleAuthRequest(path, token, id, cookies, {
+        "Content-Type": "application/x-www-form-urlencoded",
+        ... headers
+    }, {
+        data: data,
+        ...options
+    }, "POST");
+}
+
 module.exports = {
     jecnaRequest,
     jecnaAuthRequest,
     jecnaDataPost,
     foodRequest,
-    foodAuthRequest
+    foodAuthRequest,
+    moodleRequest,
+    moodleAuthRequest,
+    moodleDataPost
 }
