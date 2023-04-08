@@ -98,6 +98,26 @@ async function foodAuthRequest(path, session, token, cookies = "", headers = {},
         ...options
     });
 }
+/**
+ * This method sends POST request to the moodle server with path, token and data (url form encoded)
+ * @param path{string} The path where to send the request to
+ * @param session{string} The JSESSIONID token
+ * @param token{string} The XSRF-TOKEN token
+ * @param data The data to send
+ * @param cookies{string} Optional: more cookies to send
+ * @param headers{AxiosHeaders} Optional: more headers to send
+ * @param options{AxiosRequestConfig} Optional: more axios options to send
+ * @returns {Promise<AxiosResponse<*>>} The server response
+ */
+async function foodDataPost(path, session, token, data, cookies = "", headers = {}, options = {}) {
+    return await foodAuthRequest(path, session, token, cookies, {
+        "Content-Type": "application/x-www-form-urlencoded",
+        ... headers
+    }, {
+        data: data,
+        ...options
+    }, "POST");
+}
 
 /**
  * This method sends request to the moodle server with options
@@ -161,6 +181,7 @@ module.exports = {
     jecnaDataPost,
     foodRequest,
     foodAuthRequest,
+    foodDataPost,
     moodleRequest,
     moodleAuthRequest,
     moodleDataPost
