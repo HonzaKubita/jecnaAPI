@@ -183,6 +183,7 @@ Internal exception also returns code `500`, and it means that something has gone
 >   "lunch2": null // the same as lunch one
 > }
 > ```
+> Else list `lunches` with these objects
 > #### Throws
 > `payloadException` When `list` is not a boolean
 
