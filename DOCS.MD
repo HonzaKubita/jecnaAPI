@@ -429,7 +429,10 @@ Internal exception also returns code `500`, and it means that something has gone
 > >   "email": "Current email",
 > >   "phone": "Current phone",
 > >   "insurance": {
-> >     "value": "Current health insurance company",
+> >     "current": {
+> >       "id": 0, // the id
+> >       "value": "The text value"
+> >     },
 > >     "possibleValues": [ // all possible values for this field
 > >       {
 > >         "id": 0, // the id that MUST be sent
@@ -440,7 +443,10 @@ Internal exception also returns code `500`, and it means that something has gone
 > >   "street": "Current street name + , + current sub-village",
 > >   "houseNumber": "house registration + / + orientation number",
 > >   "village": {
-> >     "value": "current village/town name",
+> >     "current": {
+> >       "id": 0, // the id
+> >       "value": "The text value"
+> >     },
 > >     "possibleValues": [ // all possible values for this field
 > >       {
 > >         "id": 0, // the id that MUST be sent
