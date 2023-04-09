@@ -2,7 +2,7 @@ const {documentOf} = require("../../modules/utils");
 const {constants} = require("../../modules/constants");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {siteFound} = require("../../modules/checker");
-const {parseSchedule} = require("./schedule");
+const {parseSchedule} = require("../user/scheduleParser");
 
 async function teacherParser(htmlBody, year, period, token) {
     const teacherDOM = documentOf(htmlBody);
