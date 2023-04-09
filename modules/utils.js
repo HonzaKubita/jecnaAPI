@@ -1,6 +1,7 @@
 const ServerException=  require("../exceptions/server/serverException");
 const {JSDOM} = require("jsdom");
 const DataException = require("../exceptions/client/dataException");
+const ClientException = require("../exceptions/client/clientException");
 
 /**
  * Returns a cookie value from set-cookie header
@@ -32,14 +33,23 @@ function documentOf(responseData) {
 }
 
 /**
+ * Returns a field that is not undefined.
+ * @param field{any} The field
+ * @param fieldName{string} The name of the field
+ */
+function getSafeField(field, fieldName) {
+    if (field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
+    return field;
+}
+/**
  * Returns a value of field or a default value
  * @param field{string | undefined} The field value, can be undefined
  * @param fieldName{string} The name of the field for error messages
  * @param defaultValue{string|null} The default value, if it's null, the field is required
  * @returns {string} The final value of the field
  */
-function getSafeField(field, fieldName, defaultValue = null) {
-    if (defaultValue === null && field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
+function getSafeStringField(field, fieldName, defaultValue = null) {
+    if (defaultValue === null && field === undefined) throw new DataException(`Required string field '${fieldName}' is missing in the payload!`);
     return (field === undefined ? defaultValue : field).toString();
 }
 
@@ -69,10 +79,22 @@ function getSafeBooleanField(field, fieldName, defaultValue = null) {
     return Boolean(field === undefined ? defaultValue : field);
 }
 
+/**
+ * Returns the content type
+ * @param headers{Headers}
+ */
+function getContentType(headers) {
+    const contentTypeHeader = headers["content-type"];
+    if (contentTypeHeader === undefined) throw new ClientException("Request has no Content-Type header!");
+    return contentTypeHeader.split(";")[0];
+}
+
 module.exports = {
     getCookie,
     documentOf,
+    getSafeField,
     getSafeNumberField,
     getSafeBooleanField,
-    getSafeField
+    getSafeStringField,
+    getContentType
 }

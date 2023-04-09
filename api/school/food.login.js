@@ -1,14 +1,14 @@
 const {payloadIsType} = require("../../modules/checker");
 const {foodRequest, foodDataPost} = require("../../modules/http");
-const {getCookie, getSafeField} = require("../../modules/utils");
+const {getCookie, getSafeStringField} = require("../../modules/utils");
 const {constants} = require("../../modules/constants");
 const LoginException = require("../../exceptions/client/loginException");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);
 
-        const username = getSafeField(req.body.username, "username");
-        const password = getSafeField(req.body.password, "password");
+        const username = getSafeStringField(req.body.username, "username");
+        const password = getSafeStringField(req.body.password, "password");
 
         const foodBaseRes = await foodRequest({
             method: "GET",

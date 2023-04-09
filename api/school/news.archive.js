@@ -1,13 +1,13 @@
 const {payloadIsType, tokenValid} = require("../../modules/checker");
 const {constants} = require("../../modules/constants");
 const {jecnaAuthRequest} = require("../../modules/http");
-const {getSafeBooleanField, getSafeField, getSafeNumberField} = require("../../modules/utils");
+const {getSafeBooleanField, getSafeStringField, getSafeNumberField} = require("../../modules/utils");
 const {archiveExpandParser, archiveParser} = require("../../parsers/school/newsParser");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);
 
-        const token = getSafeField(req.body.token, "token", constants.jecna.wrongToken);
+        const token = getSafeStringField(req.body.token, "token", constants.jecna.wrongToken);
         const expand = getSafeBooleanField(req.body.expand, "expand", false);
         const index = getSafeNumberField(req.body.index, "index", 0);
         const max = getSafeNumberField(req.body.max, "max", Infinity);

@@ -2,12 +2,12 @@ const {tokenValid, payloadIsType} = require("../../modules/checker");
 const {constants} = require("../../modules/constants");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {newsParser} = require("../../parsers/school/newsParser");
-const {getSafeField} = require("../../modules/utils");
+const {getSafeStringField} = require("../../modules/utils");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);
 
-        const token = getSafeField(req.body.token, "token", constants.jecna.wrongToken);
+        const token = getSafeStringField(req.body.token, "token", constants.jecna.wrongToken);
 
         const newsRes = await jecnaAuthRequest("/akce", token);
         if (req.body.token !== undefined) tokenValid(newsRes.data);
