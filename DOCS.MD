@@ -293,7 +293,7 @@ Internal exception also returns code `500`, and it means that something has gone
 >   "email": "The email of the teacher",
 >   "privateEmail": "The private email of the teacher",
 >   "phones": {
->     "mobile": "The mobile number of the teacher",
+>     "mobiles": [], // The mobile numbers of the teacher
 >     "link": "The number of teachers phone link",
 >     "private": "Teachers private number"
 >   },

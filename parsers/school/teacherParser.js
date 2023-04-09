@@ -12,7 +12,7 @@ async function teacherParser(htmlBody, year, period, token) {
         email: "",
         privateEmail: "",
         phones: {
-            mobile: "",
+            mobiles: [],
             link: "",
             private: ""
         },
@@ -24,14 +24,14 @@ async function teacherParser(htmlBody, year, period, token) {
         certificates: []
     };
 
-    const profileTbody = teacherDOM.getElementsByClassName("userprofile")[0].children[0]; // profileTable.children[0]
+    const propertiesTbody = teacherDOM.getElementsByClassName("userprofile")[0].children[0]; // propertiesTable.children[0]
     // parse image
     teacherJSON.image = constants.jecna.baseURL + teacherDOM
         .getElementsByClassName("image")[0] // imageDiv
         .children[0] // imageChild (img or noimage div)
         .src ?? ""; // link or ""
     // parse properties
-    for (const propertyTr of profileTbody.children) {
+    for (const propertyTr of propertiesTbody.children) {
         const propertyName = propertyTr
             .getElementsByClassName("label")[0] // nameSpan
             .innerHTML;
@@ -56,7 +56,7 @@ async function teacherParser(htmlBody, year, period, token) {
                 teacherJSON.privateEmail = propertyValueRaw.children[1].innerHTML; // emailSpan.innerHTML
                 break;
             case "Telefon":
-                teacherJSON.phones.mobile = propertyValue.split(" a linka ")[0].trim();
+                teacherJSON.phones.mobiles = [...new Set(propertyValue.split(" a linka ")[0].trim().split(", nebo ").map(a => a.trim()))];
                 teacherJSON.phones.link = propertyValue
                     .split(" a linka ")[1]
                     .replaceAll(new RegExp("</?strong>", "g"), "")
