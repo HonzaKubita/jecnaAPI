@@ -1,6 +1,6 @@
-const {payloadIsType, getSafeField} = require("../../modules/checker");
+const {payloadIsType} = require("../../modules/checker");
 const {moodleRequest, moodleDataPost} = require("../../modules/http");
-const {getCookie, documentOf} = require("../../modules/utils");
+const {getCookie, documentOf, getSafeField} = require("../../modules/utils");
 const {constants} = require("../../modules/constants");
 const LoginException = require("../../exceptions/client/loginException");
 module.exports = {

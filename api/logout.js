@@ -1,5 +1,6 @@
-const {getSafeField, payloadIsType} = require("../modules/checker");
+const {payloadIsType} = require("../modules/checker");
 const {jecnaAuthRequest} = require("../modules/http");
+const {getSafeField} = require("../modules/utils");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);

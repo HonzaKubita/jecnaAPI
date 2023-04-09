@@ -1,6 +1,7 @@
-const {payloadIsType, getSafeBooleanField} = require("../../modules/checker");
+const {payloadIsType} = require("../../modules/checker");
 const {foodRequest} = require("../../modules/http");
 const {foodParser} = require("../../parsers/school/foodParser");
+const {getSafeBooleanField} = require("../../modules/utils");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);

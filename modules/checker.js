@@ -3,7 +3,7 @@ const TokenException = require("../exceptions/client/tokenException");
 const PayloadException = require("../exceptions/client/payloadException");
 const ClientException = require("../exceptions/client/clientException");
 const DataException = require("../exceptions/client/dataException");
-const {userLoggedIn} = require("./utils");
+const {documentOf} = require("./utils");
 
 /**
  * Throws an exception if the token is not valid
@@ -34,50 +34,18 @@ function payloadIsType(headers, type = ["application/json"]) {
     if (contentTypeHeader === undefined) throw new ClientException("Request has no Content-Type header!");
     if (!type.includes(contentTypeHeader)) throw new PayloadException("The payload has wrong content type!");
 }
-
 /**
- * Returns a value of field or a default value
- * @param field{string | undefined} The field value, can be undefined
- * @param fieldName{string} The name of the field for error messages
- * @param defaultValue{string|null} The default value, if it's null, the field is required
- * @returns {string} The final value of the field
+ * Returns if the user is logged in based on the jecna server response
+ * @param htmlBody{string} The response
+ * @returns {boolean} If the user is logged in
  */
-function getSafeField(field, fieldName, defaultValue = null) {
-    if (defaultValue === null && field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
-    return (field === undefined ? defaultValue : field).toString();
-}
-
-/**
- * Returns a number value of field or a default value
- * @param field{string|undefined} The field value, can be undefined
- * @param fieldName{string} The name of the field for error messages
- * @param defaultValue{number|null} The default value, if it's null, the field is required
- * @returns {number} The final value for the field
- */
-function getSafeNumberField(field, fieldName, defaultValue = null) {
-    if (defaultValue === null && field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
-    const value = Number(field === undefined ? defaultValue : field);
-    if (isNaN(value)) throw new DataException(`Field '${fieldName}' is not a number!`);
-    return value;
-}
-
-/**
- * Returns a boolean value of field or a default value
- * @param field{string|undefined} The field value, can be undefined
- * @param fieldName{string} The name of the field for error messages
- * @param defaultValue{boolean|null} The default value, if it's null, the field is required
- * @returns {boolean} The final value for the field
- */
-function getSafeBooleanField(field, fieldName, defaultValue = null) {
-    if (defaultValue === null && field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
-    return Boolean(field === undefined ? defaultValue : field);
+function userLoggedIn(htmlBody) {
+    return documentOf(htmlBody).getElementsByClassName("user-menu").length !== 0;
 }
 
 module.exports = {
     tokenValid,
     siteFound,
-    payloadIsType,
-    getSafeField,
-    getSafeNumberField,
-    getSafeBooleanField
+    userLoggedIn,
+    payloadIsType
 }
