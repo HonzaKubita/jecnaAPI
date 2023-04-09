@@ -281,7 +281,7 @@ Internal exception also returns code `500`, and it means that something has gone
 >   "token": "Your auth token", // Optional - if not provided the teacher schedule is empty
 >   "short": "The shortcut of the teacher",
 >   "year": -1, // The year to take the schedule from; Optional - if not provided it takes the current year. It has to be a number.
->   "timeTableId": -1 // The period of the schedule; Optional - if not provided it selects the current period. It has to a number 
+>   "period": -1 // The period of the schedule; Optional - if not provided it selects the current period. It has to a number 
 > }
 > ```
 > #### Response
@@ -316,8 +316,8 @@ Internal exception also returns code `500`, and it means that something has gone
 > `tokenException` When the token is bad <br>
 > `payloadException` When you haven't provided the teacher short <br>
 > `dataException` When `teacherShort` doesn't exist <br>
-> `payloadException` When `year` or `timeTableId` is not a number <br>
-> `payloadException` When `year` or `timeTableId` don't exist
+> `payloadException` When `year` or `period` is not a number <br>
+> `payloadException` When `year` or `period` don't exist
 
 ### Room
 > **Url:** `/school/room` <br>
