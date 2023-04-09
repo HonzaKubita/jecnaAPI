@@ -391,11 +391,10 @@ Internal exception also returns code `500`, and it means that something has gone
 >   "homeAddress": "The home address of the user",
 >   "contactAddress": "The contact address of the user", // if not specified it's the same as homeAddress
 >   "grade": "User's grade",
->   "group": "User's group",
->   "reportNum": "The number in the class",
+>   "groups": ["group1"],// User's groups
+>   "reportNum": 0, // The number in the class
 >   "privateEmail": "The private email of the user",
 >   "schoolEmail": "The school email of the user",
->   "healthInsurance": "Name of the health insurance company",
 >   "image": "The url of the students image",
 >   "guardians": [
 >     {
@@ -405,7 +404,7 @@ Internal exception also returns code `500`, and it means that something has gone
 >     } // ...
 >   ],
 >   "support": {
->     "variableSymbol": "The variable symbol to the students support",
+>     "variableSymbol": 0, // The variable symbol to the students support
 >     "bankAccount": "The bank account to the students support",
 >   }
 > }
