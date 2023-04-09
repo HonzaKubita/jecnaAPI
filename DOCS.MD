@@ -291,7 +291,7 @@ Internal exception also returns code `500`, and it means that something has gone
 >   "name": "The whole name of the teacher",
 >   "username": "The username of the teacher",
 >   "email": "The email of the teacher",
->   "private_email": "The private email of the teacher",
+>   "privateEmail": "The private email of the teacher",
 >   "phones": {
 >     "mobile": "The mobile number of the teacher",
 >     "link": "The number of teachers phone link",
@@ -299,7 +299,7 @@ Internal exception also returns code `500`, and it means that something has gone
 >   },
 >   "cabinet": "The teachers cabinet",
 > //  "cabinetShort":  "The teachers cabinet shortcut", // can be then used for fetching (/school/room) TODO decide if it's needed
->   "class_teacher": "The class the teacher teaches",
+>   "classTeacher": "The class the teacher teaches",
 >   "consultations": "Consultation hours of the teacher",
 >   "image": "The url of the teachers image",
 >   "schedule": {}, // The teachers schedule object
