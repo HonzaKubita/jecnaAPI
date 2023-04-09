@@ -417,6 +417,7 @@ Internal exception also returns code `500`, and it means that something has gone
 > **Url:** `/user/profile/edit` <br>
 > #### POST METHOD
 > > **Description:** Sends a list with all possible values to change and it's values.
+> > **Warning:** You have to disable the request timeout, it takes about 40 seconds (to load all the villages :/)
 > > ##### Request
 > > ```json5
 > > {
