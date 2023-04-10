@@ -47,7 +47,7 @@ function parseSchedule(htmlBody) {
     }
 
     // parse days
-    days: for (let i = 1; i < scheduleTbody.children.length; i++) {
+    for (let i = 1; i < scheduleTbody.children.length; i++) {
         const dayTr = scheduleTbody.children[i];
 
         const subjectsJSON = [];
@@ -58,7 +58,7 @@ function parseSchedule(htmlBody) {
         let bigSubjectAdds = 0;
         let emptySubjects = 0;
         // parse lessons
-        subjects: for (const subjectTd of dayTr.children) {
+        for (const subjectTd of dayTr.children) {
             const lessonsJSON = [];
             // eliminate day name
             if (subjectTd.tagName === "TH") {
@@ -78,7 +78,7 @@ function parseSchedule(htmlBody) {
             const subjectLength = Number(subjectTd.getAttribute("colspan") ?? 1);
             bigSubjectAdds += subjectLength - 1;
             // parse lessons
-            lessons: for (const lessonDiv of subjectTd.children) {
+            for (const lessonDiv of subjectTd.children) {
                 const nameSpan = lessonDiv.getElementsByClassName("subject")[0];
                 const teacherSpan = lessonDiv.getElementsByClassName("employee")[0]; // undefinable
 
