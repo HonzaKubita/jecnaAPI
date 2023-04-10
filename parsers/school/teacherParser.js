@@ -91,10 +91,7 @@ async function teacherParser(htmlBody, year, period, token) {
         const scheduleRes = await jecnaAuthRequest(scheduleLink, token);
         siteFound(scheduleRes.data, `${year === -1 ? "" : `Year ${year}`}${year !== -1 && period !== -1 ? " or " : ""}${period === -1 ? "" : `Period ${period}`}`);
 
-        // FIXME teacherJSON.schedule = parseSchedule(scheduleRes.data);
-        teacherJSON.schedule = {
-            link: scheduleLink
-        };
+        teacherJSON.schedule = parseSchedule(scheduleRes.data);
     }
     // parse certificates
     const certificatesUl = teacherDOM.getElementsByClassName("certifications")?.[0];

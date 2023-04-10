@@ -2,6 +2,7 @@ const {documentOf} = require("../../modules/utils");
 const {constants} = require("../../modules/constants");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {siteFound} = require("../../modules/checker");
+const {parseSchedule} = require("../user/scheduleParser");
 
 async function roomParser(htmlBody, year, token){
     const roomDOM = documentOf(htmlBody);
@@ -67,10 +68,7 @@ async function roomParser(htmlBody, year, token){
         const scheduleRes = await jecnaAuthRequest(scheduleLink, token);
         siteFound(scheduleRes.data, `Year ${year}`);
 
-        // FIXME teacherJSON.schedule = parseSchedule(scheduleRes.data);
-        roomJSON.schedule = {
-            link: scheduleLink
-        };
+        roomJSON.schedule = parseSchedule(scheduleRes.data);
     }
 
     return roomJSON;

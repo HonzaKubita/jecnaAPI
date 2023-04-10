@@ -793,7 +793,7 @@ Internal exception also returns code `500`, and it means that something has gone
 >             "short": "The lesson name short",
 >             "name": "The lesson full name",
 >             "teacherShort": "The teacher shortcut",
->             "teacherName": "The teacher full name",
+>             "teacherFull": "The teacher full name",
 >             "classroom": "The classroom where the lesson is",
 >             "class": "The class which is the lesson for",
 >             "group": "The group who it is for or empty",
@@ -817,12 +817,12 @@ Internal exception also returns code `500`, and it means that something has gone
 >     {
 >       "name": "The name of the year",
 >       "id": "The id of the year",
->       "periods": [
->         {
->           "name": "The name of the period",
->           "id": "The id of the period"
->         } // ...
->       ]
+>     } // ...
+>   ],
+>   "periods": [
+>     {
+>       "name": "The name of the period",
+>       "id": "The id of the period"
 >     } // ...
 >   ]
 > }
