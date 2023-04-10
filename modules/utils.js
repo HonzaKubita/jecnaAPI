@@ -1,7 +1,7 @@
 const ServerException=  require("../exceptions/server/serverException");
-const {JSDOM} = require("jsdom");
 const DataException = require("../exceptions/client/dataException");
 const ClientException = require("../exceptions/client/clientException");
+const {parseHTML} = require("linkedom");
 
 /**
  * Returns a cookie value from set-cookie header
@@ -29,7 +29,7 @@ function getCookie(name, resHeaders) {
  * @returns {Document} The document object
  */
 function documentOf(responseData) {
-    return new JSDOM(responseData).window.document;
+    return parseHTML(responseData).window.document;
 }
 
 /**

@@ -124,6 +124,54 @@ function profileParser(htmlBody, token) {
     return profileJSON;
 }
 
+function profileEditParser(htmlBody) {
+    const profileEditDOM = documentOf(htmlBody);
+
+    const email = profileEditDOM.getElementById("email")?.value ?? "";
+    const phone = profileEditDOM.getElementById("phone")?.value ?? "";
+    const street = profileEditDOM.getElementById("street")?.value ?? "";
+    const houseNumber = profileEditDOM.getElementById("streetNumber")?.value ?? "";
+    const zip = profileEditDOM.getElementById("zip")?.value ?? "";
+
+    let selectedInsurance;
+    const possibleInsurances = [];
+    for (const option of profileEditDOM.getElementById("healthInsuranceId").children) {
+        const insurance = {
+            id: Number(option.value),
+            name: option.label
+        };
+        if (option.getAttribute("selected") === "selected") selectedInsurance = insurance;
+        possibleInsurances.push(insurance);
+    }
+    let selectedVillage;
+    const possibleVillages = [];
+    for (const option of profileEditDOM.getElementById("czMsmtRaujId").children) {
+        const village = {
+            id: Number(option.value),
+            name: option.label
+        };
+        if (option.getAttribute("selected") === "selected") selectedVillage = village;
+        possibleVillages.push(village);
+    }
+
+    return {
+        email: email,
+        phone: phone,
+        street: street,
+        houseNumber: houseNumber,
+        zip: zip,
+        insurance: {
+            current: selectedInsurance,
+            possibleValues: possibleInsurances
+        },
+        village: {
+            current: selectedVillage,
+            possibleValues: possibleVillages
+        }
+    };
+}
+
 module.exports = {
-    profileParser
+    profileParser,
+    profileEditParser
 }

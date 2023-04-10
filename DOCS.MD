@@ -16,13 +16,15 @@
 > 13. [/school/room](#room)
 > 14. [/school/event](#event)
 > 15. [/user/profile](#profile)
-> 16. [/user/profile/edit](#profile-edit)
-> 17. [/user/grades](#grades)
-> 18. [/user/record-list](#record-list)
-> 19. [/user/absence](#absence)
-> 20. [/user/passings](#passings)
-> 21. [/user/schedule](#schedule)
-> 22. [/user/special-schedule](#special-schedule)
+> 16. [/user/profile/data](#profile-data)
+> 17. [/user/profile/image](#profile-image)
+> 18. [/user/profile/password](#profile-password)
+> 18. [/user/grades](#grades)
+> 19. [/user/record-list](#record-list)
+> 20. [/user/absence](#absence)
+> 21. [/user/passings](#passings)
+> 22. [/user/schedule](#schedule)
+> 23. [/user/special-schedule](#special-schedule)
 
 ## Server behaviour
 The server accepts everything in JSON data, if a payload doesn't have type `application/json` an `payloadException` exception will be thrown;
@@ -298,7 +300,6 @@ Internal exception also returns code `500`, and it means that something has gone
 >     "private": "Teachers private number"
 >   },
 >   "cabinet": "The teachers cabinet",
-> //  "cabinetShort":  "The teachers cabinet shortcut", // can be then used for fetching (/school/room) TODO decide if it's needed
 >   "classTeacher": "The class the teacher teaches",
 >   "consultations": "Consultation hours of the teacher",
 >   "image": "The url of the teachers image",
@@ -413,11 +414,10 @@ Internal exception also returns code `500`, and it means that something has gone
 > `tokenException` When the token is bad <br>
 > `payloadException` When you haven't provided the token
 
-### Profile edit
-> **Url:** `/user/profile/edit` <br>
+### Profile data
+> **Url:** `/user/profile/data` <br>
 > #### POST METHOD
 > > **Description:** Sends a list with all possible values to change and it's values.
-> > **Warning:** You have to disable the request timeout, it takes about 40 seconds (to load all the villages :/)
 > > ##### Request
 > > ```json5
 > > {
@@ -468,38 +468,104 @@ Internal exception also returns code `500`, and it means that something has gone
 > > ```json5
 > > {
 > >   "token": "Your auth token",
-> >   "form": { // ONLY FORM
-> >     // any of these can be missing, it will be set to the current value
-> >     "email": "New user email",
-> >     "phone": "New user phone",
-> >     "insurance": 0, // new insurance id,
-> >     "street": "New street value",
-> >     "houseNumber": "New house number value",
-> >     "village": 0, // new village id
-> >     "zip": "New zip value"
-> >   },
-> >   "password": { // OR ONLY PASSWORD
-> >     "oldPassword": "Old password",
-> >     "newPassword": "New password"
-> >   }
+> >   "email": "New user email",
+> >   "phone": "New user phone",
+> >   "insurance": 0, // new insurance id,
+> >   "street": "New street value",
+> >   "houseNumber": "New house number value",
+> >   "village": 0, // new village id
+> >   "zip": "New zip value"
+> >   
 > > }
 > > ```
-> > **OR**
-> > Content-Type: image/jpeg
-> > File: image
 > > ##### Response
-> > The data object (like [this](#response-13)) if successful
-> > If not successful -> error object ([reference](#server-behaviour))
+> > Empty if everything ok
 > > ##### Throws
 > > `tokenException` When the token is bad <br>
 > > `payloadException` When you haven't provided the token <br>
-> > `payloadException` When you provided form and password field together <br>
-> > `payloadException` When `oldPassword` or `newPassword` or both in `password` field are missing <br>
-> > `dataException` When `oldPassword` is wrong <br>
-> > `dataException` When `newPassword` doesn't fulfill the password requirements <br>
-> > `payloadException` When `insurance` or `village` have wrong value <br>
+> > `payloadException` When any of the fields are missing <br>
+> > `payloadException` When some field has wrong value + **added `errors{{field: message,...}}` field with error messages** <br>
+
+### Profile image
+> **Url:** `/profile/image`
+> #### POST METHOD
+> > **Description:** Returns currently pending image
+> > **Warning:** If some other token uploaded/rejected the image, you have to acquire a new one, in order to work
+> > ##### Request
+> > ```json5
+> > {
+> >   "token": "Your auth token"
+> > }
+> > ```
+> > ##### Response
+> > ```json5
+> > {
+> >   "image": "The url of the currently pending image"
+> > }
+> > ```
+> > ##### Throws
+> > `tokenException` When the token is bad <br>
+> > `payloadException` When you haven't provided the token <br>
+> > `stateException` When no image is pending
+> 
+> #### PUT METHOD
+> > **Description:** Changes the profile image to a new image
+> > **Warning:** If some other token uploaded/rejected the image, you have to acquire a new one, in order to work
+> > ##### Request
+> > **Content type:** `multipart/form-data`
+> > ```json5
+> > {
+> >   token: "Your auth token",
+> >   image: "image/jpeg" // The image buffer you send
+> > }
+> > ```
+> > ##### Response
+> > Empty if everything ok
+> > ##### Throws
 > > `payloadException` When image is too large <br>
-> > `payloadException` When image is not JPEG format
+> > `payloadException` When image is not JPEG format <br>
+> > `payloadException` When you send more than one file <br>
+> > `stateException` When other image is already requested
+> 
+> #### DELETE METHOD
+> > **Description:** Cancels image request
+> > **Warning:** If some other token uploaded/rejected the image, you have to acquire a new one, in order to work
+> > ##### Request
+> > ```json5
+> > {
+> >   "token": "Your auth token"
+> > }
+> > ```
+> > ##### Response
+> > Empty if everything ok
+> > ##### Throws
+> > `tokenException` When the token is bad <br>
+> > `payloadException` When you haven't provided the token <br>
+> > `stateException` When no image is pending
+
+### Profile password
+> **Url:** `/user/profile/password`
+> **Description:** Changes the password
+> **Method:** `PUT`
+> #### Request
+> ```json5
+> {
+>   "token": "Your auth token",
+>   "oldPassword": "Your old password",
+>   "newPassword": "Your new password"
+> }
+> ```
+> #### Response
+> ```json5
+> {
+>   "password": "The new password"
+> }
+> ```
+> #### Throws
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token <br>
+> `payloadException` When `oldPassword` or `newPassword` field is missing <br>
+> `dataException` When `oldPassword` is wrong or `newPassword` does not fulfill the password requirements
 
 ### Grades
 > **Url:** `/user/grades` <br>

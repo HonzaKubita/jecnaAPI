@@ -1,9 +1,8 @@
 const {constants} = require("./constants");
 const TokenException = require("../exceptions/client/tokenException");
 const PayloadException = require("../exceptions/client/payloadException");
-const ClientException = require("../exceptions/client/clientException");
 const DataException = require("../exceptions/client/dataException");
-const {documentOf} = require("./utils");
+const {documentOf, getContentType} = require("./utils");
 
 /**
  * Throws an exception if the token is not valid
@@ -26,13 +25,11 @@ function siteFound(htmlBody, what) {
 
 /**
  * Throws an exception if a Content-Type header is undefined or if it is not one of the provided options
- * @param headers{AxiosHeaders} The headers of the request
- * @param type{string[]} An array of strings, represents all possible values for the header
+ * @param headers{Headers} The headers of the request
+ * @param type{string} An array of strings, represents all possible values for the header
  */
-function payloadIsType(headers, type = ["application/json"]) {
-    const contentTypeHeader = headers["content-type"];
-    if (contentTypeHeader === undefined) throw new ClientException("Request has no Content-Type header!");
-    if (!type.includes(contentTypeHeader)) throw new PayloadException("The payload has wrong content type!");
+function payloadIsType(headers, type = "application/json") {
+    if (type !== getContentType(headers)) throw new PayloadException("The payload has wrong content type!");
 }
 /**
  * Returns if the user is logged in based on the jecna server response

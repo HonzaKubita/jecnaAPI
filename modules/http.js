@@ -49,14 +49,15 @@ async function jecnaAuthRequest(path, token, cookies = "", headers = {}, options
  * @param path{string} The path where to send the request to
  * @param token{string} The JSESSIONID token
  * @param data The data to send
+ * @param contentType{string} Optional: The data content type
  * @param cookies{string} Optional: more cookies to send
  * @param headers{AxiosHeaders} Optional: more headers to send
  * @param options{AxiosRequestConfig} Optional: more axios options to send
  * @returns {Promise<AxiosResponse<*>>} The server response
  */
-async function jecnaDataPost(path, token, data, cookies = "", headers = {}, options = {}) {
+async function jecnaDataPost(path, token, data, contentType = "application/x-www-form-urlencoded", cookies = "", headers = {}, options = {}) {
     return await jecnaAuthRequest(path, token, cookies, {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": contentType,
         ... headers
     }, {
         data: data,
