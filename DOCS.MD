@@ -574,8 +574,8 @@ Internal exception also returns code `500`, and it means that something has gone
 > ```json5
 > {
 >   "token": "Your auth token",
->   "year": -1, // The year to take the grades from; Optional - if not provided it takes the current year. It has to be a number.
->   "half-term": -1 // The school year half id; Optional - if not provided it takes the first half-term possible. It has to be a number
+>   "year": -1, // The year to take the grades from; Optional - if not provided or not existing it takes the current year. It has to be a number.
+>   "halfTerm": -1 // The school year half id; Optional - if not provided or not existing it takes the first half-term possible. It has to be a number
 > }
 > ```
 > #### Response
@@ -608,21 +608,20 @@ Internal exception also returns code `500`, and it means that something has gone
 >     {
 >       "name": "The name of the year",
 >       "id": -1, // the id of the year
->       "half-terms": [
->         {
->           "name": "The name of the half term",
->           "id": -1 // the id of the half-term
->         } // ...
->       ]
 >     } // ...
->   ] 
+>   ],
+>   "halfTerms": [
+>     {
+>       "name": "The name of the half term",
+>       "id": -1 // the id of the half-term
+>     } // ...
+>   ]
 > }
 > > ```
 > #### Throws
 > `tokenException` When the token is bad <br>
 > `payloadException` When you haven't provided the token <br>
-> `payloadException` When `year` or `half-term` is not a number <br>
-> `payloadException` When `year` or `half-term` don't exist
+> `payloadException` When `year` or `halfTerm` is not a number
 
 ### Record list
 > **Url:** `/user/record-list`
