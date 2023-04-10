@@ -744,15 +744,15 @@ Internal exception also returns code `500`, and it means that something has gone
 >   "years": [
 >     {
 >       "name": "The name of the year",
->       "id": "The id of the year",
->       "months": [
->         {
->           "name": "The name of the month",
->           "id": "The id of the month"
->         } // ...
->       ]
+>       "id": "The id of the year"
 >     } // ...
->   ]
+>   ],
+>   "months": [
+>     {
+>       "name": "The name of the month",
+>       "id": "The id of the month"
+>     } // ...
+>  ]
 > }
 > ```
 > #### Throws

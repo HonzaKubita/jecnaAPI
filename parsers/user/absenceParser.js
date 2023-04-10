@@ -7,11 +7,6 @@ function absenceParser(htmlBody) {
         years: []
     };
 
-    // parse absence
-    const absenceTbody = absenceDOM
-        .getElementsByClassName("absence-list")[0] // absenceTable
-        ?.children?.[0];
-
     // parse years
     const yearSelect = absenceDOM.getElementById("schoolYearId");
     for (const yearOption of yearSelect.children) {
@@ -20,6 +15,11 @@ function absenceParser(htmlBody) {
             id: Number(yearOption.value)
         });
     }
+    // parse absence
+    const absenceTbody = absenceDOM
+        .getElementsByClassName("absence-list")[0] // absenceTable
+        ?.children?.[0];
+
 
     if (absenceTbody === undefined) return absenceJSON;
 
