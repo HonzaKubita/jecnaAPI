@@ -19,12 +19,13 @@
 > 16. [/user/profile/data](#profile-data)
 > 17. [/user/profile/image](#profile-image)
 > 18. [/user/profile/password](#profile-password)
-> 18. [/user/grades](#grades)
-> 19. [/user/record-list](#record-list)
-> 20. [/user/absence](#absence)
-> 21. [/user/passings](#passings)
-> 22. [/user/schedule](#schedule)
-> 23. [/user/special-schedule](#special-schedule)
+> 19. [/user/grades](#grades)
+> 20. [/user/record-list](#record-list)
+> 21. [/user/record](#record)
+> 22. [/user/absence](#absence)
+> 23. [/user/passings](#passings)
+> 24. [/user/schedule](#schedule)
+> 25. [/user/special-schedule](#special-schedule)
 
 ## Server behaviour
 The server accepts everything in JSON data, if a payload doesn't have type `application/json` an `payloadException` exception will be thrown;
@@ -629,20 +630,19 @@ Internal exception also returns code `500`, and it means that something has gone
 > #### Request
 > ```json5
 > {
->   "token": "Your auth token"
+>   "token": "Your auth token",
+>   "expand": false, // if it should expand all the records - takes longer; OPTIONAL; default = false
+>   "index": 0, // index to start from; OPTIONAL; default = 0
+>   "max": Infinity // the maximum number of records; OPTIONAL; default = Infinity
 > }
 > ```
 > #### Response
+> If `expand` is false:
 > ```json5
 > {
 >   "records": [
 >     {
->       // TODO find more data to be able to parse this
->       //"good": true, // if it's good - true, if it's bad - false
->       //"type": "The type of the record",
->       //"date": "The date of the record",
->       //"reason": "The reason for the record",
->       //"referenceNumber": "The reference number" // or empty if none
+>       "id": 0, // The id of the record, can be used in /user/record
 >       "good": true,
 >       "date": "The date of the record",
 >       "text": "The text of the record"
@@ -650,9 +650,40 @@ Internal exception also returns code `500`, and it means that something has gone
 >   ]
 > }
 > ```
+> Else:
+> ```json5
+> {
+>   "records": [
+>     {
+>       "good": true,
+>       "type": "The type of the record",
+>       "date": "The date of the record",
+>       "reason": "The reason for the record",
+>       "referenceNumber": "The reference number"
+>     } // ...
+>   ]
+> }
+> ```
 > #### Throws
 > `tokenException` When the token is bad <br>
 > `payloadException` When you haven't provided the token
+
+### Record
+> **Url:** `/user/record` <br>
+> **Description:** Provides as much information about a record as possible
+> #### Request
+> ```json5
+> {
+>   "token": "Your auth token",
+>   "id": 0 // the id of the record
+> }
+> ```
+> #### Response
+> The classic record object provided in [Record list](#record-list) when `expand` is true
+> #### Throws
+> `tokenException` When the token is bad <br>
+> `payloadException` When you haven't provided the token <br>
+> `payloadException` When `id` does not exist
 
 ### Absence
 > **Url:** `/user/absence`
