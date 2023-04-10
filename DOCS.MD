@@ -25,7 +25,6 @@
 > 22. [/user/absence](#absence)
 > 23. [/user/passings](#passings)
 > 24. [/user/schedule](#schedule)
-> 25. [/user/special-schedule](#special-schedule)
 
 ## Server behaviour
 The server accepts everything in JSON data, if a payload doesn't have type `application/json` an `payloadException` exception will be thrown;
@@ -832,19 +831,3 @@ Internal exception also returns code `500`, and it means that something has gone
 > `payloadException` When you haven't provided the token <br>
 > `payloadException` When `year` or `period` is not a number <br>
 > `payloadException` When `year` or `period` don't exist
-
-### Special schedule
-> **Url:** `/user/special-schedule` <br>
-> **Description:** provides an url to the special schedule
-> #### Request
-> ```json5
-> {}
-> ```
-> #### Response
-> ```json5
-> {
->   "url": "Special schedule url"
-> }
-> ```
-> **Throws:** nothing
-
