@@ -59,7 +59,7 @@ async function teacherParser(htmlBody, year, period, token) {
                 teacherJSON.phones.mobiles = [...new Set(propertyValue.split(" a linka ")[0].trim().split(", nebo ").map(a => a.trim()))];
                 teacherJSON.phones.link = propertyValue
                     .split(" a linka ")[1]
-                    .replaceAll(new RegExp("</?strong>", "g"), "")
+                    .replaceAll(/<\/?strong>/g, "")
                     .trim();
                 break;
             case "Soukromý telefon":

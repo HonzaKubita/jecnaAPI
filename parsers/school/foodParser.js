@@ -41,7 +41,7 @@ function parseLunch(lunchDiv) {
         .textContent // Oběd 1 -- Ječná -- Polévka ze zeleného hrášku, ;vepřové po štýrsku, brambory, ovocný čaj, (1, 3, 7, 9)
         .split("--")[2] //  Polévka ze zeleného hrášku, ;vepřové po štýrsku, brambory, ovocný čaj, (1, 3, 7, 9)
         .trim() // Polévka ze zeleného hrášku, ;vepřové po štýrsku, brambory, ovocný čaj, (1, 3, 7, 9)
-        .match(new RegExp("(.*),\\s*\\((.+)\\)")); // groups
+        .match(/(.*),\s*\((.+)\)/); // groups
 
     return {
         food: match?.[1],

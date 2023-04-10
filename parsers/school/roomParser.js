@@ -40,7 +40,7 @@ async function roomParser(htmlBody, year, token){
                 roomJSON.phones.mobiles = [...new Set(propertyValue.split(" a linka ")[0].trim().split(", nebo ").map(a => a.trim()))];
                 roomJSON.phones.link = propertyValue
                     .split(" a linka ")[1]
-                    .replaceAll(new RegExp("</?strong>", "g"), "")
+                    .replaceAll(/<\/?strong>/g, "")
                     .trim();
                 break;
             case "Podlaží":

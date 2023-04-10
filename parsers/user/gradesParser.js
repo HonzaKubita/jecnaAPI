@@ -15,7 +15,7 @@ function gradesParser(htmlBody) {
         .getElementsByTagName("tbody")[0];
     // parse subjects
     for (const subjectTr of gradesTbody.children) {
-        const subjectNameMatch = subjectTr.children[0].innerHTML.match(new RegExp("((?:[^\\s(]+\\s?)+)(?:\\(?(.+)\\))?"));
+        const subjectNameMatch = subjectTr.children[0].innerHTML.match(/((?:[^\s(]+\s?)+)(?:\(?(.+)\))?/);
 
         const subjectName = subjectNameMatch[1].trim();
         const subjectShort = subjectNameMatch?.[2]?.trim() ?? "";
