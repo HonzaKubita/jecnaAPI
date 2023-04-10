@@ -686,7 +686,7 @@ Internal exception also returns code `500`, and it means that something has gone
 > `payloadException` When `id` does not exist
 
 ### Absence
-> **Url:** `/user/absence`
+> **Url:** `/user/absence` <br>
 > **Description:** Returns users absence + list of available years
 > #### Request
 > ```json5
