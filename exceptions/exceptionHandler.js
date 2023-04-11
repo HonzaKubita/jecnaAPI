@@ -1,5 +1,6 @@
 const PayloadException = require("./client/payloadException");
 const {MulterError} = require("multer");
+const ServerException = require("./server/serverException");
 const INTERNAL_EXCEPTION = "internalException";
 
 module.exports = (err, req, res, next) => {
@@ -13,6 +14,7 @@ module.exports = (err, req, res, next) => {
     }
     // check if the exception is custom
     if (err.isCustom) {
+        if (err instanceof ServerException) logError(err);
         res.status(err.code).json({
             type: err.type,
             tree: err.tree,
@@ -23,10 +25,18 @@ module.exports = (err, req, res, next) => {
         return;
     }
     // if it is not custom, throw an internal exception
-    console.error(err);
+    logError(err);
     res.status(500).json({
         type: INTERNAL_EXCEPTION,
         tree: INTERNAL_EXCEPTION,
-        message: `An undocumented exception happened, please report this on github issues. Error: ${err}`
+        message: `An undocumented exception happened, please report this on github issues. (see console for more details)`
     });
+}
+
+function logError(req, err) {
+    console.error("An undocumented exception occurred!");
+    console.error("================== REQUEST ==================");
+    console.error(req);
+    console.error("================= EXCEPTION =================");
+    console.error(err);
 }
