@@ -11,6 +11,7 @@ module.exports = (err, req, res, next) => {
     if (err instanceof MulterError) {
         if (err.code === "LIMIT_FILE_SIZE") err = new PayloadException("Image is too large!", 413);
         if (err.code === "LIMIT_FILE_COUNT") err = new PayloadException("You can send only one file!", 413);
+        if (err.code === "LIMIT_UNEXPECTED_FILE") err = new PayloadException("Unexpected file! Please use field name as it is in documentation.");
     }
     // check if the exception is custom
     if (err.isCustom) {

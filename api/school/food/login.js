@@ -1,8 +1,8 @@
-const {payloadIsType} = require("../../modules/checker");
-const {foodRequest, foodDataPost} = require("../../modules/http");
-const {getCookie, getSafeStringField} = require("../../modules/utils");
-const {constants} = require("../../modules/constants");
-const LoginException = require("../../exceptions/client/loginException");
+const {payloadIsType} = require("../../../modules/checker");
+const {foodRequest, foodDataPost} = require("../../../modules/http");
+const {getCookie, getSafeStringField} = require("../../../modules/utils");
+const {constants} = require("../../../modules/constants");
+const LoginException = require("../../../exceptions/client/loginException");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);
