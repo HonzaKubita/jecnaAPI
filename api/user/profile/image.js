@@ -5,6 +5,7 @@ const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const DataException = require("../../../exceptions/client/dataException");
 const StateException = require("../../../exceptions/client/stateException");
 const {constants} = require("../../../modules/constants");
+const {imageUpload} = require("../../../middleware/imageUpload");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);
@@ -67,5 +68,8 @@ module.exports = {
 
         await jecnaAuthRequest(rejectLink, token);
         res.status(200).send();
+    },
+    middleware: {
+        put: [ imageUpload.single("image") ]
     }
 }
