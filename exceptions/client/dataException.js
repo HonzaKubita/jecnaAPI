@@ -1,9 +1,13 @@
-const PayloadException = require("./payloadException");
-module.exports = class DataException extends PayloadException {
-    type = "data";
+const {PayloadException} = require("./payloadException");
+class DataException extends PayloadException {
+    name = "data";
 
     constructor(message, code = 400) {
         super(message, code);
-        this.tree += `/${this.type}`;
+        this.tree += `/${this.name}`;
     }
+}
+
+module.exports = {
+    DataException
 }

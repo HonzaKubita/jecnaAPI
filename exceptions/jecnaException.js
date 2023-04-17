@@ -1,11 +1,13 @@
-module.exports = class Exception extends Error {
-    isCustom = true;
-
-    type = "exception";
+class JecnaException extends Error {
+    name = "exception";
     tree = this.type;
 
     constructor(message, code) {
         super(message);
         this.code = code;
     }
+}
+
+module.exports = {
+    JecnaException
 }

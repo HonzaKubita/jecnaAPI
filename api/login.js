@@ -2,7 +2,7 @@ const {payloadIsType, userLoggedIn} = require("../modules/checker");
 const {jecnaRequest, jecnaDataPost} = require("../modules/http");
 const {constants} = require("../modules/constants");
 const {getCookie, documentOf, getSafeStringField} = require("../modules/utils");
-const LoginException = require("../exceptions/client/loginException");
+const {LoginException} = require("../exceptions/client/loginException");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);

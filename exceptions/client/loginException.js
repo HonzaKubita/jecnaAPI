@@ -1,9 +1,13 @@
-const PayloadException = require("./payloadException");
-module.exports = class LoginException extends PayloadException {
-    type = "login";
+const {PayloadException} = require("./payloadException");
+class LoginException extends PayloadException {
+    name = "login";
 
     constructor(message) {
         super(message, 401);
-        this.tree += `/${this.type}`;
+        this.tree += `/${this.name}`;
     }
+}
+
+module.exports = {
+    LoginException
 }

@@ -1,5 +1,5 @@
 const multer = require("multer");
-const PayloadException = require("../exceptions/client/payloadException");
+const {PayloadException} = require("../exceptions/client/payloadException");
 const imageUpload = multer({
     preservePath: true,
     limits: {

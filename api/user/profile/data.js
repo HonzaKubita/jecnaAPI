@@ -2,7 +2,7 @@ const {payloadIsType, tokenValid} = require("../../../modules/checker");
 const {getSafeStringField, getSafeNumberField, documentOf} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const {profileEditParser} = require("../../../parsers/user/profileParser");
-const PayloadException = require("../../../exceptions/client/payloadException");
+const {PayloadException} = require("../../../exceptions/client/payloadException");
 module.exports = {
     post: async (req, res) => {
         payloadIsType(req.headers);

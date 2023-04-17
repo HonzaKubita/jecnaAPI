@@ -1,7 +1,7 @@
 const {constants} = require("./constants");
-const TokenException = require("../exceptions/client/tokenException");
-const PayloadException = require("../exceptions/client/payloadException");
-const DataException = require("../exceptions/client/dataException");
+const {TokenException} = require("../exceptions/client/tokenException");
+const {PayloadException} = require("../exceptions/client/payloadException");
+const {DataException} = require("../exceptions/client/dataException");
 const {documentOf, getContentType} = require("./utils");
 
 /**

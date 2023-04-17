@@ -1,6 +1,7 @@
-const PayloadException = require("./client/payloadException");
+const {PayloadException} = require("./client/payloadException");
 const {MulterError} = require("multer");
-const ServerException = require("./server/serverException");
+const {ServerException} = require("./server/serverException");
+const { JecnaException }  = require("./jecnaException");
 const INTERNAL_EXCEPTION = "internalException";
 
 module.exports = (err, req, res, next) => {
@@ -14,30 +15,24 @@ module.exports = (err, req, res, next) => {
         if (err.code === "LIMIT_UNEXPECTED_FILE") err = new PayloadException("Unexpected file! Please use field name as it is in documentation.");
     }
     // check if the exception is custom
-    if (err.isCustom) {
-        if (err instanceof ServerException) logError(err);
+    if (err instanceof JecnaException) {
+        if (err instanceof ServerException) console.exchangeError(err, req, res);
         res.status(err.code).json({
-            type: err.type,
+            type: err.name,
             tree: err.tree,
             message: err.message,
             // only for some errors
             errors: err.errors
         });
+        next();
         return;
     }
     // if it is not custom, throw an internal exception
-    logError(err);
+    console.exchangeError(err, req, res);
     res.status(500).json({
         type: INTERNAL_EXCEPTION,
         tree: INTERNAL_EXCEPTION,
         message: `An undocumented exception happened, please report this on github issues. (see console for more details)`
     });
-}
-
-function logError(req, err) {
-    console.error("An undocumented exception occurred!");
-    console.error("================== REQUEST ==================");
-    console.error(req);
-    console.error("================= EXCEPTION =================");
-    console.error(err);
+    next();
 }

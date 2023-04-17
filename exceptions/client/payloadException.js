@@ -1,9 +1,13 @@
-const ClientException = require("./clientException");
-module.exports = class PayloadException extends ClientException {
-    type = "payload";
+const {ClientException} = require("./clientException");
+class PayloadException extends ClientException {
+    name = "payload";
 
     constructor(message, code = 400) {
         super(message, code);
-        this.tree += `/${this.type}`;
+        this.tree += `/${this.name}`;
     }
+}
+
+module.exports = {
+    PayloadException
 }
