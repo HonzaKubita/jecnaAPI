@@ -1,4 +1,4 @@
-const ServerException=  require("../exceptions/server/serverException");
+const {ServerException} =  require("../exceptions/server/serverException");
 const {DataException} = require("../exceptions/client/dataException");
 const {ClientException} = require("../exceptions/client/clientException");
 const {parseHTML} = require("linkedom");
