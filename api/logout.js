@@ -2,11 +2,12 @@ const {payloadIsType} = require("../modules/checker");
 const {jecnaAuthRequest} = require("../modules/http");
 const {getSafeStringField} = require("../modules/utils");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");
         await jecnaAuthRequest("/user/logout", token);
         res.status(200).json({});
+        next();
     }
 }

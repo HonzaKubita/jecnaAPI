@@ -19,6 +19,10 @@ const constants =
         baseURL: "https://moodle.spsejecna.cz",
         sessionCookieName: "MoodleSession",
         idCookieName: "MOODLEID1_"
+    },
+    logs: {
+        logsFolder: "logs",
+        counterFile: `logs/counter`
     }
 };
 

@@ -4,7 +4,7 @@ const {constants} = require("../../modules/constants");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {eventParser} = require("../../parsers/school/eventParser");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token", constants.jecna.wrongToken);
@@ -16,5 +16,6 @@ module.exports = {
 
         const eventJSON = eventParser(eventRes.data);
         res.status(200).json(eventJSON);
+        next();
     }
 }

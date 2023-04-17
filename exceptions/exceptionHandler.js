@@ -16,7 +16,7 @@ module.exports = (err, req, res, next) => {
     }
     // check if the exception is custom
     if (err instanceof JecnaException) {
-        if (err instanceof ServerException) console.exchangeError(err, req, res);
+        if (err instanceof ServerException) err.exitCode = 1;
         res.status(err.code).json({
             type: err.name,
             tree: err.tree,
@@ -24,15 +24,16 @@ module.exports = (err, req, res, next) => {
             // only for some errors
             errors: err.errors
         });
-        next();
-        return;
     }
-    // if it is not custom, throw an internal exception
-    console.exchangeError(err, req, res);
-    res.status(500).json({
-        type: INTERNAL_EXCEPTION,
-        tree: INTERNAL_EXCEPTION,
-        message: `An undocumented exception happened, please report this on github issues. (see console for more details)`
-    });
+    else { // if it is not custom, throw an internal exception
+        err.exitCode = 1
+        res.status(500).json({
+            type: INTERNAL_EXCEPTION,
+            tree: INTERNAL_EXCEPTION,
+            message: `An undocumented exception happened, please report this on github issues. (see console for more details)`
+        });
+    }
+
+    req.logger.err = err;
     next();
 }

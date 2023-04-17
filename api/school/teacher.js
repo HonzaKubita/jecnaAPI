@@ -4,7 +4,7 @@ const {constants} = require("../../modules/constants");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {teacherParser} = require("../../parsers/school/teacherParser");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token", constants.jecna.wrongToken);
@@ -18,5 +18,6 @@ module.exports = {
 
         const teacherJSON = await teacherParser(teacherRes.data, year, period, token);
         res.status(200).json(teacherJSON);
+        next();
     }
 }

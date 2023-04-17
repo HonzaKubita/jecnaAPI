@@ -3,7 +3,7 @@ const {getSafeStringField, getSafeNumberField} = require("../../modules/utils");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {absenceParser} = require("../../parsers/user/absenceParser");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");
@@ -16,5 +16,6 @@ module.exports = {
 
         const absenceJSON = absenceParser(absenceRes.data);
         res.status(200).json(absenceJSON);
+        next();
     }
 }

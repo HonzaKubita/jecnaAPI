@@ -3,7 +3,7 @@ const {getSafeStringField, getSafeBooleanField, getSafeNumberField} = require(".
 const {jecnaAuthRequest} = require("../../modules/http");
 const {recordListExpandParser, recordListParser} = require("../../parsers/user/recordListParser");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");
@@ -16,5 +16,6 @@ module.exports = {
 
         const recordListJSON = expand ? await recordListExpandParser(recordListRes.data, index, max, token) : recordListParser(recordListRes.data, index, max);
         res.status(200).json(recordListJSON);
+        next();
     }
 }

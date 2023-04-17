@@ -4,7 +4,7 @@ const {getCookie, getSafeStringField} = require("../../../modules/utils");
 const {constants} = require("../../../modules/constants");
 const {LoginException} = require("../../../exceptions/client/loginException");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const username = getSafeStringField(req.body.username, "username");
@@ -35,5 +35,6 @@ module.exports = {
         res.status(200).json({
             session: session
         });
+        next();
     }
 }
