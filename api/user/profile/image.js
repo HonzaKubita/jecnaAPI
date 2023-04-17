@@ -2,12 +2,12 @@ const FormData = require("form-data");
 const {payloadIsType, tokenValid} = require("../../../modules/checker");
 const {getSafeStringField, getSafeField, documentOf} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
-const DataException = require("../../../exceptions/client/dataException");
-const StateException = require("../../../exceptions/client/stateException");
+const {DataException} = require("../../../exceptions/client/dataException");
+const {StateException} = require("../../../exceptions/client/stateException");
 const {constants} = require("../../../modules/constants");
 const {imageUpload} = require("../../../middleware/imageUpload");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");
@@ -24,8 +24,9 @@ module.exports = {
         res.status(200).json({
             image: constants.jecna.baseURL + photoLink
         });
+        next();
     },
-    put: async (req, res) => {
+    put: async (req, res, next) => {
         payloadIsType(req.headers, "multipart/form-data");
 
         const token = getSafeStringField(req.body.token, "token");
@@ -51,8 +52,9 @@ module.exports = {
         if (errorDiv !== undefined) throw new DataException(errorDiv.innerHTML);
 
         res.status(201).send(); // 201 = created
+        next();
     },
-    delete: async (req, res) => {
+    delete: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");
@@ -68,6 +70,7 @@ module.exports = {
 
         await jecnaAuthRequest(rejectLink, token);
         res.status(200).send();
+        next();
     },
     middleware: {
         put: [ imageUpload.single("image") ]

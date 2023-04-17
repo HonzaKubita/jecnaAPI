@@ -1,9 +1,12 @@
-const Exception = require("../exception");
-module.exports = class ServerException extends Exception {
-    type = "server";
+const { JecnaException } = require("../jecnaException");
+class ServerException extends JecnaException {
+    name = "server";
 
     constructor(message, code = 500) {
         super(message, code);
-        this.tree += `/${this.type}`;
+        this.tree += `/${this.name}`;
     }
+}
+module.exports = {
+    ServerException
 }

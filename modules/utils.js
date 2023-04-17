@@ -1,6 +1,6 @@
-const ServerException=  require("../exceptions/server/serverException");
-const DataException = require("../exceptions/client/dataException");
-const ClientException = require("../exceptions/client/clientException");
+const {ServerException} =  require("../exceptions/server/serverException");
+const {DataException} = require("../exceptions/client/dataException");
+const {ClientException} = require("../exceptions/client/clientException");
 const {parseHTML} = require("linkedom");
 
 /**
@@ -81,7 +81,7 @@ function getSafeBooleanField(field, fieldName, defaultValue = null) {
 
 /**
  * Returns the content type
- * @param headers{Headers}
+ * @param headers{IncomingHttpHeaders}
  */
 function getContentType(headers) {
     const contentTypeHeader = headers["content-type"];

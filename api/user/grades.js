@@ -3,7 +3,7 @@ const {getSafeStringField, getSafeNumberField} = require("../../modules/utils");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {gradesParser} = require("../../parsers/user/gradesParser");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");
@@ -23,5 +23,6 @@ module.exports = {
 
         const gradesJSON = gradesParser(gradesRes.data);
         res.status(200).json(gradesJSON);
+        next();
     }
 }

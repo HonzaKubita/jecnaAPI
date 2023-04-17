@@ -4,7 +4,7 @@ const {jecnaAuthRequest} = require("../../../modules/http");
 const {getSafeBooleanField, getSafeStringField, getSafeNumberField} = require("../../../modules/utils");
 const {archiveExpandParser, archiveParser} = require("../../../parsers/school/newsParser");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token", constants.jecna.wrongToken);
@@ -17,5 +17,6 @@ module.exports = {
 
         const archiveJSON = expand ? await archiveExpandParser(archiveRes.data, token, index, max) : archiveParser(archiveRes.data, index, max);
         res.status(200).json(archiveJSON);
+        next();
     }
 }

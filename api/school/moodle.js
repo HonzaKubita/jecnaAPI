@@ -2,9 +2,9 @@ const {payloadIsType} = require("../../modules/checker");
 const {moodleRequest, moodleDataPost} = require("../../modules/http");
 const {getCookie, documentOf, getSafeStringField} = require("../../modules/utils");
 const {constants} = require("../../modules/constants");
-const LoginException = require("../../exceptions/client/loginException");
+const {LoginException} = require("../../exceptions/client/loginException");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const username = getSafeStringField(req.body.username, "username");
@@ -40,5 +40,6 @@ module.exports = {
             moodleSession: session,
             moodleId: id
         });
+        next();
     }
 }

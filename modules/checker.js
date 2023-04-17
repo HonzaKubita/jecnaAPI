@@ -1,7 +1,7 @@
 const {constants} = require("./constants");
-const TokenException = require("../exceptions/client/tokenException");
-const PayloadException = require("../exceptions/client/payloadException");
-const DataException = require("../exceptions/client/dataException");
+const {TokenException} = require("../exceptions/client/tokenException");
+const {PayloadException} = require("../exceptions/client/payloadException");
+const {DataException} = require("../exceptions/client/dataException");
 const {documentOf, getContentType} = require("./utils");
 
 /**
@@ -25,7 +25,7 @@ function siteFound(htmlBody, what) {
 
 /**
  * Throws an exception if a Content-Type header is undefined or if it is not one of the provided options
- * @param headers{Headers} The headers of the request
+ * @param headers{IncomingHttpHeaders} The headers of the request
  * @param type{string} An array of strings, represents all possible values for the header
  */
 function payloadIsType(headers, type = "application/json") {

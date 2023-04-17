@@ -3,7 +3,7 @@ const {getSafeStringField, getSafeNumberField} = require("../../modules/utils");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {roomParser} = require("../../parsers/school/roomParser");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");
@@ -16,5 +16,6 @@ module.exports = {
 
         const roomJSON = await roomParser(roomRes.data, year, token);
         res.status(200).json(roomJSON);
+        next();
     }
 }

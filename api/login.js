@@ -2,9 +2,9 @@ const {payloadIsType, userLoggedIn} = require("../modules/checker");
 const {jecnaRequest, jecnaDataPost} = require("../modules/http");
 const {constants} = require("../modules/constants");
 const {getCookie, documentOf, getSafeStringField} = require("../modules/utils");
-const LoginException = require("../exceptions/client/loginException");
+const {LoginException} = require("../exceptions/client/loginException");
 module.exports = {
-    post: async (req, res) => {
+    post: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const username = getSafeStringField(req.body.username, "username");
@@ -33,5 +33,6 @@ module.exports = {
         res.status(200).json({
             token: session
         });
+        next();
     }
 }

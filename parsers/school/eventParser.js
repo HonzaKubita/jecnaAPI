@@ -9,14 +9,16 @@ const {documentOf} = require("../../modules/utils");
 function eventParser(htmlBody) {
     const eventDOM = documentOf(htmlBody);
 
+    const eventDiv = eventDOM.getElementsByClassName("event")[0];
+
     const eventTitle = eventDOM
         .getElementById("h1") // titleH1
         .getElementsByClassName("label")[0] // titleSpan
         .innerHTML;
-    const eventContent = eventDOM
+    const eventContent = eventDiv
         .getElementsByClassName("text")[0] // textDiv
         .innerHTML;
-    const eventMiscData = parseEventMiscData(eventDOM
+    const eventMiscData = parseEventMiscData(eventDiv
         .getElementsByClassName("info")[0] // infoP
         .children[0] // infoEm
         .innerHTML
