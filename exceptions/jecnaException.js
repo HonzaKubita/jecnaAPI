@@ -1,6 +1,6 @@
 class JecnaException extends Error {
     name = "exception";
-    tree = this.type;
+    tree = this.name;
 
     constructor(message, code) {
         super(message);
