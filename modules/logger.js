@@ -7,12 +7,13 @@ const {constants} = require("./constants");
 const {JecnaException} = require("../exceptions/jecnaException");
 const {ClientException} = require("../exceptions/client/clientException");
 
-const LOG_MESSAGE_SEPARATOR_LENGTH = 150;
+const TITLE_SEPARATOR_LENGTH = 150;
+const SECTION_SEPARATOR_LENGTH = TITLE_SEPARATOR_LENGTH / 2;
 
 const LOG_MESSAGE_TEMPLATE = {
     title: (req) => {
         const titleText = ` EXCHANGE #${req.logger.id} `;
-        const separators = getSeparator(LOG_MESSAGE_SEPARATOR_LENGTH, titleText.length, "=");
+        const separators = getSeparator(TITLE_SEPARATOR_LENGTH, titleText.length, "=");
         return `${separators}${titleText}${separators}`;
     },
     /**
@@ -26,9 +27,8 @@ const LOG_MESSAGE_TEMPLATE = {
      */
     request: (req) => {
         const text = `\nHeaders:\n${JSON.stringify(req.headers, null, 2)}\nData:\n${JSON.stringify(req.body, null, 2) ?? "none"}\n`;
-        const maxLineLength = Math.max(...text.split("\n").map(a=>a.length));
         const titleText = " REQUEST ";
-        const separators = getSeparator(maxLineLength, titleText.length);
+        const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
         return `\n${separators}${titleText}${separators}${text}`;
     },
     /**
@@ -36,9 +36,8 @@ const LOG_MESSAGE_TEMPLATE = {
      */
     response: (req) => {
         const text = `\nHeaders:\n${JSON.stringify(req.res.getHeaders(), null, 2)}\nData:\n${JSON.stringify(req.logger.resData, null, 2) ?? "none"}\n`;
-        const maxLineLength = Math.max(...text.split("\n").map(a=>a.length));
         const titleText = " RESPONSE ";
-        const separators = getSeparator(maxLineLength, titleText.length);
+        const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
         return `\n${separators}${titleText}${separators}${text}`;
     },
     /**
@@ -56,29 +55,27 @@ const LOG_MESSAGE_TEMPLATE = {
         if (req.file !== undefined) text = getFileText(req.file);
         else req.files.forEach(file => text += getFileText(file));
 
-        const maxLineLength = Math.max(...text.split("\n").map(a=>a.length));
         const titleText = " FILES ";
-        const separators = getSeparator(maxLineLength, titleText.length);
+        const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
         return `\n${separators}${titleText}${separators}${text}\n`;
     },
     completedMessage: (req) => {
         const text = `Completed after ${req.logger.time}ms with ${req.res.statusCode} ${req.res.statusMessage}`;
-        return `${"-".repeat(text.length)}\n${text}\n`;
+        return `${"-".repeat(SECTION_SEPARATOR_LENGTH)}\n${text}\n`;
     },
     exception: (req) => {
         if (req.logger.err === undefined) return "";
         let text = `\nType: ${req.logger.err.name}\nMessage: ${req.logger.err.message}\n`;
         if (!(req.logger.err instanceof JecnaException)) text += `${req.logger.err.stack}\n`;
 
-        const maxLineLength = Math.max(...text.split("\n").map(a=>a.length));
         const titleText = " EXCEPTION ";
-        const separators = getSeparator(maxLineLength, titleText.length);
+        const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
         return `${separators}${titleText}${separators}${text}`;
     },
     exitMessage: (req) => {
         if (req.logger.err?.exitCode === undefined) return "";
         const text = `Process finished with exit code ${req.logger.err.exitCode.toString()}.`;
-        return `${"-".repeat(text.length)}\n${text}\n`
+        return `${"-".repeat(SECTION_SEPARATOR_LENGTH)}\n${text}\n`
     }
 };
 const LOG_MESSAGE_CONSOLE_EXCHANGE_TEMPLATE =
@@ -229,7 +226,7 @@ function giveConsoleLog(clog, _type) {
  * @param char{string}
  */
 function getSeparator(maxLineLength, titleTextLength, char = "-") {
-    if (maxLineLength > LOG_MESSAGE_SEPARATOR_LENGTH) maxLineLength = LOG_MESSAGE_SEPARATOR_LENGTH;
+    if (maxLineLength > TITLE_SEPARATOR_LENGTH) maxLineLength = TITLE_SEPARATOR_LENGTH;
     let count = (maxLineLength - titleTextLength) / 2;
     if (count < titleTextLength) count++;
     return count < 0 ? "" : char.repeat(count);
