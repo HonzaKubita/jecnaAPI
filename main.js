@@ -4,7 +4,7 @@ const express = require("express");
 const autoRestAPI = require("autorestapi");
 const {constants} = require("./modules/constants");
 const exceptionHandler = require("./exceptions/exceptionHandler");
-const {loggerInit, loggerStartMiddleware, loggerEndMiddleware} = require("./modules/logger");
+const {loggerInit, loggerStartMiddleware, loggerEndMiddleware, logger} = require("./modules/logger");
 
 loggerInit();
 
@@ -18,5 +18,5 @@ server.use(exceptionHandler); // Exception handling
 server.use(loggerEndMiddleware);
 
 server.listen(constants.server.port, () => { // Start the server
-    console.info(`Server running on port ${constants.server.port}!`);
+    logger.info(`Server running on port ${constants.server.port}!`);
 });

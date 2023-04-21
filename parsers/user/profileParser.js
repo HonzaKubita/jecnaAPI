@@ -1,5 +1,6 @@
 const {documentOf} = require("../../modules/utils");
 const {constants} = require("../../modules/constants");
+const {logger} = require("../../modules/logger");
 
 function profileParser(htmlBody, token) {
     const profileDOM = documentOf(htmlBody);
@@ -73,7 +74,7 @@ function profileParser(htmlBody, token) {
             case "Číslo v tříd. výkazu":
                 profileJSON.reportNum = Number(propertyValue);
                 if (isNaN(profileJSON.reportNum)) {
-                    console.error(`ERROR: reportNum is not a number. It's value: ${propertyValue}. Login token: ${token}`);
+                    logger.error(`ERROR: reportNum is not a number. It's value: ${propertyValue}. Login token: ${token}`);
                     profileJSON.reportNum = propertyValue;
                 }
                 break;
@@ -111,7 +112,7 @@ function profileParser(htmlBody, token) {
             case "Variabliní symbol žáka":
                 profileJSON.support.variableSymbol = Number(propertyValue);
                 if (isNaN(profileJSON.support.variableSymbol)) {
-                    console.error(`ERROR: variableSymbol is not a number. It's value: ${propertyValue}. Login token: ${token}`);
+                    logger.error(`ERROR: variableSymbol is not a number. It's value: ${propertyValue}. Login token: ${token}`);
                     profileJSON.support.variableSymbol = propertyValue;
                 }
                 break;

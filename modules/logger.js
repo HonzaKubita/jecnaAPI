@@ -86,40 +86,29 @@ const LOG_MESSAGE_CONSOLE_EXCHANGE_TEMPLATE =
 const LOG_MESSAGE_CONSOLE_TEMPLATE =
     `[{time}] [{type}] {message}`;
 
-let id;
+let id = 0;
 
-class oldConsole {
-    static log = console.log;
-    static error = console.error;
-    static info = console.info;
-    static warn = console.warn;
-    static debug = console.debug;
-}
+const logger = {
+    log: giveConsoleLog(console.log, "LOG"),
+    error: giveConsoleLog(console.error, "ERROR"),
+    info: giveConsoleLog(console.info, "INFO"),
+    warn: giveConsoleLog(console.warn, "WARNING"),
+    debug: giveConsoleLog(console.debug, "DEBUG"),
+    except: consoleExcept,
+    exchange: logExchange
+};
 /**
  * Initializes the logger to change some console methods
  */
 function loggerInit() {
-    console.log = giveConsoleLog(oldConsole.log, "LOG");
-    console.error = giveConsoleLog(oldConsole.error, "ERROR");
-    console.info = giveConsoleLog(oldConsole.info, "INFO");
-    console.warn = giveConsoleLog(oldConsole.warn, "WARNING");
-    console.debug = giveConsoleLog(oldConsole.debug, "DEBUG");
-
-    /**
-     * @type{function (Error): void}
-     */
-    console.except = consoleExcept;
-
+    // check all directories / counter
     if (fs.existsSync(constants.logs.logsFolder) && !fs.statSync(constants.logs.logsFolder).isDirectory())
         fs.unlinkSync(constants.logs.logsFolder);
     if (!fs.existsSync(constants.logs.logsFolder))
         fs.mkdirSync(constants.logs.logsFolder);
 
-    // init counter file
-    if (!fs.existsSync(constants.logs.counterFile))
-        fs.writeFileSync(constants.logs.counterFile, "0", "utf-8");
-
-    id = parseInt(fs.readFileSync(constants.logs.counterFile, "utf-8"));
+    if (fs.existsSync(constants.logs.counterFile))
+        id = parseInt(fs.readFileSync(constants.logs.counterFile, "utf-8"));
 }
 
 function getTime() {
@@ -129,7 +118,7 @@ function getTime() {
 /**
  * @param req{express.Request}
  */
-async function logExchange(req) {
+function logExchange(req) {
     /*
     Req.logger
         id : number
@@ -148,7 +137,14 @@ async function logExchange(req) {
         if (ex instanceof ClientException) contentType = "none";
         else throw ex;
     }
-    console.log(LOG_MESSAGE_CONSOLE_EXCHANGE_TEMPLATE
+    // get filename
+    const date = new Date();
+    const filename = `${constants.logs.logsFolder}/${date.getDay()}-${date.getMonth()}-${date.getFullYear()}-log.txt`;
+    // check counter
+    if (!fs.existsSync(filename) && fs.existsSync(constants.logs.counterFile)) id = 0;
+    fs.writeFileSync(constants.logs.counterFile, id.toString(), "utf-8");
+
+    logger.log(LOG_MESSAGE_CONSOLE_EXCHANGE_TEMPLATE
             .replaceAll("{id}", req.logger.id)
             .replaceAll("{ip}", req.logger.ip)
             .replaceAll("{method}", req.method)
@@ -159,15 +155,11 @@ async function logExchange(req) {
             .replaceAll("{res.time}", req.logger.time)
             .replaceAll("{misc}", req.logger.err === undefined ? "" : ` with ${req.logger.err.name}${req.logger.err instanceof JecnaException ? "Exception": ""}: ${req.logger.err.message}`)
     , "EXCHANGE");
-    if (req.logger.err?.exitCode !== undefined) oldConsole.log(req.logger.err.stack);
+    if (req.logger.err?.exitCode !== undefined) logger.error(req.logger.err.stack);
 
     // WRITE TO FILE
-    // get filename
-    const date = new Date();
-    const filename = `${constants.logs.logsFolder}/${date.getDay()}-${date.getMonth()}-${date.getFullYear()}-log.txt`;
-    if (!fs.existsSync(filename)) fs.unlinkSync(constants.logs.counterFile);
-    // write
 
+    // write to the file
     fs.appendFileSync(filename,
         LOG_MESSAGE_TEMPLATE.title(req) +
         LOG_MESSAGE_TEMPLATE.basicInfo(req) +
@@ -181,7 +173,7 @@ async function logExchange(req) {
 
     // IF UNRESOLVED EXIT
     if (req.logger.err?.exitCode !== undefined) {
-        console.error(`Exited with code ${req.logger.err.exitCode}.`);
+        logger.error(`Exited with code ${req.logger.err.exitCode}.`);
         process.exit(req.logger.err.exitCode);
     }
 }
@@ -214,10 +206,7 @@ function loggerEndMiddleware(req, res, next) {
     // set other variables
     req.logger.time = (performance.now() - req.logger.time).toFixed(2);
 
-    logExchange(req).then();
-
-    // sync id
-    fs.writeFileSync(constants.logs.counterFile, id.toString(), "utf-8");
+    logger.exchange(req);
 
     next();
 }
@@ -251,14 +240,14 @@ function getSeparator(maxLineLength, titleTextLength, char = "-") {
  * @param err{Error}
  */
 function consoleExcept(err) {
-    console.error(`${err.name}: ${err.message}`);
+    logger.error(`${err.name}: ${err.message}`);
     oldConsole.log(err.stack);
     process.exit(1);
 }
 
 module.exports = {
-    loggerInit,
+    logger,
     loggerStartMiddleware,
     loggerEndMiddleware,
-    oldConsole
+    loggerInit
 }
