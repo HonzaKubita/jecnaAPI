@@ -1,4 +1,4 @@
-const {documentOf} = require("../../modules/utils");
+const {documentOf, objectIsEmpty} = require("../../modules/utils");
 
 
 function foodParser(htmlBody, list) {
@@ -17,6 +17,8 @@ function foodParser(htmlBody, list) {
 
         const lunch1 = parseLunch(dayDiv.children[1].children[4]); // day => lunchesDiv => lunchDiv
         const lunch2 = parseLunch(dayDiv.children[1].children[5]);
+
+        if (objectIsEmpty(lunch1) && objectIsEmpty(lunch2)) continue;
 
         const lunchJSON = {
             date: lunchDate,
