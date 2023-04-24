@@ -76,7 +76,10 @@ function getSafeNumberField(field, fieldName, defaultValue = null) {
  */
 function getSafeBooleanField(field, fieldName, defaultValue = null) {
     if (defaultValue === null && field === undefined) throw new DataException(`Required field '${fieldName}' is missing in the payload!`);
-    return Boolean(field === undefined ? defaultValue : field);
+    const value = parseBoolean(field === undefined ? defaultValue.toString() : field);
+    if (value === undefined) throw new DataException(`Field '${fieldName}' is not a boolean!`);
+    return value;
+
 }
 
 /**
@@ -89,6 +92,21 @@ function getContentType(headers) {
     return contentTypeHeader.split(";")[0];
 }
 
+/**
+ * Parses string into boolean
+ * @param string{string}
+ * @returns {boolean|undefined}
+ */
+function parseBoolean(string) {
+    if (/^(true|yes)$/.test(string)) return true;
+    if (/^(false|no)$/.test(string)) return false;
+    return undefined;
+}
+
+function objectIsEmpty(object) {
+    return Object.keys(JSON.parse(JSON.stringify(object))).length === 0;
+}
+
 module.exports = {
     getCookie,
     documentOf,
@@ -96,5 +114,7 @@ module.exports = {
     getSafeNumberField,
     getSafeBooleanField,
     getSafeStringField,
-    getContentType
+    getContentType,
+    parseBoolean,
+    objectIsEmpty
 }
