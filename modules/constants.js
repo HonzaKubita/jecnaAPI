@@ -23,6 +23,10 @@ const constants =
     logs: {
         logsFolder: "logs",
         counterFile: `logs/counter`
+    },
+    ttt: {
+        databaseFile: "ttt.db",
+        enable: false
     }
 };
 
