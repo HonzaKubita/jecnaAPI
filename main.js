@@ -5,11 +5,14 @@ const autoRestAPI = require("autorestapi");
 const {constants} = require("./modules/constants");
 const exceptionHandler = require("./exceptions/exceptionHandler");
 const {loggerInit, loggerStartMiddleware, loggerEndMiddleware, logger} = require("./modules/logger");
+const {tokenFromHeader, queryToBody} = require("./middleware/parser");
 
 loggerInit();
 
 const server = express();
 server.use(express.json()); // Parse json body
+server.use(queryToBody);
+server.use(tokenFromHeader); // use token from headers
 server.use(loggerStartMiddleware);
 
 autoRestAPI(server); // Register endpoints with autoRestAPI
