@@ -33,7 +33,7 @@ module.exports = (err, req, res, next) => {
             message: `An undocumented exception happened, please report this on github issues. (see console for more details)`
         });
     }
-
+    if (req.logger === undefined) throw err;
     req.logger.err = err;
     next();
 }
