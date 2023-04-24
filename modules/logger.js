@@ -134,15 +134,9 @@ function logExchange(req) {
         if (ex instanceof ClientException) contentType = "none";
         else throw ex;
     }
-    // get filename
-    const date = new Date();
-    const filename = `${constants.logs.logsFolder}/${date.getDay()}-${date.getMonth()}-${date.getFullYear()}-log.txt`;
-    // check counter
-    if (!fs.existsSync(filename) && fs.existsSync(constants.logs.counterFile)) id = 0;
-    fs.writeFileSync(constants.logs.counterFile, id.toString(), "utf-8");
 
     logger.log(LOG_MESSAGE_CONSOLE_EXCHANGE_TEMPLATE
-            .replaceAll("{id}", req.logger.id)
+            .replaceAll("{id}", req.logger.id.toString())
             .replaceAll("{ip}", req.logger.ip)
             .replaceAll("{method}", req.method)
             .replaceAll("{path}", req.path)
@@ -157,7 +151,7 @@ function logExchange(req) {
     // WRITE TO FILE
 
     // write to the file
-    fs.appendFileSync(filename,
+    fs.appendFileSync(req.logger.filename,
         LOG_MESSAGE_TEMPLATE.title(req) +
         LOG_MESSAGE_TEMPLATE.basicInfo(req) +
         LOG_MESSAGE_TEMPLATE.request(req) +
@@ -176,12 +170,19 @@ function logExchange(req) {
 }
 
 function loggerStartMiddleware(req, res, next) {
+    // get filename
+    const date = new Date();
+    const filename = `${constants.logs.logsFolder}/${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}-log.txt`;
+    // check counter
+    if (!fs.existsSync(filename) && fs.existsSync(constants.logs.counterFile)) id = 0;
+    fs.writeFileSync(constants.logs.counterFile, id.toString(), "utf-8");
     // set all the variables
     req.logger = {
         id: id++,
         ip: req.socket.remoteAddress,
         time: performance.now(),
-        chunks: []
+        chunks: [],
+        filename: filename
     };
     // override write and end methods
     const oldJson = res.json;
