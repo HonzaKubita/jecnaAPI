@@ -7,7 +7,7 @@ const {StateException} = require("../../../exceptions/client/stateException");
 const {constants} = require("../../../modules/constants");
 const {imageUpload} = require("../../../middleware/imageUpload");
 module.exports = {
-    post: async (req, res, next) => {
+    get: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");

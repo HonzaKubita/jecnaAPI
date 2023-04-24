@@ -3,7 +3,7 @@ const {foodRequest} = require("../../../modules/http");
 const {foodParser} = require("../../../parsers/school/foodParser");
 const {getSafeBooleanField} = require("../../../modules/utils");
 module.exports = {
-    post: async (req, res, next) => {
+    get: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const list = getSafeBooleanField(req.body.list, "list", true);

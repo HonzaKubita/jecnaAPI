@@ -4,7 +4,7 @@ const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const {profileEditParser} = require("../../../parsers/user/profileParser");
 const {PayloadException} = require("../../../exceptions/client/payloadException");
 module.exports = {
-    post: async (req, res, next) => {
+    get: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");

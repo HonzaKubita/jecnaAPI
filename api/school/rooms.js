@@ -3,7 +3,7 @@ const {jecnaAuthRequest} = require("../../modules/http");
 const {roomsParser} = require("../../parsers/school/roomsParser");
 const {getSafeStringField} = require("../../modules/utils");
 module.exports = {
-    post: async (req, res, next) => {
+    get: async (req, res, next) => {
         payloadIsType(req.headers);
 
         const token = getSafeStringField(req.body.token, "token");
