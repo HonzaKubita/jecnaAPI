@@ -1,5 +1,7 @@
 # JECNA API DOCUMENTATION
 
+# THIS IS OLD DOCUMENTATION, WAIT FOR THE NEW ONE!!!!
+
 > ## Table of contents
 > 1. [Server behaviour](#server-behaviour)
 > 2. [/login](#login)
