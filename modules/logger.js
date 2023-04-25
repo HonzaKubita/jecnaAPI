@@ -26,7 +26,7 @@ const LOG_MESSAGE_TEMPLATE = {
      * @param req{express.Request}
      */
     request: (req) => {
-        const text = `\nHeaders:\n${JSON.stringify(req.headers, null, 2)}\nData:\n${JSON.stringify(req.body, null, 2) ?? "none"}\n`;
+        const text = `Token: ${req.token ?? "none"}\nHeaders:\n${JSON.stringify(req.headers, null, 2)}\n${req.logger.bodyType}:\n${JSON.stringify(req.body, null, 2) ?? "none"}\n`;
         const titleText = " REQUEST ";
         const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
         return `\n${separators}${titleText}${separators}${text}`;
@@ -180,9 +180,10 @@ function loggerStartMiddleware(req, res, next) {
     req.logger = {
         id: id++,
         ip: req.socket.remoteAddress,
-        time: performance.now(),
+        startTime: performance.now(),
         chunks: [],
-        filename: filename
+        filename: filename,
+        bodyType: req.query === undefined ? "Data" : "Query"
     };
     // override write and end methods
     const oldJson = res.json;
@@ -202,7 +203,7 @@ function loggerStartMiddleware(req, res, next) {
 }
 function loggerEndMiddleware(req, res, next) {
     // set other variables
-    req.logger.time = (performance.now() - req.logger.time).toFixed(2);
+    req.logger.time = (performance.now() - req.logger.startTime).toFixed(2);
 
     logger.exchange(req);
 
@@ -239,7 +240,7 @@ function getSeparator(maxLineLength, titleTextLength, char = "-") {
  */
 function consoleExcept(err) {
     logger.error(`${err.name}: ${err.message}`);
-    oldConsole.log(err.stack);
+    console.error(err.stack);
     process.exit(1);
 }
 

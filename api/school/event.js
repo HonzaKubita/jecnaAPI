@@ -1,13 +1,13 @@
-const {payloadIsType, tokenValid, siteFound} = require("../../modules/checker");
-const {getSafeStringField, getSafeNumberField} = require("../../modules/utils");
-const {constants} = require("../../modules/constants");
+const {tokenValid, siteFound} = require("../../modules/checker");
+const {getSafeNumberField, getToken} = require("../../modules/utils");
+
 const {jecnaAuthRequest} = require("../../modules/http");
 const {eventParser} = require("../../parsers/school/eventParser");
 module.exports = {
     get: async (req, res, next) => {
-        payloadIsType(req.headers);
 
-        const token = getSafeStringField(req.body.token, "token", constants.jecna.wrongToken);
+
+        const token = getToken(req);
         const eventCode = getSafeNumberField(req.body.eventCode, "eventCode");
 
         const eventRes = await jecnaAuthRequest(`/akce/${eventCode}`, token);

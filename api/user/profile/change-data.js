@@ -1,12 +1,12 @@
-const {payloadIsType, tokenValid} = require("../../../modules/checker");
-const {getSafeStringField, getSafeNumberField, documentOf} = require("../../../modules/utils");
+const { tokenValid, payloadIsJSON} = require("../../../modules/checker");
+const {getSafeStringField, getSafeNumberField, documentOf, getToken} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const {PayloadException} = require("../../../exceptions/client/payloadException");
 module.exports = {
     put: async (req, res, next) => {
-        payloadIsType(req.headers);
+        payloadIsJSON(req.headers);
 
-        const token = getSafeStringField(req.body.token, "token");
+        const token = getToken(req);
         const email = getSafeStringField(req.body.email, "email");
         const phone = getSafeStringField(req.body.phone, "phone");
         const insurance = getSafeNumberField(req.body.insurance, "insurance");
@@ -57,11 +57,7 @@ module.exports = {
     }
 }
 
-/**
- *
- * @param id{string}
- * @returns {string}
- */
+
 function jecnaIdToId(id) {
     switch (id) {
         case "healthInsuranceId": return "insurance";

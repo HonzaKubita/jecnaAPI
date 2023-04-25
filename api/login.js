@@ -1,11 +1,11 @@
-const {payloadIsType, userLoggedIn} = require("../modules/checker");
+const {payloadIsJSON, userLoggedIn} = require("../modules/checker");
 const {jecnaRequest, jecnaDataPost} = require("../modules/http");
 const {constants} = require("../modules/constants");
 const {getCookie, documentOf, getSafeStringField} = require("../modules/utils");
 const {LoginException} = require("../exceptions/client/loginException");
 module.exports = {
     post: async (req, res, next) => {
-        payloadIsType(req.headers);
+        payloadIsJSON(req.headers);
 
         const username = getSafeStringField(req.body.username, "username");
         const password = getSafeStringField(req.body.password, "password");

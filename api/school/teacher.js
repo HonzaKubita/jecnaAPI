@@ -1,13 +1,13 @@
-const {payloadIsType, tokenValid, siteFound} = require("../../modules/checker");
-const {getSafeStringField, getSafeNumberField} = require("../../modules/utils");
-const {constants} = require("../../modules/constants");
+const {tokenValid, siteFound} = require("../../modules/checker");
+const {getSafeStringField, getSafeNumberField, getToken} = require("../../modules/utils");
+
 const {jecnaAuthRequest} = require("../../modules/http");
 const {teacherParser} = require("../../parsers/school/teacherParser");
 module.exports = {
     get: async (req, res, next) => {
-        payloadIsType(req.headers);
 
-        const token = getSafeStringField(req.body.token, "token", constants.jecna.wrongToken);
+
+        const token = getToken(req);
         const short = getSafeStringField(req.body.short, "short");
         const year = getSafeNumberField(req.body.year, "year", -1);
         const period = getSafeNumberField(req.body.period, "period", -1);

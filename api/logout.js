@@ -1,13 +1,13 @@
-const {payloadIsType} = require("../modules/checker");
+const {payloadIsJSON} = require("../modules/checker");
 const {jecnaAuthRequest} = require("../modules/http");
-const {getSafeStringField} = require("../modules/utils");
+const {getToken} = require("../modules/utils");
 module.exports = {
     post: async (req, res, next) => {
-        payloadIsType(req.headers);
+        payloadIsJSON(req.headers);
 
-        const token = getSafeStringField(req.body.token, "token");
+        const token = getToken(req);
         await jecnaAuthRequest("/user/logout", token);
-        res.status(200).json({});
+        res.status(200).send();
         next();
     }
 }

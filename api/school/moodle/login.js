@@ -1,11 +1,11 @@
-const {payloadIsType} = require("../../modules/checker");
-const {moodleRequest, moodleDataPost} = require("../../modules/http");
-const {getCookie, documentOf, getSafeStringField} = require("../../modules/utils");
-const {constants} = require("../../modules/constants");
-const {LoginException} = require("../../exceptions/client/loginException");
+const {payloadIsJSON} = require("../../../modules/checker");
+const {moodleRequest, moodleDataPost} = require("../../../modules/http");
+const {getCookie, documentOf, getSafeStringField} = require("../../../modules/utils");
+const {constants} = require("../../../modules/constants");
+const {LoginException} = require("../../../exceptions/client/loginException");
 module.exports = {
     post: async (req, res, next) => {
-        payloadIsType(req.headers);
+        payloadIsJSON(req.headers);
 
         const username = getSafeStringField(req.body.username, "username");
         const password = getSafeStringField(req.body.password, "password");

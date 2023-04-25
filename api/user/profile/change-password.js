@@ -1,12 +1,12 @@
-const {payloadIsType, tokenValid} = require("../../../modules/checker");
-const {getSafeStringField, documentOf} = require("../../../modules/utils");
+const {tokenValid, payloadIsJSON} = require("../../../modules/checker");
+const {getSafeStringField, documentOf, getToken} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const {PayloadException} = require("../../../exceptions/client/payloadException");
 module.exports = {
     put: async (req, res, next) => {
-        payloadIsType(req.headers);
+        payloadIsJSON(req.headers);
 
-        const token = getSafeStringField(req.body.token, "token");
+        const token = getToken(req);
         const oldPassword = getSafeStringField(req.body.oldPassword, "oldPassword");
         const newPassword = getSafeStringField(req.body.newPassword, "newPassword");
 
