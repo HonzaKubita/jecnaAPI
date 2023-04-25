@@ -1,7 +1,6 @@
 const {constants} = require("../../modules/constants");
 const {documentOf} = require("../../modules/utils");
 
-
 function eventParser(htmlBody) {
     const eventDOM = documentOf(htmlBody);
 
@@ -52,7 +51,6 @@ function parseEventMiscData(miscText) {
     return eventMiscData;
 }
 
-
 function parseEventAttachments(imageDivs, fileUls) {
     let attachmentList = [];
 
@@ -79,4 +77,4 @@ module.exports = {
     parseEventMiscData,
     parseEventAttachments,
     eventParser
-}
+};

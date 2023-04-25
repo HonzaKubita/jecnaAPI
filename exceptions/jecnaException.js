@@ -10,4 +10,4 @@ class JecnaException extends Error {
 
 module.exports = {
     JecnaException
-}
+};

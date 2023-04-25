@@ -1,5 +1,5 @@
 const fs = require("fs");
-const {getContentType} = require("./utils");
+const {getContentType, getToken} = require("./utils");
 const {constants} = require("./constants");
 const {JecnaException} = require("../exceptions/jecnaException");
 const {ClientException} = require("../exceptions/client/clientException");
@@ -17,7 +17,10 @@ const LOG_MESSAGE_TEMPLATE = {
         return `\nTime: ${getTime()}\nIP: ${req.logger.ip}\nMethod: ${req.method}\nPath: ${req.path}\n`;
     },
     request: (req) => {
-        const text = `Token: ${req.token ?? "none"}\nHeaders:\n${JSON.stringify(req.headers, null, 2)}\n${req.logger.bodyType}:\n${JSON.stringify(req.body, null, 2) ?? "none"}\n`;
+        const headers = {...req.headers};
+        delete headers.token;
+
+        const text = `\nToken: ${getToken(req, false, "none")}\nHeaders:\n${JSON.stringify(headers, null, 2)}\n${req.logger.bodyType}:\n${JSON.stringify(req.body, null, 2) ?? "none"}\n`;
         const titleText = " REQUEST ";
         const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
         return `\n${separators}${titleText}${separators}${text}`;
@@ -60,7 +63,7 @@ const LOG_MESSAGE_TEMPLATE = {
     exitMessage: (req) => {
         if (req.logger.err?.exitCode === undefined) return "";
         const text = `Process finished with exit code ${req.logger.err.exitCode.toString()}.`;
-        return `${"-".repeat(SECTION_SEPARATOR_LENGTH)}\n${text}\n`
+        return `${"-".repeat(SECTION_SEPARATOR_LENGTH)}\n${text}\n`;
     }
 };
 const LOG_MESSAGE_CONSOLE_EXCHANGE_TEMPLATE =
@@ -79,6 +82,7 @@ const logger = {
     except: consoleExcept,
     exchange: logExchange
 };
+
 function loggerInit() {
     // check all directories / counter
     if (fs.existsSync(constants.logs.logsFolder) && !fs.statSync(constants.logs.logsFolder).isDirectory())
@@ -98,9 +102,8 @@ function logExchange(req) {
     // LOG TO CONSOLE
     let contentType;
     try {
-        contentType = getContentType(req.headers)
-    }
-    catch (ex) {
+        contentType = getContentType(req.headers);
+    } catch (ex) {
         if (ex instanceof ClientException) contentType = "none";
         else throw ex;
     }
@@ -114,8 +117,8 @@ function logExchange(req) {
             .replaceAll("{res.code}", req.res.statusCode.toString())
             .replaceAll("{res.codeName}", req.res.statusMessage)
             .replaceAll("{res.time}", req.logger.time)
-            .replaceAll("{misc}", req.logger.err === undefined ? "" : ` with ${req.logger.err.name}${req.logger.err instanceof JecnaException ? "Exception": ""}: ${req.logger.err.message}`)
-    , "EXCHANGE");
+            .replaceAll("{misc}", req.logger.err === undefined ? "" : ` with ${req.logger.err.name}${req.logger.err instanceof JecnaException ? "Exception" : ""}: ${req.logger.err.message}`)
+        , "EXCHANGE");
     if (req.logger.err?.exitCode !== undefined) logger.error(req.logger.err.stack);
 
     // WRITE TO FILE
@@ -145,7 +148,6 @@ function loggerStartMiddleware(req, res, next) {
     const filename = `${constants.logs.logsFolder}/${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}-log.txt`;
     // check counter
     if (!fs.existsSync(filename) && fs.existsSync(constants.logs.counterFile)) id = 0;
-    fs.writeFileSync(constants.logs.counterFile, id.toString(), "utf-8");
     // set all the variables
     req.logger = {
         id: id++,
@@ -171,11 +173,14 @@ function loggerStartMiddleware(req, res, next) {
 
     next();
 }
+
 function loggerEndMiddleware(req, res, next) {
     // set other variables
     req.logger.time = (performance.now() - req.logger.startTime).toFixed(2);
 
     logger.exchange(req);
+
+    fs.writeFileSync(constants.logs.counterFile, id.toString(), "utf-8");
 
     next();
 }
@@ -210,4 +215,4 @@ module.exports = {
     loggerStartMiddleware,
     loggerEndMiddleware,
     loggerInit
-}
+};

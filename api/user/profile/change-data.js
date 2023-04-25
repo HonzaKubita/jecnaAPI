@@ -1,4 +1,4 @@
-const { tokenValid, payloadIsJSON} = require("../../../modules/checker");
+const {tokenValid, payloadIsJSON} = require("../../../modules/checker");
 const {getSafeStringField, getSafeNumberField, documentOf, getToken} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const {PayloadException} = require("../../../exceptions/client/payloadException");
@@ -42,7 +42,7 @@ module.exports = {
         for (const fieldTr of inputsTbody.children) {
             const fieldInput = fieldTr.getElementsByTagName("input")?.[0] ?? fieldTr.getElementsByTagName("select")?.[0];
             const fieldErrorUl = fieldTr.getElementsByClassName("errors")?.[0];
-            if ((fieldInput.getAttribute("disabled") ?? "0") ==="1" || fieldErrorUl === undefined) continue;
+            if ((fieldInput.getAttribute("disabled") ?? "0") === "1" || fieldErrorUl === undefined) continue;
 
             errors[jecnaIdToId(fieldInput.id)] = fieldErrorUl.children[0].innerHTML;
         }
@@ -55,14 +55,18 @@ module.exports = {
         res.status(201).send();
         next();
     }
-}
+};
 
 
 function jecnaIdToId(id) {
     switch (id) {
-        case "healthInsuranceId": return "insurance";
-        case "streetNumber": return "houseNumber";
-        case "czMsmtRaujId": return "village";
-        default: return id;
+        case "healthInsuranceId":
+            return "insurance";
+        case "streetNumber":
+            return "houseNumber";
+        case "czMsmtRaujId":
+            return "village";
+        default:
+            return id;
     }
 }

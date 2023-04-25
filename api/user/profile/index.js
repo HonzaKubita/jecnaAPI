@@ -4,8 +4,6 @@ const {jecnaAuthRequest} = require("../../../modules/http");
 const {profileParser} = require("../../../parsers/user/profileParser");
 module.exports = {
     get: async (req, res, next) => {
-
-
         const token = getToken(req);
 
         const baseRes = await jecnaAuthRequest("/", token);
@@ -21,4 +19,4 @@ module.exports = {
         res.status(200).json(profileJSON);
         next();
     }
-}
+};

@@ -114,4 +114,4 @@ async function teacherParser(htmlBody, year, period, token) {
 
 module.exports = {
     teacherParser
-}
+};

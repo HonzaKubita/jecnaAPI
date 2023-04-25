@@ -5,8 +5,6 @@ const {newsParser} = require("../../../parsers/school/newsParser");
 const {getToken} = require("../../../modules/utils");
 module.exports = {
     get: async (req, res, next) => {
-
-
         const token = getToken(req);
 
         const newsRes = await jecnaAuthRequest("/akce", token);
@@ -16,4 +14,4 @@ module.exports = {
         res.status(200).json(newsJSON);
         next();
     }
-}
+};

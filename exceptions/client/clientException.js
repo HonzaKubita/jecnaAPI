@@ -1,4 +1,5 @@
 const {JecnaException} = require("../jecnaException");
+
 class ClientException extends JecnaException {
     name = "client";
 
@@ -10,4 +11,4 @@ class ClientException extends JecnaException {
 
 module.exports = {
     ClientException
-}
+};

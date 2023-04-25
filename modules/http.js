@@ -3,14 +3,13 @@ const {constants} = require("./constants");
 
 const jecnaAxios = axios.create({
     baseURL: constants.jecna.baseURL
-})
+});
 const foodAxios = axios.create({
     baseURL: constants.food.baseURL
 });
 const moodleAxios = axios.create({
     baseURL: constants.moodle.baseURL
 });
-
 
 async function jecnaRequest(options) {
     return jecnaAxios({
@@ -31,17 +30,15 @@ async function jecnaAuthRequest(path, token, cookies = "", headers = {}, options
     });
 }
 
-
 async function jecnaDataPost(path, token, data, contentType = "application/x-www-form-urlencoded", cookies = "", headers = {}, options = {}) {
     return await jecnaAuthRequest(path, token, cookies, {
         "Content-Type": contentType,
-        ... headers
+        ...headers
     }, {
         data: data,
         ...options
     }, "POST");
 }
-
 
 async function foodRequest(options) {
     return await foodAxios({
@@ -49,7 +46,6 @@ async function foodRequest(options) {
         ...options
     });
 }
-
 
 async function foodAuthRequest(path, session, token, cookies = "", headers = {}, options = {}, method = "GET") {
     return foodRequest({
@@ -66,7 +62,7 @@ async function foodAuthRequest(path, session, token, cookies = "", headers = {},
 async function foodDataPost(path, session, token, data, cookies = "", headers = {}, options = {}) {
     return await foodAuthRequest(path, session, token, cookies, {
         "Content-Type": "application/x-www-form-urlencoded",
-        ... headers
+        ...headers
     }, {
         data: data,
         ...options
@@ -98,7 +94,7 @@ async function moodleAuthRequest(path, token, id = undefined, cookies = "", head
 async function moodleDataPost(path, token, data, id = undefined, cookies = "", headers = {}, options = {}) {
     return await moodleAuthRequest(path, token, id, cookies, {
         "Content-Type": "application/x-www-form-urlencoded",
-        ... headers
+        ...headers
     }, {
         data: data,
         ...options
@@ -115,4 +111,4 @@ module.exports = {
     moodleRequest,
     moodleAuthRequest,
     moodleDataPost
-}
+};

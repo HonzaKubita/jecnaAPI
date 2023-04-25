@@ -1,4 +1,5 @@
 const {ClientException} = require("./clientException");
+
 class StateException extends ClientException {
     name = "state";
 
@@ -10,4 +11,4 @@ class StateException extends ClientException {
 
 module.exports = {
     StateException
-}
+};

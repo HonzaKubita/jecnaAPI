@@ -1,4 +1,5 @@
 const {PayloadException} = require("./payloadException");
+
 class DataException extends PayloadException {
     name = "data";
 
@@ -10,4 +11,4 @@ class DataException extends PayloadException {
 
 module.exports = {
     DataException
-}
+};

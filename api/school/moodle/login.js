@@ -29,7 +29,7 @@ module.exports = {
             maxRedirects: 0
         });
 
-        if (moodleLoginRes.headers["location"]==="https://moodle.spsejecna.cz/login/index.php") {
+        if (moodleLoginRes.headers["location"] === "https://moodle.spsejecna.cz/login/index.php") {
             throw new LoginException("Wrong credentials!");
         }
 
@@ -42,4 +42,4 @@ module.exports = {
         });
         next();
     }
-}
+};

@@ -4,8 +4,6 @@ const {jecnaAuthRequest} = require("../../modules/http");
 const {absenceParser} = require("../../parsers/user/absenceParser");
 module.exports = {
     get: async (req, res, next) => {
-
-
         const token = getToken(req);
         const year = getSafeNumberField(req.body.year, "year", -1);
 
@@ -18,4 +16,4 @@ module.exports = {
         res.status(200).json(absenceJSON);
         next();
     }
-}
+};

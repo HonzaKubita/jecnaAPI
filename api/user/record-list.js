@@ -4,8 +4,6 @@ const {jecnaAuthRequest} = require("../../modules/http");
 const {recordListExpandParser, recordListParser} = require("../../parsers/user/recordListParser");
 module.exports = {
     get: async (req, res, next) => {
-
-
         const token = getToken(req);
         const expand = getSafeBooleanField(req.body.expand, "expand", false);
         const index = getSafeNumberField(req.body.index, "index", 0);
@@ -18,4 +16,4 @@ module.exports = {
         res.status(200).json(recordListJSON);
         next();
     }
-}
+};

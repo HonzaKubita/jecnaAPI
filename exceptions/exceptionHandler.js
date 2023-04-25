@@ -1,7 +1,7 @@
 const {PayloadException} = require("./client/payloadException");
 const {MulterError} = require("multer");
 const {ServerException} = require("./server/serverException");
-const { JecnaException }  = require("./jecnaException");
+const {JecnaException} = require("./jecnaException");
 const INTERNAL_EXCEPTION = "internalException";
 
 module.exports = (err, req, res, next) => {
@@ -24,9 +24,8 @@ module.exports = (err, req, res, next) => {
             // only for some errors
             errors: err.errors
         });
-    }
-    else { // if it is not custom, throw an internal exception
-        err.exitCode = 1
+    } else { // if it is not custom, throw an internal exception
+        err.exitCode = 1;
         res.status(500).json({
             type: INTERNAL_EXCEPTION,
             tree: INTERNAL_EXCEPTION,
@@ -36,4 +35,4 @@ module.exports = (err, req, res, next) => {
     if (req.logger === undefined) throw err;
     req.logger.err = err;
     next();
-}
+};

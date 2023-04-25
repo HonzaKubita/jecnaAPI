@@ -58,4 +58,4 @@ async function recordListExpandParser(htmlBody, index, max, token) {
 module.exports = {
     recordListParser,
     recordListExpandParser
-}
+};

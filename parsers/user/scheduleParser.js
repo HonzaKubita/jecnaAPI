@@ -5,7 +5,7 @@ function parseSchedule(htmlBody) {
     const scheduleJSON = {
         times: [],
         days: [],
-        years:[],
+        years: [],
         periods: []
     };
 
@@ -145,4 +145,4 @@ function resolveLessonType(name) {
 
 module.exports = {
     parseSchedule
-}
+};

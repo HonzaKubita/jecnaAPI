@@ -1,5 +1,5 @@
 const FormData = require("form-data");
-const {payloadIsJSON, payloadIsType, tokenValid} = require("../../../modules/checker");
+const {payloadIsType, tokenValid} = require("../../../modules/checker");
 const {getSafeField, documentOf, getToken} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const {DataException} = require("../../../exceptions/client/dataException");
@@ -8,8 +8,6 @@ const {constants} = require("../../../modules/constants");
 const {imageUpload} = require("../../../middleware/imageUpload");
 module.exports = {
     get: async (req, res, next) => {
-
-
         const token = getToken(req);
 
         const imagePendingRes = await jecnaAuthRequest("/user-student/upload-photo", token);
@@ -55,8 +53,6 @@ module.exports = {
         next();
     },
     delete: async (req, res, next) => {
-        payloadIsJSON(req.headers);
-
         const token = getToken(req);
 
         const imageBaseRes = await jecnaAuthRequest("/user-student/upload-photo", token);
@@ -73,6 +69,6 @@ module.exports = {
         next();
     },
     middleware: {
-        put: [ imageUpload.single("image") ]
+        put: [imageUpload.single("image")]
     }
-}
+};

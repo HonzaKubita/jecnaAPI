@@ -175,4 +175,4 @@ function profileEditParser(htmlBody) {
 module.exports = {
     profileParser,
     profileEditParser
-}
+};

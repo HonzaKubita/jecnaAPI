@@ -4,8 +4,6 @@ const {roomsParser} = require("../../parsers/school/roomsParser");
 const {getToken} = require("../../modules/utils");
 module.exports = {
     get: async (req, res, next) => {
-
-
         const token = getToken(req);
 
         const roomsRes = await jecnaAuthRequest("/room/list", token);
@@ -15,4 +13,4 @@ module.exports = {
         res.status(200).json(roomsJSON);
         next();
     }
-}
+};

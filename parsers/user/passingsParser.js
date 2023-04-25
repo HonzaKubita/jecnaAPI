@@ -53,4 +53,4 @@ function passingsParser(htmlBody) {
 
 module.exports = {
     passingsParser
-}
+};

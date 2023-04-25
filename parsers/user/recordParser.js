@@ -45,4 +45,4 @@ function recordParser(htmlBody) {
 
 module.exports = {
     recordParser
-}
+};

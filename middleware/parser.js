@@ -1,3 +1,5 @@
+const {objectIsEmpty} = require("../modules/utils");
+
 function queryToBody(req, res, next) {
     if (req.method === "GET")
         req.body = req.query;
@@ -6,6 +8,14 @@ function queryToBody(req, res, next) {
     next();
 }
 
-module.exports = {
-    queryToBody
+function delEmptyData(req, res, next) {
+    if (objectIsEmpty(req.body))
+        delete req.body;
+
+    next();
 }
+
+module.exports = {
+    queryToBody,
+    delEmptyData
+};

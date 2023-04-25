@@ -5,8 +5,6 @@ const {jecnaAuthRequest} = require("../../modules/http");
 const {eventParser} = require("../../parsers/school/eventParser");
 module.exports = {
     get: async (req, res, next) => {
-
-
         const token = getToken(req);
         const eventCode = getSafeNumberField(req.body.eventCode, "eventCode");
 
@@ -18,4 +16,4 @@ module.exports = {
         res.status(200).json(eventJSON);
         next();
     }
-}
+};
