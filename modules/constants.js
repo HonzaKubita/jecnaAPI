@@ -22,6 +22,7 @@ const constants =
         },
         logs: {
             logsFolder: "logs",
+            fullLogsFolder: "logs/full",
             counterFile: `logs/counter`
         },
         ttt: {

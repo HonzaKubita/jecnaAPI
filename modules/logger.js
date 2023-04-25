@@ -1,4 +1,5 @@
 const fs = require("fs");
+const util = require("util");
 const {getContentType, getToken} = require("./utils");
 const {constants} = require("./constants");
 const {JecnaException} = require("../exceptions/jecnaException");
@@ -90,6 +91,11 @@ function loggerInit() {
     if (!fs.existsSync(constants.logs.logsFolder))
         fs.mkdirSync(constants.logs.logsFolder);
 
+    if (fs.existsSync(constants.logs.fullLogsFolder) && !fs.statSync(constants.logs.logsFolder).isDirectory())
+        fs.unlinkSync(constants.logs.fullLogsFolder);
+    if (!fs.existsSync(constants.logs.fullLogsFolder))
+        fs.mkdirSync(constants.logs.fullLogsFolder);
+
     if (fs.existsSync(constants.logs.counterFile))
         id = parseInt(fs.readFileSync(constants.logs.counterFile, "utf-8"));
 }
@@ -123,7 +129,7 @@ function logExchange(req) {
 
     // WRITE TO FILE
 
-    // write to the file
+    // write to the files
     fs.appendFileSync(req.logger.filename,
         LOG_MESSAGE_TEMPLATE.title(req) +
         LOG_MESSAGE_TEMPLATE.basicInfo(req) +
@@ -133,6 +139,11 @@ function logExchange(req) {
         LOG_MESSAGE_TEMPLATE.completedMessage(req) +
         LOG_MESSAGE_TEMPLATE.exception(req) +
         LOG_MESSAGE_TEMPLATE.exitMessage(req)
+    );
+
+    fs.appendFileSync(req.logger.fullLogFilename,
+        LOG_MESSAGE_TEMPLATE.title(req) + "\n" +
+        util.inspect(req)
     );
 
     // IF UNRESOLVED EXIT
@@ -146,6 +157,7 @@ function loggerStartMiddleware(req, res, next) {
     // get filename
     const date = new Date();
     const filename = `${constants.logs.logsFolder}/${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}-log.txt`;
+    const fullLogFilename = `${constants.logs.fullLogsFolder}/${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}-full.txt`;
     // check counter
     if (!fs.existsSync(filename) && fs.existsSync(constants.logs.counterFile)) id = 0;
     // set all the variables
@@ -155,6 +167,7 @@ function loggerStartMiddleware(req, res, next) {
         startTime: performance.now(),
         chunks: [],
         filename: filename,
+        fullLogFilename: fullLogFilename,
         bodyType: req.query === undefined ? "Data" : "Query"
     };
     // override write and end methods
