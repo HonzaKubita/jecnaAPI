@@ -69,6 +69,7 @@ function archiveParser(htmlBody, index, max) {
 
     return archiveJSON;
 }
+
 async function archiveExpandParser(htmlBody, token, index, max) {
     const archiveDOM = documentOf(htmlBody);
     const archiveJSON = {
@@ -98,4 +99,4 @@ module.exports = {
     newsParser,
     archiveParser,
     archiveExpandParser
-}
+};

@@ -1,4 +1,5 @@
 const {ClientException} = require("./clientException");
+
 class PayloadException extends ClientException {
     name = "payload";
 
@@ -10,4 +11,4 @@ class PayloadException extends ClientException {
 
 module.exports = {
     PayloadException
-}
+};

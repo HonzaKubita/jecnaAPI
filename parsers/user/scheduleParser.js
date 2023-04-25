@@ -5,7 +5,7 @@ function parseSchedule(htmlBody) {
     const scheduleJSON = {
         times: [],
         days: [],
-        years:[],
+        years: [],
         periods: []
     };
 
@@ -129,11 +129,7 @@ function parseSchedule(htmlBody) {
     return scheduleJSON;
 }
 
-/**
- *
- * @param name{string}
- * @returns {string}
- */
+
 function resolveLessonType(name) {
     switch (name) {
         case "Porada vedení":
@@ -149,4 +145,4 @@ function resolveLessonType(name) {
 
 module.exports = {
     parseSchedule
-}
+};

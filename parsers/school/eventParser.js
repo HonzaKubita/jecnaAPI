@@ -1,11 +1,6 @@
 const {constants} = require("../../modules/constants");
 const {documentOf} = require("../../modules/utils");
 
-/**
- *
- * @param htmlBody
- * @return {{date: string, attachments: string[], public: boolean, author: string, title: string, content: string}}
- */
 function eventParser(htmlBody) {
     const eventDOM = documentOf(htmlBody);
 
@@ -37,11 +32,7 @@ function eventParser(htmlBody) {
         attachments: eventAttachments
     };
 }
-/**
- * Parses misc data from event
- * @param miscText{string} The text
- * @returns {{date: string, public: boolean, author: string}} The data
- */
+
 function parseEventMiscData(miscText) {
     let eventMiscData = {
         date: "",
@@ -60,12 +51,6 @@ function parseEventMiscData(miscText) {
     return eventMiscData;
 }
 
-/**
- * Parses event attachments
- * @param imageDivs{HTMLCollectionOf<Element>} Collection of image divs
- * @param fileUls{HTMLCollectionOf<Element>} Collection of file uls
- * @returns {string[]} The attachment array
- */
 function parseEventAttachments(imageDivs, fileUls) {
     let attachmentList = [];
 
@@ -92,4 +77,4 @@ module.exports = {
     parseEventMiscData,
     parseEventAttachments,
     eventParser
-}
+};

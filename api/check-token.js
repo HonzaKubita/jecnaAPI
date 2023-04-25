@@ -1,11 +1,9 @@
-const {payloadIsType, userLoggedIn} = require("../modules/checker");
+const {userLoggedIn} = require("../modules/checker");
 const {jecnaAuthRequest} = require("../modules/http");
-const {getSafeStringField} = require("../modules/utils");
+const {getToken} = require("../modules/utils");
 module.exports = {
     post: async (req, res, next) => {
-        payloadIsType(req.headers);
-
-        const token = getSafeStringField(req.body.token, "token");
+        const token = getToken(req);
 
         const baseRes = await jecnaAuthRequest("/", token);
 
@@ -14,4 +12,4 @@ module.exports = {
         });
         next();
     }
-}
+};

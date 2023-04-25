@@ -1,12 +1,10 @@
-const {payloadIsType, tokenValid, siteFound} = require("../../modules/checker");
-const {getSafeStringField, getSafeNumberField} = require("../../modules/utils");
+const {tokenValid, siteFound} = require("../../modules/checker");
+const {getSafeNumberField, getToken} = require("../../modules/utils");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {parseSchedule} = require("../../parsers/user/scheduleParser");
 module.exports = {
-    post: async (req, res, next) => {
-        payloadIsType(req.headers);
-
-        const token = getSafeStringField(req.body.token, "token");
+    get: async (req, res, next) => {
+        const token = getToken(req);
         const year = getSafeNumberField(req.body.year, "year", -1);
         const period = getSafeNumberField(req.body.period, "period", -1);
 
@@ -24,4 +22,4 @@ module.exports = {
         res.status(200).json(scheduleJSON);
         next();
     }
-}
+};

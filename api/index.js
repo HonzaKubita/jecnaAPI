@@ -3,4 +3,4 @@ module.exports = {
         res.status(418).send("You found an easter egg!");
         next();
     }
-}
+};

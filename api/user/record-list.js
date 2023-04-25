@@ -1,12 +1,10 @@
-const {payloadIsType, tokenValid} = require("../../modules/checker");
-const {getSafeStringField, getSafeBooleanField, getSafeNumberField} = require("../../modules/utils");
+const {tokenValid} = require("../../modules/checker");
+const {getSafeBooleanField, getSafeNumberField, getToken} = require("../../modules/utils");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {recordListExpandParser, recordListParser} = require("../../parsers/user/recordListParser");
 module.exports = {
-    post: async (req, res, next) => {
-        payloadIsType(req.headers);
-
-        const token = getSafeStringField(req.body.token, "token");
+    get: async (req, res, next) => {
+        const token = getToken(req);
         const expand = getSafeBooleanField(req.body.expand, "expand", false);
         const index = getSafeNumberField(req.body.index, "index", 0);
         const max = getSafeNumberField(req.body.max, "max", Infinity);
@@ -18,4 +16,4 @@ module.exports = {
         res.status(200).json(recordListJSON);
         next();
     }
-}
+};

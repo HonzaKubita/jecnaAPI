@@ -94,4 +94,4 @@ function gradesParser(htmlBody) {
 
 module.exports = {
     gradesParser
-}
+};

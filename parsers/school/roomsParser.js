@@ -30,4 +30,4 @@ function roomsParser(htmlBody) {
 
 module.exports = {
     roomsParser
-}
+};

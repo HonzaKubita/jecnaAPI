@@ -1,12 +1,10 @@
-const {payloadIsType, tokenValid, siteFound} = require("../../modules/checker");
-const {getSafeStringField, getSafeNumberField} = require("../../modules/utils");
+const {tokenValid, siteFound} = require("../../modules/checker");
+const {getSafeStringField, getSafeNumberField, getToken} = require("../../modules/utils");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {roomParser} = require("../../parsers/school/roomParser");
 module.exports = {
-    post: async (req, res, next) => {
-        payloadIsType(req.headers);
-
-        const token = getSafeStringField(req.body.token, "token");
+    get: async (req, res, next) => {
+        const token = getToken(req);
         const short = getSafeStringField(req.body.short, "short");
         const year = getSafeNumberField(req.body.year, "year", -1);
 
@@ -18,4 +16,4 @@ module.exports = {
         res.status(200).json(roomJSON);
         next();
     }
-}
+};

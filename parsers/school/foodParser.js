@@ -1,5 +1,4 @@
-const {documentOf} = require("../../modules/utils");
-
+const {documentOf, objectIsEmpty} = require("../../modules/utils");
 
 function foodParser(htmlBody, list) {
     const foodDOM = documentOf(htmlBody);
@@ -18,6 +17,8 @@ function foodParser(htmlBody, list) {
         const lunch1 = parseLunch(dayDiv.children[1].children[4]); // day => lunchesDiv => lunchDiv
         const lunch2 = parseLunch(dayDiv.children[1].children[5]);
 
+        if (objectIsEmpty(lunch1) && objectIsEmpty(lunch2)) continue;
+
         const lunchJSON = {
             date: lunchDate,
             dayOfWeek: dayOfTheWeek,
@@ -31,11 +32,6 @@ function foodParser(htmlBody, list) {
     return foodJSON;
 }
 
-/**
- *
- * @param lunchDiv{HTMLDivElement}
- * @returns {{food:string,allergens:string[]}}
- */
 function parseLunch(lunchDiv) {
     const match = lunchDiv
         .textContent // Oběd 1 -- Ječná -- Polévka ze zeleného hrášku, ;vepřové po štýrsku, brambory, ovocný čaj, (1, 3, 7, 9)
@@ -51,4 +47,4 @@ function parseLunch(lunchDiv) {
 
 module.exports = {
     foodParser
-}
+};

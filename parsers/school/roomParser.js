@@ -4,7 +4,7 @@ const {jecnaAuthRequest} = require("../../modules/http");
 const {siteFound} = require("../../modules/checker");
 const {parseSchedule} = require("../user/scheduleParser");
 
-async function roomParser(htmlBody, year, token){
+async function roomParser(htmlBody, year, token) {
     const roomDOM = documentOf(htmlBody);
     const roomJSON = {
         admin: {
@@ -63,7 +63,7 @@ async function roomParser(htmlBody, year, token){
         scheduleLink =
             constants.jecna.baseURL + // add base url
             scheduleLink + // add the link
-            (year === -1 ? "" : `&schoolYearId=${year}`) // add school year
+            (year === -1 ? "" : `&schoolYearId=${year}`); // add school year
 
         const scheduleRes = await jecnaAuthRequest(scheduleLink, token);
         siteFound(scheduleRes.data, `Year ${year}`);
@@ -76,4 +76,4 @@ async function roomParser(htmlBody, year, token){
 
 module.exports = {
     roomParser
-}
+};

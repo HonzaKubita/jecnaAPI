@@ -1,4 +1,5 @@
 const {PayloadException} = require("./payloadException");
+
 class LoginException extends PayloadException {
     name = "login";
 
@@ -10,4 +11,4 @@ class LoginException extends PayloadException {
 
 module.exports = {
     LoginException
-}
+};

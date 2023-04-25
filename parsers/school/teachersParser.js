@@ -1,5 +1,6 @@
 const {documentOf} = require("../../modules/utils");
 const COLUMNS = ["contentLeftColumn", "contentRightColumn"];
+
 function teachersParser(htmlBody) {
     const teachersDOM = documentOf(htmlBody);
     const teachersJSON = {
@@ -24,4 +25,4 @@ function teachersParser(htmlBody) {
 
 module.exports = {
     teachersParser
-}
+};

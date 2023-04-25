@@ -1,16 +1,14 @@
 const FormData = require("form-data");
 const {payloadIsType, tokenValid} = require("../../../modules/checker");
-const {getSafeStringField, getSafeField, documentOf} = require("../../../modules/utils");
+const {getSafeField, documentOf, getToken} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const {DataException} = require("../../../exceptions/client/dataException");
 const {StateException} = require("../../../exceptions/client/stateException");
 const {constants} = require("../../../modules/constants");
 const {imageUpload} = require("../../../middleware/imageUpload");
 module.exports = {
-    post: async (req, res, next) => {
-        payloadIsType(req.headers);
-
-        const token = getSafeStringField(req.body.token, "token");
+    get: async (req, res, next) => {
+        const token = getToken(req);
 
         const imagePendingRes = await jecnaAuthRequest("/user-student/upload-photo", token);
         tokenValid(imagePendingRes.data);
@@ -29,7 +27,7 @@ module.exports = {
     put: async (req, res, next) => {
         payloadIsType(req.headers, "multipart/form-data");
 
-        const token = getSafeStringField(req.body.token, "token");
+        const token = getToken(req);
         const file = getSafeField(req.file, "image");
 
         const imageBaseRes = await jecnaAuthRequest("/user-student/upload-photo", token);
@@ -55,9 +53,7 @@ module.exports = {
         next();
     },
     delete: async (req, res, next) => {
-        payloadIsType(req.headers);
-
-        const token = getSafeStringField(req.body.token, "token");
+        const token = getToken(req);
 
         const imageBaseRes = await jecnaAuthRequest("/user-student/upload-photo", token);
         tokenValid(imageBaseRes.data);
@@ -73,6 +69,6 @@ module.exports = {
         next();
     },
     middleware: {
-        put: [ imageUpload.single("image") ]
+        put: [imageUpload.single("image")]
     }
-}
+};

@@ -1,12 +1,10 @@
-const {payloadIsType, tokenValid, siteFound} = require("../../modules/checker");
-const {getSafeStringField, getSafeNumberField} = require("../../modules/utils");
+const {tokenValid, siteFound} = require("../../modules/checker");
+const {getSafeNumberField, getToken} = require("../../modules/utils");
 const {jecnaAuthRequest} = require("../../modules/http");
 const {absenceParser} = require("../../parsers/user/absenceParser");
 module.exports = {
-    post: async (req, res, next) => {
-        payloadIsType(req.headers);
-
-        const token = getSafeStringField(req.body.token, "token");
+    get: async (req, res, next) => {
+        const token = getToken(req);
         const year = getSafeNumberField(req.body.year, "year", -1);
 
         const absenceLink = `/absence/student${year === -1 ? "" : `?schoolYearId=${year}`}`;
@@ -18,4 +16,4 @@ module.exports = {
         res.status(200).json(absenceJSON);
         next();
     }
-}
+};

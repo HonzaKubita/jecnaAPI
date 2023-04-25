@@ -1,4 +1,5 @@
 const {ServerException} = require("./serverException");
+
 class ParserException extends ServerException {
     name = "parser";
 
@@ -10,4 +11,4 @@ class ParserException extends ServerException {
 
 module.exports = {
     ParserException
-}
+};

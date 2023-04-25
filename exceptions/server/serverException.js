@@ -1,4 +1,5 @@
-const { JecnaException } = require("../jecnaException");
+const {JecnaException} = require("../jecnaException");
+
 class ServerException extends JecnaException {
     name = "server";
 
@@ -7,6 +8,7 @@ class ServerException extends JecnaException {
         this.tree += `/${this.name}`;
     }
 }
+
 module.exports = {
     ServerException
-}
+};
