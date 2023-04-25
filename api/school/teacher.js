@@ -11,7 +11,7 @@ module.exports = {
         const period = getSafeNumberField(req.body.period, "period", -1);
 
         const teacherRes = await jecnaAuthRequest(`/ucitel/${short}`, token);
-        if (req.body.token !== undefined) tokenValid(teacherRes.data);
+        if (req.token !== undefined) tokenValid(teacherRes.data);
         siteFound(teacherRes.data, `Teacher '${short}'`);
 
         const teacherJSON = await teacherParser(teacherRes.data, year, period, token);

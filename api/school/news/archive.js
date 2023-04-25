@@ -10,7 +10,7 @@ module.exports = {
         const max = getSafeNumberField(req.body.max, "max", Infinity);
 
         const archiveRes = await jecnaAuthRequest("/akce/archiv", token);
-        if (req.body.token !== undefined) tokenValid(archiveRes.data);
+        if (req.token !== undefined) tokenValid(archiveRes.data);
 
         const archiveJSON = expand ? await archiveExpandParser(archiveRes.data, token, index, max) : archiveParser(archiveRes.data, index, max);
         res.status(200).json(archiveJSON);
