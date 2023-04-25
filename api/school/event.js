@@ -9,7 +9,7 @@ module.exports = {
         const eventCode = getSafeNumberField(req.body.eventCode, "eventCode");
 
         const eventRes = await jecnaAuthRequest(`/akce/${eventCode}`, token);
-        if (req.body.token !== undefined) tokenValid(eventRes.data);
+        if (req.token !== undefined) tokenValid(eventRes.data);
         siteFound(eventRes.data, `Event ${eventCode}`);
 
         const eventJSON = eventParser(eventRes.data);
