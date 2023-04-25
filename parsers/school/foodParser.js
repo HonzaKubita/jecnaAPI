@@ -33,11 +33,7 @@ function foodParser(htmlBody, list) {
     return foodJSON;
 }
 
-/**
- *
- * @param lunchDiv{HTMLDivElement}
- * @returns {{food:string,allergens:string[]}}
- */
+
 function parseLunch(lunchDiv) {
     const match = lunchDiv
         .textContent // Oběd 1 -- Ječná -- Polévka ze zeleného hrášku, ;vepřové po štýrsku, brambory, ovocný čaj, (1, 3, 7, 9)

@@ -129,11 +129,7 @@ function parseSchedule(htmlBody) {
     return scheduleJSON;
 }
 
-/**
- *
- * @param name{string}
- * @returns {string}
- */
+
 function resolveLessonType(name) {
     switch (name) {
         case "Porada vedení":

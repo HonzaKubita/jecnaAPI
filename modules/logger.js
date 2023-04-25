@@ -1,6 +1,3 @@
-// noinspection JSUnresolvedReference
-
-const express = require("express");
 const fs = require("fs");
 const {getContentType} = require("./utils");
 const {constants} = require("./constants");
@@ -16,33 +13,21 @@ const LOG_MESSAGE_TEMPLATE = {
         const separators = getSeparator(TITLE_SEPARATOR_LENGTH, titleText.length, "=");
         return `${separators}${titleText}${separators}`;
     },
-    /**
-     * @param req{express.Request}
-     */
     basicInfo: (req) => {
         return `\nTime: ${getTime()}\nIP: ${req.logger.ip}\nMethod: ${req.method}\nPath: ${req.path}\n`;
     },
-    /**
-     * @param req{express.Request}
-     */
     request: (req) => {
         const text = `Token: ${req.token ?? "none"}\nHeaders:\n${JSON.stringify(req.headers, null, 2)}\n${req.logger.bodyType}:\n${JSON.stringify(req.body, null, 2) ?? "none"}\n`;
         const titleText = " REQUEST ";
         const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
         return `\n${separators}${titleText}${separators}${text}`;
     },
-    /**
-     * @param req{express.Request}
-     */
     response: (req) => {
         const text = `\nHeaders:\n${JSON.stringify(req.res.getHeaders(), null, 2)}\nData:\n${JSON.stringify(req.logger.resData, null, 2) ?? "none"}\n`;
         const titleText = " RESPONSE ";
         const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
         return `\n${separators}${titleText}${separators}${text}`;
     },
-    /**
-     * @param req{express.Request}
-     */
     files: (req) => {
         const getFileText = (fileObject) => {
             const fObject = {...fileObject};
@@ -94,9 +79,6 @@ const logger = {
     except: consoleExcept,
     exchange: logExchange
 };
-/**
- * Initializes the logger to change some console methods
- */
 function loggerInit() {
     // check all directories / counter
     if (fs.existsSync(constants.logs.logsFolder) && !fs.statSync(constants.logs.logsFolder).isDirectory())
@@ -112,19 +94,7 @@ function getTime() {
     return new Date().toLocaleTimeString("cs");
 }
 
-/**
- * @param req{express.Request}
- */
 function logExchange(req) {
-    /*
-    Req.logger
-        id : number
-        time : string
-        ip : string
-        err : Error | undefined
-            + exitCode : number | undefined
-     */
-
     // LOG TO CONSOLE
     let contentType;
     try {
@@ -222,11 +192,6 @@ function giveConsoleLog(clog, _type) {
     };
 }
 
-/**
- * @param maxLineLength{number}
- * @param titleTextLength{number}
- * @param char{string}
- */
 function getSeparator(maxLineLength, titleTextLength, char = "-") {
     if (maxLineLength > TITLE_SEPARATOR_LENGTH) maxLineLength = TITLE_SEPARATOR_LENGTH;
     let count = (maxLineLength - titleTextLength) / 2;
@@ -234,10 +199,6 @@ function getSeparator(maxLineLength, titleTextLength, char = "-") {
     return count < 0 ? "" : char.repeat(count);
 }
 
-/**
- *
- * @param err{Error}
- */
 function consoleExcept(err) {
     logger.error(`${err.name}: ${err.message}`);
     console.error(err.stack);
