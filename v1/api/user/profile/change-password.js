@@ -1,7 +1,6 @@
 const {tokenValid, payloadIsJSON} = require("../../../modules/checker");
 const {getSafeStringField, documentOf, getToken} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
-const {PayloadException} = require("../../../exceptions/client/payloadException");
 const {DataException} = require("../../../exceptions/client/dataException");
 module.exports = {
     put: async (req, res, next) => {
