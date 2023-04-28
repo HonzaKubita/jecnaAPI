@@ -77,7 +77,7 @@ function gradesParser(htmlBody) {
     for (const yearOption of yearSelect.children) {
         gradesJSON.years.push({
             name: yearOption.innerHTML,
-            id: Number(yearOption.value)
+            id: parseInt(yearOption.value)
         });
     }
     // parse half-terms
@@ -85,7 +85,7 @@ function gradesParser(htmlBody) {
     for (const halfTermOption of halfTermSelect.children) {
         gradesJSON.halfTerms.push({
             name: halfTermOption.innerHTML,
-            id: Number(halfTermOption.value)
+            id: parseInt(halfTermOption.value)
         });
     }
 

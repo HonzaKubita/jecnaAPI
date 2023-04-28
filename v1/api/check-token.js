@@ -2,8 +2,8 @@ const {userLoggedIn} = require("../modules/checker");
 const {jecnaAuthRequest} = require("../modules/http");
 const {getToken} = require("../modules/utils");
 module.exports = {
-    post: async (req, res, next) => {
-        const token = getToken(req);
+    get: async (req, res, next) => {
+        const token = getToken(req, true);
 
         const baseRes = await jecnaAuthRequest("/", token);
 

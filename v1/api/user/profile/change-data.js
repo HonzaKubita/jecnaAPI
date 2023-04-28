@@ -1,7 +1,7 @@
 const {tokenValid, payloadIsJSON} = require("../../../modules/checker");
 const {getSafeStringField, getSafeNumberField, documentOf, getToken} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
-const {PayloadException} = require("../../../exceptions/client/payloadException");
+const {DataException} = require("../../../exceptions/client/dataException");
 module.exports = {
     put: async (req, res, next) => {
         payloadIsJSON(req.headers);
@@ -47,7 +47,7 @@ module.exports = {
             errors[jecnaIdToId(fieldInput.id)] = fieldErrorUl.children[0].innerHTML;
         }
         if (Object.keys(errors).length > 0) {
-            const ex = new PayloadException("Some of the fields have a wrong value!");
+            const ex = new DataException("Some of the fields have a wrong value!");
             ex.errors = errors;
             throw ex;
         }

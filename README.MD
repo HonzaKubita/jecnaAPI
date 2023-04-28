@@ -1,5 +1,5 @@
 # Jecna API
-Documentation: [DOCS.MD](DOCS.MD)
+Latest documentation: [Here](v1/DOCS.MD)
 
 ## Install instructions
 * `git clone git@github.com:RORAKUS/jecnapi.git`

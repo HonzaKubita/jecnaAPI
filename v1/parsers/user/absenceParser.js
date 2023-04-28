@@ -12,7 +12,7 @@ function absenceParser(htmlBody) {
     for (const yearOption of yearSelect.children) {
         absenceJSON.years.push({
             name: yearOption.innerHTML,
-            id: Number(yearOption.value)
+            id: parseInt(yearOption.value)
         });
     }
     // parse absence
@@ -28,12 +28,12 @@ function absenceParser(htmlBody) {
 
         const absenceDate = absenceDateSplit[0];
         const absenceWeekDay = absenceDateSplit[1].replaceAll(/[()]/g, "");
-        const absenceHours = Number(
+        const absenceHours = parseInt(
             absenceTr.getElementsByClassName("count")[0]
                 .children[0]
                 .innerHTML
                 .replaceAll(/hodin[ya]?/g, "")
-        ); // Number(hoursTd.hoursStrong.innerHTML)
+        ); // parseInt(hoursTd.hoursStrong.innerHTML)
 
         absenceJSON.absence.push({
             date: absenceDate,

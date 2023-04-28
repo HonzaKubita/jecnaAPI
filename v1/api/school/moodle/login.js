@@ -37,8 +37,8 @@ module.exports = {
         const id = getCookie(constants.moodle.idCookieName, moodleLoginRes.headers);
 
         res.status(200).json({
-            moodleSession: session,
-            moodleId: id
+            session: session,
+            userId: id
         });
         next();
     }

@@ -4,7 +4,7 @@ const {jecnaAuthRequest} = require("../../modules/http");
 const {siteFound} = require("../../modules/checker");
 const {parseSchedule} = require("../user/scheduleParser");
 
-async function roomParser(htmlBody, year, token) {
+async function roomParser(htmlBody, year, period, token) {
     const roomDOM = documentOf(htmlBody);
     const roomJSON = {
         admin: {
@@ -13,9 +13,9 @@ async function roomParser(htmlBody, year, token) {
         },
         phones: {
             mobiles: [],
-            link: ""
+            link: 0
         },
-        floor: "",
+        floor: -1,
         class: "",
         schedule: {}
     };
@@ -39,16 +39,17 @@ async function roomParser(htmlBody, year, token) {
                 break;
             case "Telefon":
                 roomJSON.phones.mobiles = [...new Set(propertyValue.split(" a linka ")[0].trim().split(", nebo ").map(a => a.trim()))];
-                roomJSON.phones.link = propertyValue
+                roomJSON.phones.link = parseInt(propertyValue
                     .split(" a linka ")[1]
                     .replaceAll(/<\/?strong>/g, "")
-                    .trim();
+                    .trim());
                 break;
             case "Podlaží":
-                roomJSON.floor = propertyValue;
+                const floorMatch = propertyValue.match(/(\d)\. patro|Přízemí/);
+                roomJSON.floor = parseInt(floorMatch?.[1] ?? 0);
                 break;
             case "Kmenová učebna":
-                const classMatch = propertyValue.match(new RegExp("(.+) \\((.+)\\)"));
+                const classMatch = propertyValue.match(/(.+) \((.+)\)/);
                 roomJSON.class = classMatch[1];
                 roomJSON.admin.name = classMatch[2];
                 break;
@@ -63,10 +64,11 @@ async function roomParser(htmlBody, year, token) {
         scheduleLink =
             constants.jecna.baseURL + // add base url
             scheduleLink + // add the link
-            (year === -1 ? "" : `&schoolYearId=${year}`); // add school year
+            (year === -1 ? "" : `&schoolYearId=${year}`) + // add school year
+            (period === -1 ? "" : `&timetableId=${period}`); // add period
 
         const scheduleRes = await jecnaAuthRequest(scheduleLink, token);
-        siteFound(scheduleRes.data, `Year ${year}`);
+        siteFound(scheduleRes.data, `${year === -1 ? "" : `Year ${year}`}${year !== -1 && period !== -1 ? " or " : ""}${period === -1 ? "" : `Period ${period}`}`);
 
         roomJSON.schedule = parseSchedule(scheduleRes.data);
     }

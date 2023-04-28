@@ -18,7 +18,7 @@ function recordListParser(htmlBody, index, max) {
         const recordA = recordLi.children[0];
         const recordDescSplit = recordA.children[1].innerHTML.split(", ");
 
-        const recordId = Number(recordA.href.split("=")[1]);
+        const recordId = parseInt(recordA.href.split("=")[1]);
         const recordGood = recordA.children[0].classList.contains("sprite-icon-tick-16");
         const recordDate = recordDescSplit[0];
         const recordText = recordDescSplit.slice(1).join(", ");

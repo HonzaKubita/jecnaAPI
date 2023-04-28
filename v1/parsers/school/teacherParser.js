@@ -13,7 +13,7 @@ async function teacherParser(htmlBody, year, period, token) {
         privateEmail: "",
         phones: {
             mobiles: [],
-            link: "",
+            link: 0,
             private: ""
         },
         cabinet: "",
@@ -57,10 +57,10 @@ async function teacherParser(htmlBody, year, period, token) {
                 break;
             case "Telefon":
                 teacherJSON.phones.mobiles = [...new Set(propertyValue.split(" a linka ")[0].trim().split(", nebo ").map(a => a.trim()))];
-                teacherJSON.phones.link = propertyValue
+                teacherJSON.phones.link = parseInt(propertyValue
                     .split(" a linka ")[1]
                     .replaceAll(/<\/?strong>/g, "")
-                    .trim();
+                    .trim());
                 break;
             case "Soukromý telefon":
                 teacherJSON.phones.private = propertyValue;

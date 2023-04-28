@@ -6,7 +6,7 @@ const {eventParser} = require("../../parsers/school/eventParser");
 module.exports = {
     get: async (req, res, next) => {
         const token = getToken(req);
-        const eventCode = getSafeNumberField(req.body.eventCode, "eventCode");
+        const eventCode = getSafeNumberField(req.body.code, "code");
 
         const eventRes = await jecnaAuthRequest(`/akce/${eventCode}`, token);
         if (req.token !== undefined) tokenValid(eventRes.data);

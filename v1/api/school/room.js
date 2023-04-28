@@ -7,12 +7,13 @@ module.exports = {
         const token = getToken(req);
         const short = getSafeStringField(req.body.short, "short");
         const year = getSafeNumberField(req.body.year, "year", -1);
+        const period = getSafeNumberField(req.body.period, "period", -1);
 
         const roomRes = await jecnaAuthRequest(`/ucebna/${short}`, token);
         tokenValid(roomRes.data);
         siteFound(roomRes.data, `Room '${short}'`);
 
-        const roomJSON = await roomParser(roomRes.data, year, token);
+        const roomJSON = await roomParser(roomRes.data, year, period, token);
         res.status(200).json(roomJSON);
         next();
     }

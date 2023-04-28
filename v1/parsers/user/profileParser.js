@@ -7,7 +7,7 @@ function profileParser(htmlBody, token) {
     const profileJSON = {
         name: "",
         username: "",
-        age: "",
+        age: 0,
         birth: "",
         phone: "",
         homeAddress: "",
@@ -53,7 +53,7 @@ function profileParser(htmlBody, token) {
                 profileJSON.username = propertyValue;
                 break;
             case "Věk":
-                profileJSON.age = propertyValue;
+                profileJSON.age = parseInt(propertyValue.split(" ")?.[0] ?? 0);
                 break;
             case "Narození":
                 profileJSON.birth = propertyValue;
@@ -72,9 +72,9 @@ function profileParser(htmlBody, token) {
                 profileJSON.groups = propertyValue.split(", skupiny: ")[1].trim().split(", ").map(u => u.trim());
                 break;
             case "Číslo v tříd. výkazu":
-                profileJSON.reportNum = Number(propertyValue);
+                profileJSON.reportNum = parseInt(propertyValue);
                 if (isNaN(profileJSON.reportNum)) {
-                    logger.error(`ERROR: reportNum is not a number. It's value: ${propertyValue}. Login token: ${token}`);
+                    logger.warn(`ERROR: reportNum is not a number. It's value: ${propertyValue}. Login token: ${token}`);
                     profileJSON.reportNum = propertyValue;
                 }
                 break;
@@ -110,9 +110,9 @@ function profileParser(htmlBody, token) {
 
         switch (propertyName) {
             case "Variabliní symbol žáka":
-                profileJSON.support.variableSymbol = Number(propertyValue);
+                profileJSON.support.variableSymbol = parseInt(propertyValue);
                 if (isNaN(profileJSON.support.variableSymbol)) {
-                    logger.error(`ERROR: variableSymbol is not a number. It's value: ${propertyValue}. Login token: ${token}`);
+                    logger.warn(`ERROR: variableSymbol is not a number. It's value: ${propertyValue}. Login token: ${token}`);
                     profileJSON.support.variableSymbol = propertyValue;
                 }
                 break;
@@ -138,8 +138,8 @@ function profileEditParser(htmlBody) {
     const possibleInsurances = [];
     for (const option of profileEditDOM.getElementById("healthInsuranceId").children) {
         const insurance = {
-            id: Number(option.value),
-            name: option.label
+            id: parseInt(option.value),
+            name: option.getAttribute("label")
         };
         if (option.getAttribute("selected") === "selected") selectedInsurance = insurance;
         possibleInsurances.push(insurance);
@@ -148,8 +148,8 @@ function profileEditParser(htmlBody) {
     const possibleVillages = [];
     for (const option of profileEditDOM.getElementById("czMsmtRaujId").children) {
         const village = {
-            id: Number(option.value),
-            name: option.label
+            id: parseInt(option.value),
+            name: option.getAttribute("label")
         };
         if (option.getAttribute("selected") === "selected") selectedVillage = village;
         possibleVillages.push(village);

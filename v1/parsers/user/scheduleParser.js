@@ -14,7 +14,7 @@ function parseSchedule(htmlBody) {
     for (const yearOption of yearSelect.children) {
         scheduleJSON.years.push({
             name: yearOption.innerHTML,
-            id: Number(yearOption.value)
+            id: parseInt(yearOption.value)
         });
     }
     // parse periods
@@ -22,7 +22,7 @@ function parseSchedule(htmlBody) {
     for (const periodOption of periodSelect.children) {
         scheduleJSON.periods.push({
             name: periodOption.innerHTML,
-            id: Number(periodOption.value)
+            id: parseInt(periodOption.value)
         });
     }
 
@@ -40,7 +40,7 @@ function parseSchedule(htmlBody) {
         const timeEnd = timeText.split(" - ")[1];
 
         scheduleJSON.times.push({
-            lesson: timeLesson,
+            lesson: parseInt(timeLesson),
             start: timeStart,
             end: timeEnd
         });
@@ -75,7 +75,7 @@ function parseSchedule(htmlBody) {
             }
             // normal subject
             // this is the same for all classes
-            const subjectLength = Number(subjectTd.getAttribute("colspan") ?? 1);
+            const subjectLength = parseInt(subjectTd.getAttribute("colspan") ?? 1);
             bigSubjectAdds += subjectLength - 1;
             // parse lessons
             for (const lessonDiv of subjectTd.children) {
@@ -94,7 +94,7 @@ function parseSchedule(htmlBody) {
                 // parse lesson:
                 const lessonShort = nameSpan.innerHTML;
                 const lessonName = nameSpan.title;
-                const lessonTeacherShort = teacherSpan?.innerHTML.toString() ?? "";
+                const lessonTeacherShort = teacherSpan?.innerHTML.toString().toLocaleLowerCase() ?? "";
                 const lessonTeacherFull = teacherSpan?.title ?? "";
                 const lessonClassroom = lessonDiv.getElementsByClassName("room")[0]?.innerHTML?.toString() ?? "";
                 const lessonClass = lessonDiv.getElementsByClassName("class")[0]?.innerHTML?.toString() ?? "";

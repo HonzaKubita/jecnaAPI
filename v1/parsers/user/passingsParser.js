@@ -13,7 +13,7 @@ function passingsParser(htmlBody) {
     for (const yearOption of yearSelect.children) {
         passingsJSON.years.push({
             name: yearOption.innerHTML,
-            id: Number(yearOption.value)
+            id: parseInt(yearOption.value)
         });
     }
     // parse months
@@ -21,7 +21,7 @@ function passingsParser(htmlBody) {
     for (const monthOption of monthSelect.children) {
         passingsJSON.months.push({
             name: monthOption.innerHTML,
-            id: Number(monthOption.value)
+            id: parseInt(monthOption.value)
         });
     }
     // parse passings

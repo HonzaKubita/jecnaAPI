@@ -41,7 +41,7 @@ function parseLunch(lunchDiv) {
 
     return {
         food: match?.[1],
-        allergens: match?.[2].split(", ")
+        allergens: match?.[2].split(", ").map(o => parseInt(o))
     };
 }
 

@@ -62,7 +62,7 @@ function archiveParser(htmlBody, index, max) {
 
             archiveJSON.news.push({
                 title: eventTitle,
-                code: eventCode
+                code: parseInt(eventCode)
             });
         }
     }
