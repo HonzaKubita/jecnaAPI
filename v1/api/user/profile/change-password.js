@@ -7,8 +7,8 @@ module.exports = {
         payloadIsJSON(req.headers);
 
         const token = getToken(req, true);
-        const oldPassword = getSafeStringField(req.body.oldPassword, "oldPassword");
-        const newPassword = getSafeStringField(req.body.newPassword, "newPassword");
+        const oldPassword = getSafeStringField(req.body?.oldPassword, "oldPassword");
+        const newPassword = getSafeStringField(req.body?.newPassword, "newPassword");
 
         const passwordBaseRes = await jecnaAuthRequest("/user/change-password", token);
         tokenValid(passwordBaseRes.data);

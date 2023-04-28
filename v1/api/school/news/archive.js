@@ -5,9 +5,9 @@ const {archiveExpandParser, archiveParser} = require("../../../parsers/school/ne
 module.exports = {
     get: async (req, res, next) => {
         const token = getToken(req);
-        const expand = getSafeBooleanField(req.body.expand, "expand", false);
-        const index = getSafeNumberField(req.body.index, "index", 0);
-        const max = getSafeNumberField(req.body.max, "max", Infinity);
+        const expand = getSafeBooleanField(req.body?.expand, "expand", false);
+        const index = getSafeNumberField(req.body?.index, "index", 0);
+        const max = getSafeNumberField(req.body?.max, "max", Infinity);
 
         const archiveRes = await jecnaAuthRequest("/akce/archiv", token);
         if (req.token !== undefined) tokenValid(archiveRes.data);

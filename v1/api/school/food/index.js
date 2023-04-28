@@ -3,7 +3,7 @@ const {foodParser} = require("../../../parsers/school/foodParser");
 const {getSafeBooleanField} = require("../../../modules/utils");
 module.exports = {
     get: async (req, res, next) => {
-        const list = getSafeBooleanField(req.body.list, "list", true);
+        const list = getSafeBooleanField(req.body?.list, "list", true);
 
         const foodRes = await foodRequest({
             method: "GET",

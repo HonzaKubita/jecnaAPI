@@ -10,7 +10,7 @@ const {queryToBody, delEmptyData} = require("./middleware/parser");
 const server = express();
 server.use(logger.setupMiddleware);
 server.use(express.json({
-    limit: '5mb',
+    limit: "5mb",
     verify(req, res, buf, encoding) {
         req.logger.rawData = buf.toString(encoding);
     }

@@ -7,13 +7,13 @@ module.exports = {
         payloadIsJSON(req.headers);
 
         const token = getToken(req, true);
-        const email = getSafeStringField(req.body.email, "email");
-        const phone = getSafeStringField(req.body.phone, "phone");
-        const insurance = getSafeNumberField(req.body.insurance, "insurance");
-        const street = getSafeStringField(req.body.street, "street");
-        const houseNumber = getSafeStringField(req.body.houseNumber, "houseNumber");
-        const village = getSafeNumberField(req.body.village, "village");
-        const zip = getSafeStringField(req.body.zip, "zip");
+        const email = getSafeStringField(req.body?.email, "email");
+        const phone = getSafeStringField(req.body?.phone, "phone");
+        const insurance = getSafeNumberField(req.body?.insurance, "insurance");
+        const street = getSafeStringField(req.body?.street, "street");
+        const houseNumber = getSafeStringField(req.body?.houseNumber, "houseNumber");
+        const village = getSafeNumberField(req.body?.village, "village");
+        const zip = getSafeStringField(req.body?.zip, "zip");
 
         const dataBaseRes = await jecnaAuthRequest("/user-student/self-update", token);
         tokenValid(dataBaseRes.data);

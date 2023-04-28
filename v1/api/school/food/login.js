@@ -7,8 +7,8 @@ module.exports = {
     post: async (req, res, next) => {
         payloadIsJSON(req.headers);
 
-        const username = getSafeStringField(req.body.username, "username");
-        const password = getSafeStringField(req.body.password, "password");
+        const username = getSafeStringField(req.body?.username, "username");
+        const password = getSafeStringField(req.body?.password, "password");
 
         const foodBaseRes = await foodRequest({
             method: "GET",
