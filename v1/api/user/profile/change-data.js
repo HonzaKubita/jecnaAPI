@@ -6,7 +6,7 @@ module.exports = {
     put: async (req, res, next) => {
         payloadIsJSON(req.headers);
 
-        const token = getToken(req);
+        const token = getToken(req, true);
         const email = getSafeStringField(req.body.email, "email");
         const phone = getSafeStringField(req.body.phone, "phone");
         const insurance = getSafeNumberField(req.body.insurance, "insurance");

@@ -8,7 +8,7 @@ const {constants} = require("../../../modules/constants");
 const {imageUpload} = require("../../../middleware/imageUpload");
 module.exports = {
     get: async (req, res, next) => {
-        const token = getToken(req);
+        const token = getToken(req, true);
 
         const imagePendingRes = await jecnaAuthRequest("/user-student/upload-photo", token);
         tokenValid(imagePendingRes.data);
@@ -27,7 +27,7 @@ module.exports = {
     put: async (req, res, next) => {
         payloadIsType(req.headers, "multipart/form-data");
 
-        const token = getToken(req);
+        const token = getToken(req, true);
         const file = getSafeField(req.file, "image");
 
         const imageBaseRes = await jecnaAuthRequest("/user-student/upload-photo", token);
@@ -53,7 +53,7 @@ module.exports = {
         next();
     },
     delete: async (req, res, next) => {
-        const token = getToken(req);
+        const token = getToken(req, true);
 
         const imageBaseRes = await jecnaAuthRequest("/user-student/upload-photo", token);
         tokenValid(imageBaseRes.data);

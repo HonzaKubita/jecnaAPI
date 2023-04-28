@@ -4,7 +4,7 @@ const {jecnaAuthRequest} = require("../../../modules/http");
 const {profileParser} = require("../../../parsers/user/profileParser");
 module.exports = {
     get: async (req, res, next) => {
-        const token = getToken(req);
+        const token = getToken(req, true);
 
         const baseRes = await jecnaAuthRequest("/", token);
         tokenValid(baseRes.data);

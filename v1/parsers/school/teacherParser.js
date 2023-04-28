@@ -26,10 +26,11 @@ async function teacherParser(htmlBody, year, period, token) {
 
     const propertiesTbody = teacherDOM.getElementsByClassName("userprofile")[0].children[0]; // propertiesTable.children[0]
     // parse image
-    teacherJSON.image = constants.jecna.baseURL + teacherDOM
-        .getElementsByClassName("image")[0] // imageDiv
-        .children[0] // imageChild (img or noimage div)
-        .src ?? ""; // link or ""
+    if (teacherDOM.getElementsByClassName("noimage").length === 0)
+        teacherJSON.image = constants.jecna.baseURL + teacherDOM
+            .getElementsByClassName("image")[0] // imageDiv
+            .children[0] // imageChild (img or noimage div)
+            .src; // link or ""
     // parse properties
     for (const propertyTr of propertiesTbody.children) {
         const propertyName = propertyTr
@@ -86,7 +87,7 @@ async function teacherParser(htmlBody, year, period, token) {
             constants.jecna.baseURL + // add base url
             scheduleLink + // add the link
             (year === -1 ? "" : `&schoolYearId=${year}`) + // add school year
-            (period === -1 ? "" : `&timeTableId=${period}`); // add period
+            (period === -1 ? "" : `&timetableId=${period}`); // add period
 
         const scheduleRes = await jecnaAuthRequest(scheduleLink, token);
         siteFound(scheduleRes.data, `${year === -1 ? "" : `Year ${year}`}${year !== -1 && period !== -1 ? " or " : ""}${period === -1 ? "" : `Period ${period}`}`);

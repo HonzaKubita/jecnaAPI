@@ -4,7 +4,7 @@ const {jecnaAuthRequest} = require("../../modules/http");
 const {parseSchedule} = require("../../parsers/user/scheduleParser");
 module.exports = {
     get: async (req, res, next) => {
-        const token = getToken(req);
+        const token = getToken(req, true);
         const year = getSafeNumberField(req.body.year, "year", -1);
         const period = getSafeNumberField(req.body.period, "period", -1);
 

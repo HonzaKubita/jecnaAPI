@@ -4,7 +4,7 @@ const {jecnaAuthRequest} = require("../../modules/http");
 const {recordParser} = require("../../parsers/user/recordParser");
 module.exports = {
     get: async (req, res, next) => {
-        const token = getToken(req);
+        const token = getToken(req, true);
         const id = getSafeNumberField(req.body.id, "id");
 
         const recordRes = await jecnaAuthRequest(`/user-student/record?userStudentRecordId=${id}`, token);

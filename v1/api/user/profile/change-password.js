@@ -2,11 +2,12 @@ const {tokenValid, payloadIsJSON} = require("../../../modules/checker");
 const {getSafeStringField, documentOf, getToken} = require("../../../modules/utils");
 const {jecnaAuthRequest, jecnaDataPost} = require("../../../modules/http");
 const {PayloadException} = require("../../../exceptions/client/payloadException");
+const {DataException} = require("../../../exceptions/client/dataException");
 module.exports = {
     put: async (req, res, next) => {
         payloadIsJSON(req.headers);
 
-        const token = getToken(req);
+        const token = getToken(req, true);
         const oldPassword = getSafeStringField(req.body.oldPassword, "oldPassword");
         const newPassword = getSafeStringField(req.body.newPassword, "newPassword");
 
@@ -26,17 +27,33 @@ module.exports = {
         });
 
         // resolve errors
-        const errorUls = documentOf(passwordUploadRes.data).getElementsByClassName("errors");
-        if (errorUls.length > 0) {
-            const errorMessages = [];
-            for (const errorUl of errorUls) {
-                for (const errorLi of errorUl.children) {
-                    errorMessages.push(errorLi.innerHTML);
-                }
-            }
-            const err = new PayloadException("Some of the fields have wrong value!");
-            err.errors = errorMessages;
-            throw err;
+        // const errorUls = documentOf(passwordUploadRes.data).getElementsByClassName("errors");
+        // if (errorUls.length > 0) {
+        //     const errorMessages = [];
+        //     for (const errorUl of errorUls) {
+        //         for (const errorLi of errorUl.children) {
+        //             errorMessages.push(errorLi.innerHTML);
+        //         }
+        //     }
+        //     const err = new PayloadException("Some of the fields have wrong value!");
+        //     err.errors = errorMessages;
+        //     throw err;
+        // }
+        const inputsTbody = documentOf(passwordUploadRes.data)
+            .getElementsByClassName("form")[0]
+            .getElementsByTagName("tbody")[0];
+        const errors = {};
+        for (const fieldTr of inputsTbody.children) {
+            const fieldInput = fieldTr.getElementsByTagName("input")?.[0] ?? fieldTr.getElementsByTagName("select")?.[0];
+            const fieldErrorUl = fieldTr.getElementsByClassName("errors")?.[0];
+            if ((fieldInput.getAttribute("disabled") ?? "0") === "1" || fieldErrorUl === undefined) continue;
+
+            errors[jecnaIdToId(fieldInput.id)] = fieldErrorUl.children[0].innerHTML;
+        }
+        if (Object.keys(errors).length > 0) {
+            const ex = new DataException("Some of the fields have a wrong value!");
+            ex.errors = errors;
+            throw ex;
         }
 
         res.status(201).send({
@@ -45,3 +62,14 @@ module.exports = {
         next();
     }
 };
+
+function jecnaIdToId(id) {
+    switch (id) {
+        case "oldpass":
+            return "oldPassword";
+        case "pass":
+            return "newPassword";
+        default:
+            return id;
+    }
+}
