@@ -27,7 +27,7 @@ const constants =
         },
         ttt: {
             databaseFile: "ttt.db",
-            enable: false
+            enable: true
         }
     };
 

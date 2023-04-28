@@ -5,7 +5,6 @@ const {JecnaException} = require("./jecnaException");
 const INTERNAL_EXCEPTION = "internalException";
 
 module.exports = (err, req, res, next) => {
-    //console.log(err);
     if (err instanceof SyntaxError) {
         err = new PayloadException(`Wrong json format: ${err.message}`);
     }

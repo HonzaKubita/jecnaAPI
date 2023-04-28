@@ -18,6 +18,11 @@ const logger = new class Logger {
         this.#fileCheck(constants.logs.counterFile, false, "0");
 
         this.#nextId = parseInt(fs.readFileSync(constants.logs.counterFile, "utf-8"));
+
+        const oldCerror = console.error;
+        console.error = function (what) {
+            if (!what.toString().includes("ERR_HTTP_HEADERS_SENT")) oldCerror.apply(this, arguments);
+        };
     }
 
     log = this.#giveConsoleLog(console.log, "LOG");
@@ -104,8 +109,11 @@ const logger = new class Logger {
             reqBody = req.logger.rawData;
             bodyIsRaw = true;
         }
-        const resBody = {...req.logger.resData};
-        this.#changeBody(resBody, req.logger.fullLogFilename);
+        let resBody;
+        if (req.logger.resDataJSON) {
+            resBody = {...req.logger.resData};
+            this.#changeBody(resBody, req.logger.fullLogFilename);
+        }
 
         const reqHeaders = {...req.headers};
         delete reqHeaders.token;
@@ -143,7 +151,7 @@ Status: ${req.res.statusCode} ${req.res.statusMessage}
 Headers:
 ${JSON.stringify(req.res.getHeaders(), null, 2)}
 Data:
-${JSON.stringify(resBody, null, 2) ?? "none"}${req.logger.err === undefined ? "" : `
+${req.logger.resDataJSON ? JSON.stringify(resBody, null, 2) ?? "none" : req.logger.resData}${req.logger.err === undefined ? "" : `
 ${this.#computeSeparator(" EXCEPTION ")}
 Type: ${req.logger.err.name}
 Message: ${req.logger.err.message}${req.logger.err.exitCode === undefined ? "" : `\n${req.logger.err.stack.substring(req.logger.err.stack.indexOf("\n") + 1)}`}`}
@@ -179,7 +187,8 @@ Process finished with exit code ${req.logger.err.exitCode}.`}
             setupTimeStart: performance.now(),
             id: this.#nextId++,
             logFilename: logFilename,
-            fullLogFilename: fullLogFilename
+            fullLogFilename: fullLogFilename,
+            resDataJSON: false
         };
         // write the id to the file
         fs.writeFileSync(constants.logs.counterFile, this.#nextId.toString(), "utf-8");
@@ -189,6 +198,7 @@ Process finished with exit code ${req.logger.err.exitCode}.`}
 
         res.json = function (obj) {
             req.logger.resData = obj;
+            req.logger.resDataJSON = true;
             oldJson.apply(this, arguments);
         };
         res.send = function (body) {

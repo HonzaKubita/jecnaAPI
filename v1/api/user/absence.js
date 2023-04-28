@@ -5,7 +5,7 @@ const {absenceParser} = require("../../parsers/user/absenceParser");
 module.exports = {
     get: async (req, res, next) => {
         const token = getToken(req, true);
-        const year = getSafeNumberField(req.body.year, "year", -1);
+        const year = getSafeNumberField(req.body?.year, "year", -1);
 
         const absenceLink = `/absence/student${year === -1 ? "" : `?schoolYearId=${year}`}`;
         const absenceRes = await jecnaAuthRequest(absenceLink, token);

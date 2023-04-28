@@ -3,5 +3,5 @@ node_modules
 *test*
 package-lock.json
 logs
-ttt.js
 todo.js
+ttt.db

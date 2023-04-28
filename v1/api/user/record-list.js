@@ -5,9 +5,9 @@ const {recordListExpandParser, recordListParser} = require("../../parsers/user/r
 module.exports = {
     get: async (req, res, next) => {
         const token = getToken(req, true);
-        const expand = getSafeBooleanField(req.body.expand, "expand", false);
-        const index = getSafeNumberField(req.body.index, "index", 0);
-        const max = getSafeNumberField(req.body.max, "max", Infinity);
+        const expand = getSafeBooleanField(req.body?.expand, "expand", false);
+        const index = getSafeNumberField(req.body?.index, "index", 0);
+        const max = getSafeNumberField(req.body?.max, "max", Infinity);
 
         const recordListRes = await jecnaAuthRequest("/user-student/record-list", token);
         tokenValid(recordListRes.data);
