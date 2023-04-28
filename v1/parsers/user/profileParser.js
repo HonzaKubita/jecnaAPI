@@ -1,6 +1,6 @@
 const {documentOf} = require("../../modules/utils");
 const {constants} = require("../../modules/constants");
-const {logger} = require("../../modules/logger");
+const logger = require("../../modules/logger");
 
 function profileParser(htmlBody, token) {
     const profileDOM = documentOf(htmlBody);

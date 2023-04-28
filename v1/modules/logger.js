@@ -1,231 +1,254 @@
 const fs = require("fs");
 const util = require("util");
-const {getContentType, getToken} = require("./utils");
 const {constants} = require("./constants");
-const {JecnaException} = require("../exceptions/jecnaException");
+const {getContentType, getToken} = require("./utils");
 const {ClientException} = require("../exceptions/client/clientException");
+const {JecnaException} = require("../exceptions/jecnaException");
+const logger = new class Logger {
+    constructor() {
+        this.except = this.except.bind(this);
+        this.exchange = this.exchange.bind(this);
+        this.getTime = this.getTime.bind(this);
+        this.setupMiddleware = this.setupMiddleware.bind(this);
+        this.startMiddleware = this.startMiddleware.bind(this);
+        this.endMiddleware = this.endMiddleware.bind(this);
 
-const TITLE_SEPARATOR_LENGTH = 150;
-const SECTION_SEPARATOR_LENGTH = TITLE_SEPARATOR_LENGTH / 2;
+        this.#fileCheck(constants.logs.logsFolder, true);
+        this.#fileCheck(constants.logs.fullLogsFolder, true);
+        this.#fileCheck(constants.logs.counterFile, false, "0");
 
-const LOG_MESSAGE_TEMPLATE = {
-    title: (req) => {
-        const titleText = ` EXCHANGE #${req.logger.id} `;
-        const separators = getSeparator(TITLE_SEPARATOR_LENGTH, titleText.length, "=");
-        return `${separators}${titleText}${separators}`;
-    },
-    basicInfo: (req) => {
-        return `\nTime: ${getTime()}\nIP: ${req.logger.ip}\nMethod: ${req.method}\nPath: ${req.path}\n`;
-    },
-    request: (req) => {
-        const headers = {...req.headers};
-        delete headers.token;
-
-        const text = `\nToken: ${getToken(req, false, "none")}\nHeaders:\n${JSON.stringify(headers, null, 2)}\n${req.logger.bodyType}:\n${JSON.stringify(req.body, null, 2) ?? "none"}\n`;
-        const titleText = " REQUEST ";
-        const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
-        return `\n${separators}${titleText}${separators}${text}`;
-    },
-    response: (req) => {
-        const text = `\nHeaders:\n${JSON.stringify(req.res.getHeaders(), null, 2)}\nData:\n${JSON.stringify(req.logger.resData, null, 2) ?? "none"}\n`;
-        const titleText = " RESPONSE ";
-        const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
-        return `\n${separators}${titleText}${separators}${text}`;
-    },
-    files: (req) => {
-        const getFileText = (fileObject) => {
-            const fObject = {...fileObject};
-            fObject.type = fObject.buffer === undefined ? "file" : "memory";
-            fObject.buffer = undefined;
-            return `\n${JSON.stringify(fObject, null, 2)}`;
-        };
-        if (req.file === undefined && req.files === undefined) return "";
-        let text = "";
-        if (req.file !== undefined) text = getFileText(req.file);
-        else req.files.forEach(file => text += getFileText(file));
-
-        const titleText = " FILES ";
-        const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
-        return `\n${separators}${titleText}${separators}${text}\n`;
-    },
-    completedMessage: (req) => {
-        const text = `Completed after ${req.logger.time}ms with ${req.res.statusCode} ${req.res.statusMessage}`;
-        return `${"-".repeat(SECTION_SEPARATOR_LENGTH)}\n${text}\n`;
-    },
-    exception: (req) => {
-        if (req.logger.err === undefined) return "";
-        let text = `\nType: ${req.logger.err.name}\nMessage: ${req.logger.err.message}\n`;
-        if (!(req.logger.err instanceof JecnaException)) text += `${req.logger.err.stack}\n`;
-
-        const titleText = " EXCEPTION ";
-        const separators = getSeparator(SECTION_SEPARATOR_LENGTH, titleText.length);
-        return `${separators}${titleText}${separators}${text}`;
-    },
-    exitMessage: (req) => {
-        if (req.logger.err?.exitCode === undefined) return "";
-        const text = `Process finished with exit code ${req.logger.err.exitCode.toString()}.`;
-        return `${"-".repeat(SECTION_SEPARATOR_LENGTH)}\n${text}\n`;
-    }
-};
-const LOG_MESSAGE_CONSOLE_EXCHANGE_TEMPLATE =
-    `[#{id}] [{ip}] [{method} {path}] [{req.contentType}] - {res.code} {res.codeName} after {res.time}ms{misc}`;
-const LOG_MESSAGE_CONSOLE_TEMPLATE =
-    `[{time}] [{type}] {message}`;
-
-let id = 0;
-
-const logger = {
-    log: giveConsoleLog(console.log, "LOG"),
-    error: giveConsoleLog(console.error, "ERROR"),
-    info: giveConsoleLog(console.info, "INFO"),
-    warn: giveConsoleLog(console.warn, "WARNING"),
-    debug: giveConsoleLog(console.debug, "DEBUG"),
-    except: consoleExcept,
-    exchange: logExchange
-};
-
-function loggerInit() {
-    // check all directories / counter
-    if (fs.existsSync(constants.logs.logsFolder) && !fs.statSync(constants.logs.logsFolder).isDirectory())
-        fs.unlinkSync(constants.logs.logsFolder);
-    if (!fs.existsSync(constants.logs.logsFolder))
-        fs.mkdirSync(constants.logs.logsFolder);
-
-    if (fs.existsSync(constants.logs.fullLogsFolder) && !fs.statSync(constants.logs.logsFolder).isDirectory())
-        fs.unlinkSync(constants.logs.fullLogsFolder);
-    if (!fs.existsSync(constants.logs.fullLogsFolder))
-        fs.mkdirSync(constants.logs.fullLogsFolder);
-
-    if (fs.existsSync(constants.logs.counterFile))
-        id = parseInt(fs.readFileSync(constants.logs.counterFile, "utf-8"));
-}
-
-function getTime() {
-    return new Date().toLocaleTimeString("cs");
-}
-
-function logExchange(req) {
-    // LOG TO CONSOLE
-    let contentType;
-    try {
-        contentType = getContentType(req.headers);
-    } catch (ex) {
-        if (ex instanceof ClientException) contentType = "none";
-        else throw ex;
+        this.#nextId = parseInt(fs.readFileSync(constants.logs.counterFile, "utf-8"));
     }
 
-    logger.log(LOG_MESSAGE_CONSOLE_EXCHANGE_TEMPLATE
-            .replaceAll("{id}", req.logger.id.toString())
-            .replaceAll("{ip}", req.logger.ip)
-            .replaceAll("{method}", req.method)
-            .replaceAll("{path}", req.path)
-            .replaceAll("{req.contentType}", contentType)
-            .replaceAll("{res.code}", req.res.statusCode.toString())
-            .replaceAll("{res.codeName}", req.res.statusMessage)
-            .replaceAll("{res.time}", req.logger.time)
-            .replaceAll("{misc}", req.logger.err === undefined ? "" : ` with ${req.logger.err.name}${req.logger.err instanceof JecnaException ? "Exception" : ""}: ${req.logger.err.message}`)
-        , "EXCHANGE");
-    if (req.logger.err?.exitCode !== undefined) logger.error(req.logger.err.stack);
+    log = this.#giveConsoleLog(console.log, "LOG");
+    info = this.#giveConsoleLog(console.info, "INFO");
+    error = this.#giveConsoleLog(console.error, "ERROR");
+    warn = this.#giveConsoleLog(console.warn, "WARNING");
+    debug = this.#giveConsoleLog(console.debug, "DEBUG");
 
-    // WRITE TO FILE
+    #nextId;
+    #SEPARATOR_LENGTH = 150;
 
-    // write to the files
-    fs.appendFileSync(req.logger.filename,
-        LOG_MESSAGE_TEMPLATE.title(req) +
-        LOG_MESSAGE_TEMPLATE.basicInfo(req) +
-        LOG_MESSAGE_TEMPLATE.request(req) +
-        LOG_MESSAGE_TEMPLATE.files(req) +
-        LOG_MESSAGE_TEMPLATE.response(req) +
-        LOG_MESSAGE_TEMPLATE.completedMessage(req) +
-        LOG_MESSAGE_TEMPLATE.exception(req) +
-        LOG_MESSAGE_TEMPLATE.exitMessage(req)
-    );
-
-    fs.appendFileSync(req.logger.fullLogFilename,
-        LOG_MESSAGE_TEMPLATE.title(req) + "\n" +
-        util.inspect(req)
-    );
-
-    // IF UNRESOLVED EXIT
-    if (req.logger.err?.exitCode !== undefined) {
-        logger.error(`Exited with code ${req.logger.err.exitCode}.`);
-        process.exit(req.logger.err.exitCode);
-    }
-}
-
-function loggerStartMiddleware(req, res, next) {
-    // get filename
-    const date = new Date();
-    const filename = `${constants.logs.logsFolder}/${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}-log.txt`;
-    const fullLogFilename = `${constants.logs.fullLogsFolder}/${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}-full.txt`;
-    // check counter
-    if (!fs.existsSync(filename) && fs.existsSync(constants.logs.counterFile)) id = 0;
-    // set all the variables
-    req.logger = {
-        id: id++,
-        ip: req.socket.remoteAddress,
-        startTime: performance.now(),
-        chunks: [],
-        filename: filename,
-        fullLogFilename: fullLogFilename,
-        bodyType: req.query === undefined ? "Data" : "Query"
-    };
-    // override write and end methods
-    const oldJson = res.json;
-    const oldSend = res.send;
-
-    res.json = function (obj) {
-        req.logger.resData = obj;
-        oldJson.apply(this, arguments);
-    };
-    res.send = function (body) {
-        if (req.logger.resData === undefined)
-            req.logger.resData = body;
-        oldSend.apply(this, arguments);
+    except(err, exitCode = 1) {
+        this.error(`${err.name}: ${err.message}`);
+        console.error(err.stack);
+        process.exit(exitCode);
     };
 
-    next();
-}
-
-function loggerEndMiddleware(req, res, next) {
-    // set other variables
-    req.logger.time = (performance.now() - req.logger.startTime).toFixed(2);
-
-    logger.exchange(req);
-
-    fs.writeFileSync(constants.logs.counterFile, id.toString(), "utf-8");
-
-    next();
-}
-
-// #############################
-
-function giveConsoleLog(clog, _type) {
-    return (message, type = _type) => {
-        clog(LOG_MESSAGE_CONSOLE_TEMPLATE
-            .replaceAll("{time}", getTime())
-            .replaceAll("{type}", type)
-            .replaceAll("{message}", message)
+    exchange(req) {
+        // set content type
+        let contentType;
+        try {
+            contentType = getContentType(req.headers);
+        } catch (ex) {
+            if (ex instanceof ClientException) contentType = req.query === undefined ? "none" : "query params";
+            else throw ex;
+        }
+        /*
+        [#{id}] [{ip}] [{method} {path}] [{req.contentType}] - {res.code} {res.codeName} after {res.startTime}ms ({res.setupTime}ms setup inc.){misc}
+         */
+        this.log(
+            `[#${req.logger.id}] [${req.socket.remoteAddress}] [${req.method} ${req.path}] [${contentType}] - ${req.res.statusCode} ${req.res.statusMessage} ` +
+            `after ${req.logger.startTime ?? "??"}ms (${req.logger.setupTime}ms setup inc.)${req.logger.err === undefined ? "" :
+                ` with ${req.logger.err.name}${req.logger.err instanceof JecnaException ? "Exception" : ""}: ${req.logger.err.message}`}`,
+            "EXCHANGE"
         );
-    };
-}
+        // if exiting error log stack
+        if (req.logger.err?.exitCode !== undefined) this.error(req.logger.err.stack);
 
-function getSeparator(maxLineLength, titleTextLength, char = "-") {
-    if (maxLineLength > TITLE_SEPARATOR_LENGTH) maxLineLength = TITLE_SEPARATOR_LENGTH;
-    let count = (maxLineLength - titleTextLength) / 2;
-    if (count < titleTextLength) count++;
-    return count < 0 ? "" : char.repeat(count);
-}
+        // write to the log
+        /*
+        {head}
+        Time: {time}
+        IP: {ip}
+        Path: {url}
+        Method: {method}
+        {title ' REQUEST '}
+        Token: {req.token}
+        Headers:
+        {req.headers}
+        {req.dataType}
+        {req.data}
+        [[files]]
+        {files.title}
+        {files}
+        [[files.end]]
+        {title ' RESPONSE '}
+        Status: {res.statusCode} {res.statusMessage}
+        Headers:
+        {res.headers}
+        Data:
+        {res.data}
+        [[exception]]
+        {title ' EXCEPTION '}
+        Type: {err.type}
+        Message: {err.message}
+        [[endException]]
+        {err.stack}
+        [[endException.end]]
+        [[exception.end]]
+        {separator}
+        Completed after:
+            {setupTime}ms from setup
+            {startTime}ms from start
+        [[endException]]
+        Process finished with exit code {err.exitCode}.
+        [[endException.end]]
+         */
+        let reqBody;
+        let bodyIsRaw = false;
+        if (req.logger.bodyType !== undefined) {
+            reqBody = {...req.body};
+            this.#changeBody(reqBody, req.logger.fullLogFilename);
+        } else {
+            reqBody = req.logger.rawData;
+            bodyIsRaw = true;
+        }
+        const resBody = {...req.logger.resData};
+        this.#changeBody(resBody, req.logger.fullLogFilename);
 
-function consoleExcept(err) {
-    logger.error(`${err.name}: ${err.message}`);
-    console.error(err.stack);
-    process.exit(1);
-}
+        const reqHeaders = {...req.headers};
+        delete reqHeaders.token;
 
-module.exports = {
-    logger,
-    loggerStartMiddleware,
-    loggerEndMiddleware,
-    loggerInit
+        const filesText = (req) => {
+            // if no file return ""
+            if (req.file === undefined && req.files === undefined) return "";
+            const getFileText = (fileObject) => {
+                const fObject = {...fileObject};
+                fObject.type = fObject.buffer === undefined ? "file" : "memory";
+                delete fObject.buffer;
+                return `\n${JSON.stringify(fObject, null, 2)}`;
+            };
+            // populate the text
+            let text = "";
+            if (req.file !== undefined) text = getFileText(req.file);
+            else req.files.forEach(file => text += getFileText(file));
+
+            return `\n${this.#computeSeparator(" FILES ")}${text}`;
+        };
+
+        const log = `${this.#computeSeparator(` EXCHANGE #${req.logger.id} `, this.#SEPARATOR_LENGTH, "=")}
+Time: ${this.getTime()}
+IP: ${req.socket.remoteAddress}
+Path: ${req.path}
+Method: ${req.method}
+${this.#computeSeparator(" REQUEST ")}
+Token: ${getToken(req, false, "none")}
+Headers:
+${JSON.stringify(reqHeaders, null, 2)}
+${req.logger.bodyType ?? "Plain"}:
+${bodyIsRaw ? reqBody : JSON.stringify(reqBody, null, 2) ?? "none"}${filesText(req)}
+${this.#computeSeparator(" RESPONSE ")}
+Status: ${req.res.statusCode} ${req.res.statusMessage}
+Headers:
+${JSON.stringify(req.res.getHeaders(), null, 2)}
+Data:
+${JSON.stringify(resBody, null, 2) ?? "none"}${req.logger.err === undefined ? "" : `
+${this.#computeSeparator(" EXCEPTION ")}
+Type: ${req.logger.err.name}
+Message: ${req.logger.err.message}${req.logger.err.exitCode === undefined ? "" : `\n${req.logger.err.stack.substring(req.logger.err.stack.indexOf("\n") + 1)}`}`}
+${this.#computeSeparator()}
+Completed after:
+    ${req.logger.setupTime}ms from setup
+    ${req.logger.startTime === undefined ? "Haven't reached start" : `${req.logger.startTime}ms from start`}${req.logger.err?.exitCode === undefined ? "" : `
+${this.#computeSeparator()}
+Process finished with exit code ${req.logger.err.exitCode}.`}
+`;
+
+        fs.appendFileSync(req.logger.logFilename, log, "utf-8");
+
+        // Write a full log
+        fs.appendFileSync(req.logger.fullLogFilename, this.#computeSeparator(` EXCHANGE #${req.logger.id}`) + util.inspect(req), "utf-8");
+    }
+
+    getTime() {
+        return new Date().toLocaleTimeString("cs");
+    }
+
+    setupMiddleware(req, res, next) {
+        // get files
+        const date = new Date();
+        const stringDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+        const logFilename = `${constants.logs.logsFolder}/${stringDate}.log`;
+        const fullLogFilename = `${constants.logs.fullLogsFolder}/${stringDate}-full.log`;
+        // check if reset counter
+        if (!fs.existsSync(logFilename))
+            this.#nextId = 0;
+        // set the request logger object
+        req.logger = {
+            setupTimeStart: performance.now(),
+            id: this.#nextId++,
+            logFilename: logFilename,
+            fullLogFilename: fullLogFilename
+        };
+        // write the id to the file
+        fs.writeFileSync(constants.logs.counterFile, this.#nextId.toString(), "utf-8");
+        // overwrite properties
+        const oldJson = res.json;
+        const oldSend = res.send;
+
+        res.json = function (obj) {
+            req.logger.resData = obj;
+            oldJson.apply(this, arguments);
+        };
+        res.send = function (body) {
+            if (req.logger.resData === undefined)
+                req.logger.resData = body;
+            oldSend.apply(this, arguments);
+        };
+
+        next();
+    }
+
+    startMiddleware(req, res, next) {
+        req.logger.startTimeStart = performance.now();
+        req.logger.bodyType = req.query === undefined ? "Data" : "Query";
+
+        next();
+    }
+
+    endMiddleware(req, res, next) {
+        const now = performance.now();
+        // stop times
+        req.logger.setupTime = (now - req.logger.setupTimeStart).toFixed(2);
+        if (req.logger.startTimeStart !== undefined)
+            req.logger.startTime = (now - req.logger.startTimeStart).toFixed(2);
+        // log the exchange
+        this.exchange(req);
+        // if end exit
+        if (req.logger.err?.exitCode !== undefined)
+            process.exit(req.logger.err.exitCode);
+        next();
+    }
+
+    #giveConsoleLog(method, _type) {
+        return (message, type = _type) => {
+            method(`[${this.getTime()}] [${type}] ${message}`);
+        };
+    }
+
+    #fileCheck(file, isFolder, data = "") {
+        if (fs.existsSync(file) && (isFolder ^ fs.statSync(file).isDirectory()))
+            fs.rmSync(file, {recursive: true, force: true});
+        if (!fs.existsSync(file)) {
+            if (isFolder) fs.mkdirSync(file);
+            else fs.writeFileSync(file, data, "utf-8");
+        }
+    }
+
+    #computeSeparator(title = "", maxLength = this.#SEPARATOR_LENGTH / 2, separatorChar = "-") {
+        const separators = separatorChar.repeat(Math.ceil((maxLength - title.length) / 2));
+        return `${separators}${title}${separators}`;
+    }
+
+    #changeBody(object, fullLogName) {
+        for (const entry of Object.entries(object)) {
+            if (typeof (entry[1]) === "object") this.#changeBody(entry[1], fullLogName);
+            let length = JSON.stringify(entry[1])?.length;
+            if (length === undefined) continue;
+            if (length > 20000) object[entry[0]] = `(hidden ${length} characters, see full in ${fullLogName})`;
+        }
+    }
 };
+
+module.exports = logger;

@@ -103,7 +103,7 @@ function parseSchedule(htmlBody) {
                 lessonsJSON.push({
                     type: lessonType,
                     short: lessonShort,
-                    name: lessonName,
+                    name: lessonName.replaceAll("\xa0", ""),
                     teacherShort: lessonTeacherShort,
                     teacherFull: lessonTeacherFull,
                     classroom: lessonClassroom,
