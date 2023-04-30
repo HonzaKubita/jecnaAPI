@@ -1,3 +1,4 @@
+require('dotenv').config();ß
 require("express-async-errors");
 
 const express = require("express");
@@ -29,6 +30,6 @@ server.subscribe("/", methodSelection.subscribe);
 server.use(exceptionHandler); // Exception handling
 server.use(logger.endMiddleware);
 
-server.listen(constants.server.port, () => { // Start the server
-    logger.info(`Server running on port ${constants.server.port}!`);
+server.listen(process.env.PORT, () => { // Start the server
+    logger.info(`Server running on port ${process.env.PORT}!`);
 });
