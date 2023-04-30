@@ -1,8 +1,8 @@
 # Jecna API
-Latest documentation: [Here](v1/DOCS.MD)
+Documentation: [Here](DOCS.MD)
 
 ## Install instructions
-* `git clone git@github.com:RORAKUS/jecnapi.git`
-* `cd jecnapi/v{version_num}`
+* `git clone git@github.com:HonzaKubita/jecnaAPI.git`
+* `cd jecnaAPI`
 * `npm install`
 * `node main.js`
