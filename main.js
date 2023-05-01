@@ -1,9 +1,8 @@
-require('dotenv').config();
 require("express-async-errors");
+require('dotenv').config();
 
 const express = require("express");
 const autoRestAPI = require("autorestapi");
-const {constants} = require("./modules/constants");
 const exceptionHandler = require("./exceptions/exceptionHandler");
 const logger = require("./modules/logger");
 const methodSelection = require("./api/index");
