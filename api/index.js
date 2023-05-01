@@ -3,6 +3,7 @@ const {payloadIsJSON, tokenValid} = require("../modules/checker");
 const {getSafeNumberField, getToken} = require("../modules/utils");
 const {jecnaAuthRequest} = require("../modules/http");
 const {ServerException} = require("../exceptions/server/serverException");
+const {constants} = require("../modules/constants");
 module.exports = {
     trace: async (req, res, next) => {
         res.status(418).send("You found an easter egg!");
@@ -48,5 +49,16 @@ module.exports = {
         });
 
         next();
+    },
+    get: (req, res, next) => {
+        if (req.body.githubRedir === "true")
+            res.sendFile(`${process.cwd()}/static/index.html`, (err) => {
+                if (err) next(err);
+                else next();
+            });
+        else {
+            res.redirect(302, constants.repo);
+            next();
+        }
     }
 };
