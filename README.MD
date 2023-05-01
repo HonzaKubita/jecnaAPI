@@ -2,7 +2,7 @@
 Documentation: [Here](DOCS.MD)
 
 ## Quick start
-**Host: https://www.jecnaapi.cz/** <br>
+**Host: [https://www.jecnaapi.cz/](https://www.jecnaapi.cz/?githubRedir=true)** <br>
 Firstly you have to log in to the server using the endpoint [`/user/login`](DOCS.MD#login): *(This is in javascript, but feel free to use any other language)*
 ```js
 let response = await client({
