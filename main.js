@@ -13,6 +13,7 @@ tttInit();
 
 const server = express();
 server.use(logger.setupMiddleware);
+server.use(express.static("static"));
 server.use(express.json({
     limit: "5mb",
     verify(req, res, buf, encoding) {
