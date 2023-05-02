@@ -42,7 +42,7 @@ function getSafeStringField(field, fieldName, defaultValue = null) {
 
 function getSafeNumberField(field, fieldName, defaultValue = null) {
     if (defaultValue === null && field === undefined) throw new PayloadException(`Required field '${fieldName}' is missing in the payload!`);
-    const value = parseInt(field === undefined ? defaultValue : field);
+    const value = Number(field === undefined ? defaultValue : field);
     if (isNaN(value)) throw new DataException(`Field '${fieldName}' is not a number!`);
     return value;
 }
