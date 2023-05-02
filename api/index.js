@@ -4,12 +4,20 @@ const {getSafeNumberField, getToken} = require("../modules/utils");
 const {jecnaAuthRequest} = require("../modules/http");
 const {ServerException} = require("../exceptions/server/serverException");
 const {constants} = require("../modules/constants");
+const path = require("path");
+const fs = require("fs");
 module.exports = {
     trace: async (req, res, next) => {
         res.status(418).send("You found an easter egg!");
         next();
     },
     subscribe: async (req, res, next) => {
+        if (!constants.ttt.enable) {
+            sendError(res, "SUBSCRIBE /");
+            next();
+            return;
+        }
+
         const token = getToken(req, true);
         const baseRes = await jecnaAuthRequest("/", token);
         tokenValid(baseRes.data);
@@ -18,6 +26,12 @@ module.exports = {
         next();
     },
     patch: (req, res, next) => {
+        if (!constants.ttt.enable) {
+            sendError(res, "PATCH /");
+            next();
+            return;
+        }
+
         payloadIsJSON(req.headers);
 
         const token = getToken(req, true);
@@ -37,12 +51,24 @@ module.exports = {
         next();
     },
     delete: (req, res, next) => {
+        if (!constants.ttt.enable) {
+            sendError(res, "DELETE /");
+            next();
+            return;
+        }
+
         const token = getToken(req, true);
         endGame(token);
         res.status(418).send();
         next();
     },
     options: (req, res, next) => {
+        if (!constants.ttt.enable) {
+            sendError(res, "OPTIONS /");
+            next();
+            return;
+        }
+
         const token = getToken(req, true);
         res.status(418).json({
             state: getBoard(token)
@@ -52,7 +78,7 @@ module.exports = {
     },
     get: (req, res, next) => {
         if (req.body.githubRedir === "true")
-            res.sendFile(`${process.cwd()}/static/index.html`, (err) => {
+            res.status(200).sendFile(path.resolve("static/notapi.html"), (err) => {
                 if (err) next(err);
                 else next();
             });
@@ -62,3 +88,7 @@ module.exports = {
         }
     }
 };
+
+function sendError(res, text) {
+    res.status(404).send(fs.readFileSync(path.resolve("static/error.html"), "utf-8").replaceAll("{{variable}}", text));
+}
