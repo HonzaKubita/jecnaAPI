@@ -1,4 +1,4 @@
-const fetchArchive = require("./archiveFetch");
+const {fetchArchive} = require("./archiveFetch");
 const {documentOf} = require("../../modules/utils");
 const {parseEventMiscData, parseEventAttachments, eventParser} = require("./eventParser");
 const {jecnaAuthRequest, jecnaPostRequestAuth} = require("../../modules/http");
