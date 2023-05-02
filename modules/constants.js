@@ -1,3 +1,4 @@
+const path = require("path");
 const constants =
     {
         repo: "https://github.com/HonzaKubita/jecnaAPI",
@@ -18,13 +19,13 @@ const constants =
             idCookieName: "MOODLEID1_"
         },
         logs: {
-            logsFolder: "logs",
-            fullLogsFolder: "logs/full",
-            counterFile: `logs/counter`
+            logsFolder: path.resolve("logs"),
+            fullLogsFolder: path.resolve("logs/full"),
+            counterFile: path.resolve(`logs/counter`)
         },
         ttt: {
-            databaseFile: "ttt.db",
-            enable: true
+            databaseFile: path.resolve("ttt.db"),
+            enable: false
         }
     };
 
