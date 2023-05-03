@@ -8,13 +8,11 @@ module.exports = {
         const expand = getSafeBooleanField(req.body?.expand, "expand", false);
         const index = getSafeNumberField(req.body?.index, "index", 0);
         const max = getSafeNumberField(req.body?.max, "max", Infinity);
-        const count = getSafeStringField(req.body?.count, "count", "allowed");
-        const defaultDescription = getSafeStringField(req.body?.defaultDescription, "defaultDescription", "none provided")
 
         const archiveRes = await jecnaAuthRequest("/akce/archiv", token);
         if (req.token !== undefined) tokenValid(archiveRes.data);
 
-        const archiveJSON = expand ? await archiveExpandParser(archiveRes.data, token, index, max, count, defaultDescription, req) : archiveParser(archiveRes.data, index, max);
+        const archiveJSON = expand ? await archiveExpandParser(archiveRes.data, token, index, max, req) : archiveParser(archiveRes.data, index, max);
         res.status(200).json(archiveJSON);
         next();
     }

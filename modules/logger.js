@@ -34,6 +34,10 @@ const logger = new class Logger {
     #nextId;
     #SEPARATOR_LENGTH = 150;
 
+    decrementId() {
+        this.#nextId--;
+    }
+
     except(err, exitCode = 1) {
         this.error(`${err.name}: ${err.message}`);
         console.error(err.stack);

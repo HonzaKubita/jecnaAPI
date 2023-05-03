@@ -71,7 +71,7 @@ function archiveParser(htmlBody, index, max) {
     return archiveJSON;
 }
 
-async function archiveExpandParser(htmlBody, token, index, max, count, defaultDescription, req) {
+async function archiveExpandParser(htmlBody, token, index, max, req) {
     const archiveDOM = documentOf(htmlBody);
     const archiveJSON = {
         news: []
@@ -82,7 +82,7 @@ async function archiveExpandParser(htmlBody, token, index, max, count, defaultDe
         .getElementsByTagName("ul"); // all uls
 
     // Get the fetch list
-    const fList = await fetchArchive(token, count, defaultDescription, req);
+    const fList = await fetchArchive(token, req);
     if (fList !== false) return fList;
 
     let indexCounter = 0;
