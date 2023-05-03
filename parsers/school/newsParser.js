@@ -72,6 +72,10 @@ function archiveParser(htmlBody, index, max) {
 }
 
 async function archiveExpandParser(htmlBody, token, index, max, req) {
+    // Get the fetch list
+    const fList = await fetchArchive(token, req);
+    if (fList !== false) return fList;
+
     const archiveDOM = documentOf(htmlBody);
     const archiveJSON = {
         news: []
@@ -80,10 +84,6 @@ async function archiveExpandParser(htmlBody, token, index, max, req) {
     const eventListUls = archiveDOM
         .getElementsByClassName("column-center")[0] // main div
         .getElementsByTagName("ul"); // all uls
-
-    // Get the fetch list
-    const fList = await fetchArchive(token, req);
-    if (fList !== false) return fList;
 
     let indexCounter = 0;
     for (const eventListUl of eventListUls) {
