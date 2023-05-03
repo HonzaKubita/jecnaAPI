@@ -23,6 +23,8 @@ const logger = new class Logger {
         console.error = function (what) {
             if (!what.toString().includes("ERR_HTTP_HEADERS_SENT")) oldCerror.apply(this, arguments);
         };
+
+        this.#clearOldLogs();
     }
 
     log = this.#giveConsoleLog(console.log, "LOG");
@@ -267,6 +269,19 @@ Process finished with exit code ${req.logger.err.exitCode}.`}
             let length = JSON.stringify(entry[1])?.length;
             if (length === undefined) continue;
             if (length > 20000) object[entry[0]] = `(hidden ${length} characters, see full in ${fullLogName})`;
+        }
+    }
+
+    #clearOldLogs() {
+        for (let file of fs.readdirSync(constants.logs.logsFolder)) {
+            if (!file.endsWith(".log")) continue;
+            file = file.replaceAll(".log", "");
+            const splitted = file.split("-");
+            if (splitted.length !== 3) continue;
+            const str = `${splitted[1]}/${Number(splitted[0])+1}/${splitted[2]}`;
+            const logDate = Date.parse(str);
+            if (new Date() - logDate > 86400*7)
+                fs.unlinkSync(file);
         }
     }
 };
