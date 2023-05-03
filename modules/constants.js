@@ -1,4 +1,3 @@
-const path = require("path");
 const constants =
     {
         repo: "https://github.com/HonzaKubita/jecnaAPI",
