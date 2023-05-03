@@ -179,7 +179,7 @@ Process finished with exit code ${req.logger.err.exitCode}.`}
     }
 
     getTime() {
-        return new Date().toLocaleTimeString("cs");
+        return new Date().toLocaleTimeString("cs", {timeZone: 'Europe/Prague'});
     }
 
     setupMiddleware(req, res, next) {
