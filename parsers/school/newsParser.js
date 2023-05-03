@@ -72,7 +72,7 @@ function archiveParser(htmlBody, index, max) {
 }
 
 async function archiveExpandParser(htmlBody, token, index, max, req) {
-    // Get the fetch list
+    // Get the fetch lists
     const fList = await fetchArchive(token, req);
     if (fList !== false) return fList;
 
