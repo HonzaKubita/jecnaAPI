@@ -1,5 +1,7 @@
 require("express-async-errors");
-require('dotenv').config();
+require('dotenv').config({
+    path: `${__dirname}/.env`
+});
 
 const express = require("express");
 const autoRestAPI = require("autorestapi");
@@ -13,7 +15,7 @@ tttInit();
 
 const server = express();
 server.use(logger.setupMiddleware);
-server.use(express.static("static"));
+server.use(express.static(`${__dirname}/static`));
 server.use(express.json({
     limit: "5mb",
     verify(req, res, buf, encoding) {

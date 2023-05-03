@@ -1,4 +1,3 @@
-const path = require("path");
 const constants =
     {
         repo: "https://github.com/HonzaKubita/jecnaAPI",
@@ -25,7 +24,7 @@ const constants =
         },
         ttt: {
             databaseFile: `${__dirname}/../ttt.db`,
-            enable: false
+            enable: true
         }
     };
 
