@@ -34,6 +34,10 @@ const logger = new class Logger {
     #nextId;
     #SEPARATOR_LENGTH = 150;
 
+    decrementId() {
+        this.#nextId--;
+    }
+
     except(err, exitCode = 1) {
         this.error(`${err.name}: ${err.message}`);
         console.error(err.stack);
@@ -197,12 +201,14 @@ Process finished with exit code ${req.logger.err.exitCode}.`}
         const oldSend = res.send;
 
         res.json = function (obj) {
-            req.logger.resData = obj;
-            req.logger.resDataJSON = true;
+            if (req.logger !== undefined) {
+                req.logger.resData = obj;
+                req.logger.resDataJSON = true;
+            }
             oldJson.apply(this, arguments);
         };
         res.send = function (body) {
-            if (req.logger.resData === undefined)
+            if (req.logger !== undefined && req.logger.resData === undefined)
                 req.logger.resData = body;
             oldSend.apply(this, arguments);
         };
@@ -218,6 +224,7 @@ Process finished with exit code ${req.logger.err.exitCode}.`}
     }
 
     endMiddleware(req, res, next) {
+        if (req.logger === undefined) return;
         const now = performance.now();
         // stop times
         req.logger.setupTime = (now - req.logger.setupTimeStart).toFixed(2);

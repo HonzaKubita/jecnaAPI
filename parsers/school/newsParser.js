@@ -1,6 +1,7 @@
+const {fetchArchive} = require("./archiveFetch");
 const {documentOf} = require("../../modules/utils");
 const {parseEventMiscData, parseEventAttachments, eventParser} = require("./eventParser");
-const {jecnaAuthRequest} = require("../../modules/http");
+const {jecnaAuthRequest, jecnaPostRequestAuth} = require("../../modules/http");
 
 function newsParser(htmlBody) {
     const newsDOM = documentOf(htmlBody);
@@ -70,7 +71,7 @@ function archiveParser(htmlBody, index, max) {
     return archiveJSON;
 }
 
-async function archiveExpandParser(htmlBody, token, index, max) {
+async function archiveExpandParser(htmlBody, token, index, max, req) {
     const archiveDOM = documentOf(htmlBody);
     const archiveJSON = {
         news: []
@@ -79,6 +80,10 @@ async function archiveExpandParser(htmlBody, token, index, max) {
     const eventListUls = archiveDOM
         .getElementsByClassName("column-center")[0] // main div
         .getElementsByTagName("ul"); // all uls
+
+    // Get the fetch list
+    const fList = await fetchArchive(token, req);
+    if (fList !== false) return fList;
 
     let indexCounter = 0;
     for (const eventListUl of eventListUls) {
