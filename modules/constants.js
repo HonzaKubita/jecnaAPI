@@ -25,7 +25,7 @@ const constants =
         },
         ttt: {
             databaseFile: `${__dirname}/../ttt.db`,
-            enable: false
+            enable: true
         }
     };
 
