@@ -280,8 +280,11 @@ Process finished with exit code ${req.logger.err.exitCode}.`}
             if (splitted.length !== 3) continue;
             const str = `${splitted[1]}/${Number(splitted[0])+1}/${splitted[2]}`;
             const logDate = Date.parse(str);
-            if (new Date() - logDate > 86400*7)
-                fs.unlinkSync(file);
+            if (new Date() - logDate > 86400*7) {
+                if (fs.existsSync(`${constants.logs.logsFolder}/${file}.log`)) fs.unlinkSync(`${constants.logs.logsFolder}/${file}.log`);
+                if (fs.existsSync(`${constants.logs.fullLogsFolder}/${file}-full.log`))
+                    fs.unlinkSync(`${constants.logs.fullLogsFolder}/${file}-full.log`)
+            }
         }
     }
 };
