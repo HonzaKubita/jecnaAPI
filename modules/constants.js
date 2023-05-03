@@ -19,12 +19,12 @@ const constants =
             idCookieName: "MOODLEID1_"
         },
         logs: {
-            logsFolder: path.resolve("logs"),
-            fullLogsFolder: path.resolve("logs/full"),
-            counterFile: path.resolve(`logs/counter`)
+            logsFolder: `${__dirname}/../logs`,
+            fullLogsFolder: `${__dirname}/../logs/full`,
+            counterFile: `${__dirname}/../logs/counter`
         },
         ttt: {
-            databaseFile: path.resolve("ttt.db"),
+            databaseFile: `${__dirname}/../ttt.db`,
             enable: false
         }
     };

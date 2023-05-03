@@ -78,7 +78,7 @@ module.exports = {
     },
     get: (req, res, next) => {
         if (req.body.githubRedir === "true")
-            res.status(200).sendFile(path.resolve("static/notapi.html"), (err) => {
+            res.status(200).sendFile(`${__dirname}/../static/notapi.html`, (err) => {
                 if (err) next(err);
                 else next();
             });
@@ -90,5 +90,5 @@ module.exports = {
 };
 
 function sendError(res, text) {
-    res.status(404).send(fs.readFileSync(path.resolve("static/error.html"), "utf-8").replaceAll("{{variable}}", text));
+    res.status(404).send(fs.readFileSync(`${__dirname}/../static/error.html`, "utf-8").replaceAll("{{variable}}", text));
 }
