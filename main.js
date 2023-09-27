@@ -11,7 +11,6 @@ const logger = require("./modules/logger");
 const methodSelection = require("./api/index");
 const {queryToBody, delEmptyData} = require("./middleware/parser");
 const {tttInit} = require("./modules/ttt");
-const cors = require("cors");
 
 tttInit();
 
