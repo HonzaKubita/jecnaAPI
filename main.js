@@ -4,6 +4,7 @@ require('dotenv').config({
 });
 
 const express = require("express");
+const cors = require("cors");
 const autoRestAPI = require("autorestapi");
 const exceptionHandler = require("./exceptions/exceptionHandler");
 const logger = require("./modules/logger");
@@ -14,6 +15,7 @@ const {tttInit} = require("./modules/ttt");
 tttInit();
 
 const server = express();
+server.use(cors());
 server.use(logger.setupMiddleware);
 server.use(express.static(`${__dirname}/static`));
 server.use(express.json({
