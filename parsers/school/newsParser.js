@@ -55,7 +55,7 @@ function archiveParser(htmlBody, index, max) {
     let monthJSON = [];
 
     for (const eventListUl of eventListUls) {
-        if (eventListUl.tagName === "H2") { // if its a heading
+        if (eventListUl.tagName === "H2") { // if it's a heading
             if (month !== "") archiveJSON.news[month] = monthJSON;
             month = eventListUl.children[0].innerHTML;
             monthJSON = [];
