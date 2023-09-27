@@ -4,6 +4,7 @@ require('dotenv').config({
 });
 
 const express = require("express");
+const cors = require("cors");
 const autoRestAPI = require("autorestapi");
 const exceptionHandler = require("./exceptions/exceptionHandler");
 const logger = require("./modules/logger");
