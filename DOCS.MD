@@ -235,15 +235,17 @@ There are 3 main types of exceptions:
 > **If** expand **is** *false*
 > ```json5
 > {
->   "news": [ // simpleEventObject[]; Array of simple events
->     {
->       "title": "Přihlášky k maturitám", // string; The title of the event
->       "code": 2670 // number; The code of the event that can be used to fetch the event
->     } // ...
->   ]
+>   "news": { // newsObject; object containing the months with the events
+>     "Srpen, 2023": [ // simpleEventObject[]; Array of simple events
+>       {
+>         "title": "Přihlášky k maturitám", // string; The title of the event
+>         "code": 2670 // number; The code of the event that can be used to fetch the event
+>       } // ...
+>     ]
+>   }
 > }
 > ```
-> **Else** `eventObject[]` called `news` - The list of selected events <br>
+> **Else** instead of `simpleEventObject[]` - `eventObject[]` - The list of selected events <br>
 > [*eventObject*](#event)
 > #### Throws
 > [**token exceptions**](#token-system) <br>
