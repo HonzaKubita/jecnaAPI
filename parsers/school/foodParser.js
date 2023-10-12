@@ -7,17 +7,14 @@ function foodParser(htmlBody, list) {
     };
 
     for (const dayDiv of foodDOM.getElementsByClassName("jidelnicekDen")) {
-        const lunchDate = dayDiv
-            .getElementsByClassName("important")[0]
-            .innerHTML.trim();
-        const dayOfTheWeek = dayDiv
-            .getElementsByTagName("span")[1]
-            .innerHTML.trim();
+        const dayTopMatch = dayDiv.children[0].innerHTML.trim().match(/Jídelníček na (\d\d.\d\d.\d\d\d\d) - (.+)/); // day => dayTop
+        const lunchDate = dayTopMatch?.groups?.[1];
+        const dayOfTheWeek = dayTopMatch?.groups?.[2];
 
-        const lunch1 = parseLunch(dayDiv.children[1].children[4]); // day => lunchesDiv => lunchDiv
-        const lunch2 = parseLunch(dayDiv.children[1].children[5]);
+        const lunch1 = parseLunch(findLunch(dayDiv.children[1], 1)); // day => lunchesArticle
+        const lunch2 = parseLunch(findLunch(dayDiv.children[1], 2));
 
-        if (objectIsEmpty(lunch1) && objectIsEmpty(lunch2)) continue;
+        if (objectIsEmpty(lunch1 ?? {}) && objectIsEmpty(lunch2 ?? {})) continue;
 
         const lunchJSON = {
             date: lunchDate,
@@ -32,17 +29,38 @@ function foodParser(htmlBody, list) {
     return foodJSON;
 }
 
+/**
+ *
+ * @param lunchDiv{Element}
+ * @return {{food: string, allergens: number[]} | undefined}
+ */
 function parseLunch(lunchDiv) {
-    const match = lunchDiv
-        .textContent // Oběd 1 -- Ječná -- Polévka ze zeleného hrášku, ;vepřové po štýrsku, brambory, ovocný čaj, (1, 3, 7, 9)
-        .split("--")[2] //  Polévka ze zeleného hrášku, ;vepřové po štýrsku, brambory, ovocný čaj, (1, 3, 7, 9)
-        .trim() // Polévka ze zeleného hrášku, ;vepřové po štýrsku, brambory, ovocný čaj, (1, 3, 7, 9)
-        .match(/(.*),\s*(?:\((.+)\))?/); // groups
+    const lunch = lunchDiv?.children[2].innerText.trim();
+    const lunchMatch = lunch?.match(/(.+) \(((?:\d(?:, )?)+)\)/);
+    const food = lunchMatch?.[1] ?? lunch
+
+    if (!food) return undefined;
 
     return {
-        food: match?.[1],
-        allergens: match?.[2]?.split(", ")?.map(o => parseInt(o))
+        food: food,
+        allergens: lunchMatch?.[2]?.split(", ")?.map(o => parseInt(o)) ?? []
     };
+}
+
+/**
+ * Finds a specific lunch element
+ * @param lunchesArticle{Element}
+ * @param num{1|2}
+ * @returns {Element}
+ */
+function findLunch(lunchesArticle, num) {
+    for (const lunchDiv of lunchesArticle.children) {
+        if (
+            lunchDiv.children[1].innerText.trim() === "Ječná" &&
+            lunchDiv.children[0].innerText.trim().includes(num.toString())
+        ) return lunchDiv;
+    }
+    return undefined;
 }
 
 module.exports = {

@@ -8,7 +8,7 @@ const constants =
             wrongToken: "wrongToken"
         },
         food: {
-            baseURL: "https://objednavky.jidelnasokolska.cz",
+            baseURL: "https://strav.nasejidelna.cz/0341",
             sessionCookieName: "JSESSIONID",
             tokenCookieName: "XSRF-TOKEN"
         },
