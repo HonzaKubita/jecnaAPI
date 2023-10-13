@@ -33,18 +33,19 @@ function passingsParser(htmlBody) {
 
     for (const passingTr of passingsTbody.children) {
         const passingDateSplit = passingTr.children[0].innerHTML.split("&nbsp;");
-        const passingValueMatch = passingTr.children[1].children[0]?.innerHTML?.match(/Příchod (\d{1,2}:\d{2}), Odchod (\d{1,2}:\d{2})/);
+        const passingValues = passingTr.children[1].innerText.trim().split("\n").map(enterLeave => {
+            const match = enterLeave.match(/Příchod (\d{1,2}:\d{2}), Odchod (\d{1,2}:\d{2})/);
+            if (!match?.[1] && !match?.[2]) return [];
+            return [match?.[1], match?.[2]];
+        });
 
         const passingDate = passingDateSplit[0];
         const passingWeekDay = passingDateSplit[1].replaceAll(/[()]/g, "");
-        const passingArrived = passingValueMatch?.[1] ?? "";
-        const passingLeft = passingValueMatch?.[2] ?? "";
 
         passingsJSON.passings.push({
             date: passingDate,
             weekDay: passingWeekDay,
-            arrived: passingArrived,
-            left: passingLeft
+            times: passingValues
         });
     }
 
