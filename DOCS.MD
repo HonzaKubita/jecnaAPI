@@ -754,8 +754,10 @@ There are 3 main types of exceptions:
 >     {
 >       "date": "1.8.", // string; The date of the passing
 >       "weekDay": "pátek", // string; The week day of the passing
->       "arrived": "7:06", // string; The time the student arrived
->       "left": "15:36" // string; The time the student left
+>       "times": [ // array[]; The array of arrays of passings
+>           ["5:23", "19:30"],
+>           // ...
+>       ]
 >     } // ...
 >   ],
 >   "years": [], // yearObject[]; The list of all possible years
