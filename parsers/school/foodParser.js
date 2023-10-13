@@ -7,9 +7,9 @@ function foodParser(htmlBody, list) {
     };
 
     for (const dayDiv of foodDOM.getElementsByClassName("jidelnicekDen")) {
-        const dayTopMatch = dayDiv.children[0].innerHTML.trim().match(/Jídelníček na (\d\d.\d\d.\d\d\d\d) - (.+)/); // day => dayTop
-        const lunchDate = dayTopMatch?.groups?.[1];
-        const dayOfTheWeek = dayTopMatch?.groups?.[2];
+        const dayTopMatch = dayDiv.children[0].innerHTML.trim().match(/Jídelníček na\s+(\d\d\.\d\d\.\d\d\d\d) - (.+)/); // day => dayTop
+        const lunchDate = dayTopMatch?.[1];
+        const dayOfTheWeek = dayTopMatch?.[2];
 
         const lunch1 = parseLunch(findLunch(dayDiv.children[1], 1)); // day => lunchesArticle
         const lunch2 = parseLunch(findLunch(dayDiv.children[1], 2));
