@@ -45,7 +45,7 @@ function parseEventMiscData(miscText) {
         .split(" | ");
 
     eventMiscData.date = splitValues[0];
-    eventMiscData.author = splitValues[1].trim();
+    eventMiscData.author = splitValues[1]?.trim();
     eventMiscData.public = splitValues.length === 3 ? splitValues[2] !== "Pouze pro školu" : true; // if it has 3 values, choose according to its value, or set it to true if not
 
     return eventMiscData;
